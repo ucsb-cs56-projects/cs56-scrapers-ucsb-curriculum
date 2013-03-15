@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="ctl00_Head1"><title>
+	Curriculum Search
+</title><link rel="stylesheet" href="../css/Styles.css" type="text/css" />
+
+<script type="text/javascript">
+
+// dropdown functions
+sfHover = function() {
+	var sfEls = document.getElementById("nav").getElementsByTagName("LI");
+	for (var i=0; i<sfEls.length; i++) {
+		sfEls[i].onmouseover=function() {
+			this.className+=" sfhover";
+		}
+		sfEls[i].onmouseout=function() {
+			this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
+		}
+	}
+}
+if (window.attachEvent) window.attachEvent("onload", sfHover);
+
+</script>
+    
+<link href="css/PublicCourseSearch.css" rel="stylesheet" type="text/css" /></head>
+
+<body>
+    <form name="aspnetForm" method="post" action="http://foo.cs.ucsb.edu:21000/coursesearch.aspx" id="aspnetForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTMyMjcxODEzOA9kFgJmD2QWAgIDD2QWAgIHD2QWCAIBDxAPFgIeC18hRGF0YUJvdW5kZ2QQFVs1QW50aHJvcG9sb2d5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQU5USCAgICA1Q3JlYXRpdmUgU3R1ZGllczogQXJ0ICAgICAgICAgICAgICAgICAgICAgLSAgQVJUICBDUyA1QXJ0IEhpc3RvcnkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQVJUSEkgICA1QXJ0IFN0dWRpbyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQVJUU1QgICA1QXNpYW4gQW1lcmljYW4gU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgLSAgQVMgQU0gICA1QXN0cm9ub215ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQVNUUk8gICA1Q3JlYXRpdmUgU3R1ZGllczogQmlvbG9neSAgICAgICAgICAgICAgICAgLSAgQklPTCBDUyA1QmxhY2sgU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQkwgU1QgICA1QmlvbW9sZWN1bGFyIFNjaWVuY2UgYW5kIEVuZ2luZWVyaW5nICAgICAgLSAgQk1TRSAgICA1Q29tcGFyYXRpdmUgTGl0ZXJhdHVyZSAgICAgICAgICAgICAgICAgICAgLSAgQyBMSVQgICA1Q2hlbWljYWwgRW5naW5lZXJpbmcgICAgICAgICAgICAgICAgICAgICAgLSAgQ0ggRSAgICA1Q2hpY2FubyBTdHVkaWVzICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQ0ggU1QgICA1Q2hlbWlzdHJ5IGFuZCBCaW9jaGVtaXN0cnkgICAgICAgICAgICAgICAgLSAgQ0hFTSAgICA1Q3JlYXRpdmUgU3R1ZGllczogQ2hlbWlzdHJ5ICAgICAgICAgICAgICAgLSAgQ0hFTSBDUyA1Q2hpbmVzZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQ0hJTiAgICA1Q2xhc3NpY3MgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQ0xBU1MgICA1Q29tcHV0ZXIgU2NpZW5jZSAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQ01QU0MgICA1Q3JlYXRpdmUgU3R1ZGllczogQ29tcHV0ZXIgU2NpZW5jZSAgICAgICAgLSAgQ01QU0NDUyA1Q291bnNlbGluZywgQ2xpbmljYWwsIFNjaG9vbCBQc3ljaG9sb2d5ICAgLSAgQ05DU1AgICA1Q29tbXVuaWNhdGlvbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgQ09NTSAgICA1RGFuY2UgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgREFOQ0UgICA1RWFzdCBBc2lhbiBDdWx0dXJhbCBTdHVkaWVzICAgICAgICAgICAgICAgLSAgRUFDUyAgICA1RWFydGggU2NpZW5jZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUFSVEggICA1RWxlY3RyaWNhbCBDb21wdXRlciBFbmdpbmVlcmluZyAgICAgICAgICAgLSAgRUNFICAgICA1RWNvbm9taWNzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUNPTiAgICA1RWR1Y2F0aW9uICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICAgICA1RWR1Y2F0aW9uOiBBcnQgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICBBICA1RWR1Y2F0aW9uOiBFbmdsaXNoICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICBFICA1RWR1Y2F0aW9uOiBIaXN0b3J5ICYgU29jaWFsIFNjaWVuY2UgICAgICAgLSAgRUQgICBIU1M1RWR1Y2F0aW9uOiBMaXRlcmFjeSAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICBMICA1RWR1Y2F0aW9uOiBMYW5ndWFnZSBBcnRzICAgICAgICAgICAgICAgICAgLSAgRUQgICBMQSA1RWR1Y2F0aW9uOiBNYXRoICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICBNICA1RWR1Y2F0aW9uOiBTY2llbmNlICAgICAgICAgICAgICAgICAgICAgICAgLSAgRUQgICBTICA1RWR1Y2F0aW9uOiBXb3JsZCBMYW5ndWFnZSAgICAgICAgICAgICAgICAgLSAgRUQgICBXTCA1RWNvbG9neSwgRXZvbHV0aW9uICYgTWFyaW5lIEJpb2xvZ3kgICAgICAgLSAgRUVNQiAgICA1RW5nbGlzaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRU5HTCAgICA1RW5naW5lZXJpbmcgU2NpZW5jZXMgICAgICAgICAgICAgICAgICAgICAgLSAgRU5HUiAgICA1RW52aXJvbm1lbnRhbCBTdHVkaWVzICAgICAgICAgICAgICAgICAgICAgLSAgRU5WIFMgICA1RXhlcmNpc2UgU3BvcnQgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRVMgICAxLSA1RW52aXJvbm1lbnRhbCBTY2llbmNlICYgTWFuYWdlbWVudCAgICAgICAgLSAgRVNNICAgICA1RXhlcmNpc2UgJiBTcG9ydCBTdHVkaWVzICAgICAgICAgICAgICAgICAgLSAgRVNTICAgICA1RmVtaW5pc3QgU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRkVNU1QgICA1RmlsbSBTdHVkaWVzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRkxNU1QgICA1RnJlbmNoICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgRlIgICAgICA1Q3JlYXRpdmUgU3R1ZGllczogR2VuZXJhbCBTdHVkaWVzICAgICAgICAgLSAgR0VOIFNDUyA1R2VvZ3JhcGh5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgR0VPRyAgICA1R2VvbG9naWNhbCBTY2llbmNlcyAgICAgICAgICAgICAgICAgICAgICAgLSAgR0VPTCAgICA1R2VybWFuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgR0VSICAgICA1R2xvYmFsIFN0dWRpZXMgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgR0xPQkwgICA1R2xvYmFsIFBlYWNlIGFuZCBTZWN1cml0eSAgICAgICAgICAgICAgICAgLSAgR1BTICAgICA1R3JlZWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgR1JFRUsgICA1SGVicmV3ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgSEVCICAgICA1SGlzdG9yeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgSElTVCAgICA1SW50ZXJkaXNjaXBsaW5hcnkgICAgICAgICAgICAgICAgICAgICAgICAgLSAgSU5UICAgICA1SXRhbGlhbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgSVRBTCAgICA1SmFwYW5lc2UgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgSkFQQU4gICA1S29yZWFuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgS09SICAgICA1TGF0aW4gQW1lcmljYW4gYW5kIEliZXJpYW4gU3R1ZGllcyAgICAgICAgLSAgTEFJUyAgICA1TGF0aW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTEFUSU4gICA1TGluZ3Vpc3RpY3MgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTElORyAgICA1Q3JlYXRpdmUgU3R1ZGllczogTGl0ZXJhdHVyZSAgICAgICAgICAgICAgLSAgTElUICBDUyA1TWFyaW5lIFNjaWVuY2UgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTUFSU0MgICA1TWVkaWEgQXJ0cyBhbmQgVGVjaG5vbG9neSAgICAgICAgICAgICAgICAgLSAgTUFUICAgICA1TWF0aGVtYXRpY3MgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTUFUSCAgICA1Q3JlYXRpdmUgU3R1ZGllczogTWF0aGVtYXRpY3MgICAgICAgICAgICAgLSAgTUFUSCBDUyA1TWF0aGVtYXRpY3MgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTUFUSCBXS0w1TWF0ZXJpYWxzICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTUFUUkwgICA1TW9sZWN1bGFyLCBDZWxsdWxhciAmIERldmVsb3AuIEJpb2xvZ3kgICAgLSAgTUNEQiAgICA1TWVjaGFuaWNhbCBFbmdpbmVlcmluZyAgICAgICAgICAgICAgICAgICAgLSAgTUUgICAgICA1TWVkaWV2YWwgU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTUUgU1QgICA1TWlkZGxlIEVhc3QgU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgICAgLSAgTUVTICAgICA1TWlsaXRhcnkgU2NpZW5jZSAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTVMgICAgICA1TXVzaWMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgTVVTICAgICA1Q3JlYXRpdmUgU3R1ZGllczogTXVzaWMgICAgICAgICAgICAgICAgICAgLSAgTVVTICBDUyA1TXVzaWMgUGVyZm9ybWFuY2UgTGFib3JhdG9yaWVzICAgICAgICAgICAgLSAgTVVTIEEgICA1UGh5c2ljYWwgQWN0aXZpdGllcyAgICAgICAgICAgICAgICAgICAgICAgLSAgUEEgICAxLSA1UGhpbG9zb3BoeSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUEhJTCAgICA1UGh5c2ljcyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUEhZUyAgICA1Q3JlYXRpdmUgU3R1ZGllczogUGh5c2ljcyAgICAgICAgICAgICAgICAgLSAgUEhZUyBDUyA1UG9saXRpY2FsIFNjaWVuY2UgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUE9MIFMgICA1UG9ydHVndWVzZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUE9SVCAgICA1U3RhdGlzdGljcyAmIEFwcGxpZWQgUHJvYmFiaWxpdHkgICAgICAgICAgLSAgUFNUQVQgICA1UHN5Y2hvbG9neSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUFNZICAgICA1UmVuYWlzc2FuY2UgU3R1ZGllcyAgICAgICAgICAgICAgICAgICAgICAgLSAgUkVOU1QgICA1UmVsaWdpb3VzIFN0dWRpZXMgICAgICAgICAgICAgICAgICAgICAgICAgLSAgUkcgU1QgICA1U3BlZWNoICYgSGVhcmluZyBTY2llbmNlcyAgICAgICAgICAgICAgICAgLSAgU0hTICAgICA1U2xhdmljICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgU0xBViAgICA1U29jaW9sb2d5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgU09DICAgICA1U3BhbmlzaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgU1BBTiAgICA1VGhlYXRlciAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgVEhUUiAgICA1V3JpdGluZyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLSAgV1JJVCAgICAVWwhBTlRIICAgIAhBUlQgIENTIAhBUlRISSAgIAhBUlRTVCAgIAhBUyBBTSAgIAhBU1RSTyAgIAhCSU9MIENTIAhCTCBTVCAgIAhCTVNFICAgIAhDIExJVCAgIAhDSCBFICAgIAhDSCBTVCAgIAhDSEVNICAgIAhDSEVNIENTIAhDSElOICAgIAhDTEFTUyAgIAhDTVBTQyAgIAhDTVBTQ0NTIAhDTkNTUCAgIAhDT01NICAgIAhEQU5DRSAgIAhFQUNTICAgIAhFQVJUSCAgIAhFQ0UgICAgIAhFQ09OICAgIAhFRCAgICAgIAhFRCAgIEEgIAhFRCAgIEUgIAhFRCAgIEhTUwhFRCAgIEwgIAhFRCAgIExBIAhFRCAgIE0gIAhFRCAgIFMgIAhFRCAgIFdMIAhFRU1CICAgIAhFTkdMICAgIAhFTkdSICAgIAhFTlYgUyAgIAhFUyAgIDEtIAhFU00gICAgIAhFU1MgICAgIAhGRU1TVCAgIAhGTE1TVCAgIAhGUiAgICAgIAhHRU4gU0NTIAhHRU9HICAgIAhHRU9MICAgIAhHRVIgICAgIAhHTE9CTCAgIAhHUFMgICAgIAhHUkVFSyAgIAhIRUIgICAgIAhISVNUICAgIAhJTlQgICAgIAhJVEFMICAgIAhKQVBBTiAgIAhLT1IgICAgIAhMQUlTICAgIAhMQVRJTiAgIAhMSU5HICAgIAhMSVQgIENTIAhNQVJTQyAgIAhNQVQgICAgIAhNQVRIICAgIAhNQVRIIENTIAhNQVRIIFdLTAhNQVRSTCAgIAhNQ0RCICAgIAhNRSAgICAgIAhNRSBTVCAgIAhNRVMgICAgIAhNUyAgICAgIAhNVVMgICAgIAhNVVMgIENTIAhNVVMgQSAgIAhQQSAgIDEtIAhQSElMICAgIAhQSFlTICAgIAhQSFlTIENTIAhQT0wgUyAgIAhQT1JUICAgIAhQU1RBVCAgIAhQU1kgICAgIAhSRU5TVCAgIAhSRyBTVCAgIAhTSFMgICAgIAhTTEFWICAgIAhTT0MgICAgIAhTUEFOICAgIAhUSFRSICAgIAhXUklUICAgIBQrA1tnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZGQCAw8QDxYCHwBnZBAVCgxTUFJJTkcgMjAxMSAMV0lOVEVSIDIwMTEgDEZBTEwgMjAxMCAgIAxTVU1NRVIgMjAxMCAMU1BSSU5HIDIwMTAgDFdJTlRFUiAyMDEwIAxGQUxMIDIwMDkgICAMU1VNTUVSIDIwMDkgDFNQUklORyAyMDA5IAxXSU5URVIgMjAwOSAVCgUyMDExMgUyMDExMQUyMDEwNAUyMDEwMwUyMDEwMgUyMDEwMQUyMDA5NAUyMDA5MwUyMDA5MgUyMDA5MRQrAwpnZ2dnZ2dnZ2dnZGQCBQ8QZA8WA2YCAQICFgMQBQ1VbmRlcmdyYWR1YXRlBQ1VbmRlcmdyYWR1YXRlZxAFCEdyYWR1YXRlBQhHcmFkdWF0ZWcQBQNBbGwFA0FsbGdkZAIJDxYCHgtfIUl0ZW1Db3VudGZkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBR5jdGwwMCRwYWdlQ29udGVudCRzZWFyY2hCdXR0b25zbUTJD24CNnYuDp3ulGKqmCuQHw==" />
+
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWagL+xuSxCwKCmOWMCQLV47W5DgLpmJW5CQKemPmzAgKJ3IvjBQLrmIm7BALXu6ALAqvf/6MLAqbdgvALAviaigcC4N+n6wcC9N6P2AoCuYvzsw4Cuti5jw8Cpb2ygAICnsrLrg0CsdvttwQCxKKkogkCh+rztQoC0fyLlg8C3Ozj5QIC8ernsgoC7Pv5gAYC+4qLnwICxaqisgQCot/bggICot/fjwICot/vjwIClcHVQQKi38uPAgLvgJe7DAKi38+PAgKi35ePAgLGvbuUDAKT/I9fAu2qn40BAu2q544KAoW79eUKAsOG3tgJApP8/5oDAsHcjrwGAoj/u5EIAoj/34oIAoPeo7MCAsr4hPEJAoeq5v4LAoeqwrAFAsb6+ZsMAvut7uIEAoPcmr0GAp6N6/4HAuer74UOArzY5jYC2pnFnA0Cm8m3qwIC5dbFxQ4CkvmRkgwC3rrqggoC15jFgwcC9+qznwQCiOGRjg4C8fmNuwUCxpi5mQ0CxpjZiQkC6eCRugoC4cXdvgoC8pnRigQC9s2A6gwC+tzXjwIC7t3bqgsCmdrGlwYC+tyftAICmdqGugYC1t6FkAUCuNuGugYCtoCmtwYCqrbagAMC+raMwQUCu5Ld7QkCyJeC8QkCz/SBgwYCrZTd+AwC+rac3QwC8emT3ggCm9jTqAsC19j6hAYC3caPtAECx+briQUC3cafrwUC/Zf1gwQC8buSuA8Cv4WH5AcCsIWH5AcCtYXziQ4CvoXziQ4Cv4XziQ4CsIXziQ4CyuqCoAMC0+qCoAMC1OqCoAMC1eqCoAMCsZ/e3AMCsozJggIChKbPKQLni9WrCKubXRHX8yo7LNjCz39TLafLhPGW" />
+
+    <table class="maintable" cellpadding="0" cellspacing="0" border="0" align="center">
+        <tr>
+            <td align="center"><img src="../images/header_ucsb.jpg" id="ctl00_Img3" width="760" height="21" alt="My.SA.UCSB" border="0" /></td>
+        </tr>
+        <tr>
+            <td>
+            <div class="container">
+                <div class="imagealigncontainer" style="float:left;"><img src="../images/header_myucsb.jpg" id="ctl00_Img1" class="imagealign" width="244" height="60" alt="My.SA.UCSB" border="0" /></div>
+                <div class="imagealigncontainer" style="float:right;"><a href="http://www.ucsb.edu"><img src="../images/header_ucsbaerial.jpg" id="ctl00_Img2" class="imagealign" width="181" height="60" alt="UCSB Aerial" border="0" /></a></div>
+            </div>
+            </td>
+        </tr>
+        
+        <tr>
+			<td class="menusection"><ul id="nav"><li>&nbsp;</li></ul></td>
+        </tr>
+        
+        <tr>
+        <td class="content">
+
+    <script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+
+    <script type="text/javascript">
+
+        function hideExpandedInfoDiv() {
+
+            $(".RestrictionsTableDiv").hide();
+            $(".MasterCourseTableDiv").hide();
+            $(".SelectedEnrollCodeSection").removeClass("SelectedEnrollCodeSection");
+            $(".Header").removeClass("SelectedHeader");
+            $(".Expanded").hide();
+            $(".Expanded").removeClass("Expanded");
+        }
+
+        function ExpandInfoDiv(className) {
+            $(this).parent().find(className).addClass("Expanded");
+            $(this).parent().find(className).slideToggle("fast");
+        }
+
+        $(document).ready(function() {
+
+            $(".Section:contains('True')").siblings().andSelf().addClass("Header");
+            $(".PrimaryCourse.Header").addClass("Clickable");
+            $(".PrimaryCourse.Header").siblings().andSelf().addClass("Clickable");
+
+            $(".Clickable").hover(
+               function() {
+                   $(this).addClass("HeaderHover");
+               },
+               function() {
+                   $(this).removeClass("HeaderHover");
+               });
+
+            $(".Header").hover(
+                function() {
+                    $(this).siblings().andSelf().addClass("HeaderHover");
+                },
+                function() {
+                    $(this).siblings().andSelf().removeClass("HeaderHover");
+                });
+
+            $(".EnrollCodeLink").hover(
+                function(e) {
+                    $(this).parent().addClass("EnrollCodeSectionHover");
+                    e.stopImmediatePropagation();
+                },
+                function(e) {
+                    $(this).parent().removeClass("EnrollCodeSectionHover");
+                    e.stopImmediatePropagation();
+                });
+
+            $(".RestrictionsTableDiv").click(
+                function(e) {
+                    hideExpandedInfoDiv();
+                    e.stopImmediatePropagation();
+                });
+
+            $(".MasterCourseTable").click(
+                function(e) {
+                    hideExpandedInfoDiv();
+                    e.stopImmediatePropagation();
+                });
+
+            $(".Clickable").click(
+                function(e) {
+                    if (!$(this).parent().find(".MasterCourseTableDiv").hasClass("Expanded")) {
+                        hideExpandedInfoDiv();
+                        $(this).parent().find(".MasterCourseTableDiv").slideDown("fast");
+                        $(this).parent().find(".MasterCourseTableDiv").addClass("Expanded");
+                    } else {
+                        hideExpandedInfoDiv();
+                    }
+                    e.stopImmediatePropagation();
+                },
+                function(e) {
+                    hideExpandedInfoDiv();
+                    e.stopImmediatePropagation();
+                });
+
+            $(".EnrollCodeLink").click(
+                function(e) {
+                    if (!$(this).parent().find(".RestrictionsTableDiv").hasClass("Expanded")) {
+                        hideExpandedInfoDiv();
+                        $(this).parent().find(".RestrictionsTableDiv").slideDown("fast");
+                        $(this).parent().find(".RestrictionsTableDiv").addClass("Expanded");
+                    } else {
+                        hideExpandedInfoDiv();
+                    }
+                    e.stopImmediatePropagation();
+                },
+                function(e) {
+                    hideExpandedInfoDiv();
+                    e.stopImmediatePropagation();
+                });
+
+            $(".Status:contains('Closed')").css("color", "red");
+            $(".Status:contains('Full')").css("color", "orange");
+            $(".Status:contains('Cancelled')").css("color", "Black");
+            $(".Section").text("");
+        });       
+                
+    </script>
+
+    <h1 class="SearchPageTitle">
+        Schedule of Classes
+        <br />
+        &nbsp; &nbsp; &nbsp; Class Search
+    </h1>
+    <div style="padding: 1px;">
+        <h5>
+            Disclaimer: Course data on this page may be up to 24 hours old.
+        </h5>
+        <table>
+            <tr>
+                <td class="droplistDiv">
+                    <label>
+                        Subject Area:</label>
+                </td>
+                <td>
+                    <select name="ctl00$pageContent$courseList" id="ctl00_pageContent_courseList" class="droplist">
+	<option value="ANTH    ">Anthropology                              -  ANTH    </option>
+	<option value="ART  CS ">Creative Studies: Art                     -  ART  CS </option>
+	<option value="ARTHI   ">Art History                               -  ARTHI   </option>
+	<option value="ARTST   ">Art Studio                                -  ARTST   </option>
+	<option value="AS AM   ">Asian American Studies                    -  AS AM   </option>
+	<option value="ASTRO   ">Astronomy                                 -  ASTRO   </option>
+	<option value="BIOL CS ">Creative Studies: Biology                 -  BIOL CS </option>
+	<option value="BL ST   ">Black Studies                             -  BL ST   </option>
+	<option value="BMSE    ">Biomolecular Science and Engineering      -  BMSE    </option>
+	<option value="C LIT   ">Comparative Literature                    -  C LIT   </option>
+	<option value="CH E    ">Chemical Engineering                      -  CH E    </option>
+	<option value="CH ST   ">Chicano Studies                           -  CH ST   </option>
+	<option value="CHEM    ">Chemistry and Biochemistry                -  CHEM    </option>
+	<option value="CHEM CS ">Creative Studies: Chemistry               -  CHEM CS </option>
+	<option value="CHIN    ">Chinese                                   -  CHIN    </option>
+	<option value="CLASS   ">Classics                                  -  CLASS   </option>
+	<option value="CMPSC   ">Computer Science                          -  CMPSC   </option>
+	<option value="CMPSCCS ">Creative Studies: Computer Science        -  CMPSCCS </option>
+	<option value="CNCSP   ">Counseling, Clinical, School Psychology   -  CNCSP   </option>
+	<option value="COMM    ">Communication                             -  COMM    </option>
+	<option value="DANCE   ">Dance                                     -  DANCE   </option>
+	<option value="EACS    ">East Asian Cultural Studies               -  EACS    </option>
+	<option value="EARTH   ">Earth Science                             -  EARTH   </option>
+	<option value="ECE     ">Electrical Computer Engineering           -  ECE     </option>
+	<option value="ECON    ">Economics                                 -  ECON    </option>
+	<option value="ED      ">Education                                 -  ED      </option>
+	<option value="ED   A  ">Education: Art                            -  ED   A  </option>
+	<option value="ED   E  ">Education: English                        -  ED   E  </option>
+	<option value="ED   HSS">Education: History &amp; Social Science       -  ED   HSS</option>
+	<option value="ED   L  ">Education: Literacy                       -  ED   L  </option>
+	<option value="ED   LA ">Education: Language Arts                  -  ED   LA </option>
+	<option value="ED   M  ">Education: Math                           -  ED   M  </option>
+	<option value="ED   S  ">Education: Science                        -  ED   S  </option>
+	<option value="ED   WL ">Education: World Language                 -  ED   WL </option>
+	<option value="EEMB    ">Ecology, Evolution &amp; Marine Biology       -  EEMB    </option>
+	<option value="ENGL    ">English                                   -  ENGL    </option>
+	<option value="ENGR    ">Engineering Sciences                      -  ENGR    </option>
+	<option value="ENV S   ">Environmental Studies                     -  ENV S   </option>
+	<option value="ES   1- ">Exercise Sport                            -  ES   1- </option>
+	<option value="ESM     ">Environmental Science &amp; Management        -  ESM     </option>
+	<option value="ESS     ">Exercise &amp; Sport Studies                  -  ESS     </option>
+	<option value="FEMST   ">Feminist Studies                          -  FEMST   </option>
+	<option value="FLMST   ">Film Studies                              -  FLMST   </option>
+	<option value="FR      ">French                                    -  FR      </option>
+	<option value="GEN SCS ">Creative Studies: General Studies         -  GEN SCS </option>
+	<option value="GEOG    ">Geography                                 -  GEOG    </option>
+	<option value="GEOL    ">Geological Sciences                       -  GEOL    </option>
+	<option value="GER     ">German                                    -  GER     </option>
+	<option value="GLOBL   ">Global Studies                            -  GLOBL   </option>
+	<option value="GPS     ">Global Peace and Security                 -  GPS     </option>
+	<option value="GREEK   ">Greek                                     -  GREEK   </option>
+	<option value="HEB     ">Hebrew                                    -  HEB     </option>
+	<option value="HIST    ">History                                   -  HIST    </option>
+	<option value="INT     ">Interdisciplinary                         -  INT     </option>
+	<option value="ITAL    ">Italian                                   -  ITAL    </option>
+	<option value="JAPAN   ">Japanese                                  -  JAPAN   </option>
+	<option value="KOR     ">Korean                                    -  KOR     </option>
+	<option value="LAIS    ">Latin American and Iberian Studies        -  LAIS    </option>
+	<option value="LATIN   ">Latin                                     -  LATIN   </option>
+	<option value="LING    ">Linguistics                               -  LING    </option>
+	<option value="LIT  CS ">Creative Studies: Literature              -  LIT  CS </option>
+	<option value="MARSC   ">Marine Science                            -  MARSC   </option>
+	<option value="MAT     ">Media Arts and Technology                 -  MAT     </option>
+	<option value="MATH    ">Mathematics                               -  MATH    </option>
+	<option value="MATH CS ">Creative Studies: Mathematics             -  MATH CS </option>
+	<option value="MATH WKL">Mathematics                               -  MATH WKL</option>
+	<option value="MATRL   ">Materials                                 -  MATRL   </option>
+	<option value="MCDB    ">Molecular, Cellular &amp; Develop. Biology    -  MCDB    </option>
+	<option value="ME      ">Mechanical Engineering                    -  ME      </option>
+	<option value="ME ST   ">Medieval Studies                          -  ME ST   </option>
+	<option value="MES     ">Middle East Studies                       -  MES     </option>
+	<option value="MS      ">Military Science                          -  MS      </option>
+	<option value="MUS     ">Music                                     -  MUS     </option>
+	<option value="MUS  CS ">Creative Studies: Music                   -  MUS  CS </option>
+	<option value="MUS A   ">Music Performance Laboratories            -  MUS A   </option>
+	<option value="PA   1- ">Physical Activities                       -  PA   1- </option>
+	<option value="PHIL    ">Philosophy                                -  PHIL    </option>
+	<option value="PHYS    ">Physics                                   -  PHYS    </option>
+	<option value="PHYS CS ">Creative Studies: Physics                 -  PHYS CS </option>
+	<option value="POL S   ">Political Science                         -  POL S   </option>
+	<option value="PORT    ">Portuguese                                -  PORT    </option>
+	<option value="PSTAT   ">Statistics &amp; Applied Probability          -  PSTAT   </option>
+	<option value="PSY     ">Psychology                                -  PSY     </option>
+	<option value="RENST   ">Renaissance Studies                       -  RENST   </option>
+	<option value="RG ST   ">Religious Studies                         -  RG ST   </option>
+	<option value="SHS     ">Speech &amp; Hearing Sciences                 -  SHS     </option>
+	<option value="SLAV    ">Slavic                                    -  SLAV    </option>
+	<option value="SOC     ">Sociology                                 -  SOC     </option>
+	<option value="SPAN    ">Spanish                                   -  SPAN    </option>
+	<option value="THTR    ">Theater                                   -  THTR    </option>
+	<option value="WRIT    ">Writing                                   -  WRIT    </option>
+
+</select>
+                </td>
+            </tr>
+            <tr>
+                <td class="droplistDiv">
+                    <label>
+                        Quarter:</label>
+                </td>
+                <td>
+                    <select name="ctl00$pageContent$quarterList" id="ctl00_pageContent_quarterList" class="droplist">
+	<option value="20112">SPRING 2011 </option>
+	<option selected="selected" value="20111">WINTER 2011 </option>
+	<option value="20104">FALL 2010   </option>
+	<option value="20103">SUMMER 2010 </option>
+	<option value="20102">SPRING 2010 </option>
+	<option value="20101">WINTER 2010 </option>
+	<option value="20094">FALL 2009   </option>
+	<option value="20093">SUMMER 2009 </option>
+	<option value="20092">SPRING 2009 </option>
+	<option value="20091">WINTER 2009 </option>
+
+</select>
+                </td>
+            </tr>
+            <tr>
+                <td class="droplistDiv">
+                    <label>
+                        Course Level:</label>
+                </td>
+                <td>
+                    <select name="ctl00$pageContent$dropDownCourseLevels" id="ctl00_pageContent_dropDownCourseLevels" class="droplist">
+	<option selected="selected" value="Undergraduate">Undergraduate</option>
+	<option value="Graduate">Graduate</option>
+	<option value="All">All</option>
+
+</select>
+                    <input type="image" name="ctl00$pageContent$searchButton" id="ctl00_pageContent_searchButton" src="Images/btn_PublicCourseSearch.png" alt="Search Button" border="0" style="margin-left: 30px; vertical-align: bottom;" />
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td style="width: 40%;"></td>
+                <td style="vertical-align:top;text-align:right;">
+                    <h5 style="white-space:nowrap;">PLEASE NOTE:</h5>
+                </td>
+                <td style="vertical-align:top;text-align:left;">
+                    <ul style=" padding-left:20px; padding-top:5px; font-size:11px;">        
+                        <li>Click on primary course row for course and textbook info.</li>
+                        <li>Click on enroll code for restrictions.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>      
+        <center>
+            
+        </center>
+    </div>
+</td>
+        </tr>
+        <tr>
+            <td class="copyright">
+            
+            <div align="center">
+                <div class="fl"><a href="http://www.sa.ucsb.edu" title="Student Affairs Home"><img id="ctl00_Image5" src="../images/footer_sa.gif" alt="Student Affairs Home" border="0" height="40" width="41" /></a></div>
+			    <div class="fl"><a href="http://www.ucsb.edu" title="UCSB Home"><img id="ctl00_Image6" src="../images/footer_ucsb.gif" alt="UCSB Home" border="0" height="40" width="55" /></a></div>
+                
+	            <b>Copyright ©2006 The Regents of the University of California, All Rights 
+		            Reserved. </b>
+	            <br />
+	            <a id="ctl00_HyperLink1" href="../Privacy.aspx" style="display:inline-block;">
+		            Privacy &amp; Policy Info</a>&nbsp;/ <a id="ctl00_HyperLink2" href="../Accessibility.aspx" style="display:inline-block;">Accessibility</a>&nbsp;/ Last Modified June 5, 2006&nbsp;4:52 PM PDT&nbsp;/ 
+	            Questions or Comments? Please <a href="mailto:webmaster@sa.ucsb.edu">email us</a>
+	            
+               
+            </div>
+
+            </td> 
+        </tr>
+        </table>
+     
+        
+     
+    </form>
+</body>
+</html>
