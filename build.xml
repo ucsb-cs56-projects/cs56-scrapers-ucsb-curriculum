@@ -25,7 +25,7 @@
          <pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar"/>
   </path>
 
-  <target name="compile" >
+  <target name="compile" description="compile the code">
     <mkdir dir="build" />
     <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source">
      <classpath refid="project.class.path" />
@@ -33,13 +33,13 @@
 
   </target>
 
-  <target name="run" depends="compile">
+  <target name="run" depends="compile" description="run the main">
     <java classname="${mainClass}"  >  
        <classpath refid="project.class.path" />
     </java>
   </target>
 
-  <target name="clean" >
+  <target name="clean" description="get rid of unnecessary files">
     <delete failonerror="false" verbose="true">
       <fileset dir="build" includes="**/*.class"/>
     </delete>
@@ -49,7 +49,7 @@
     <delete dir="temp" quiet="true" />
   </target>
 
-  <target name="test" depends="compile">
+  <target name="test" depends="compile" description="run junit tests">
 
    <junit haltonerror="no" haltonfailure="no">
        <classpath refid="project.class.path" />
