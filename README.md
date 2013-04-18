@@ -1,6 +1,8 @@
 # cs56-scrapers-ucsb-curriculum
 
-This is a prototype (incomplete) for an object for screen scraping the Curriculum Search page.
+This is a prototype (incomplete) for an object for screen scraping the Curriculum Search page at this link: https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx
+
+
 
 The long term goal is to be add UCSB Courses directly into a Calendar program (e.g. iCal or Google Calendar). The classes in this package are a first step towards that long-term goal.
 
