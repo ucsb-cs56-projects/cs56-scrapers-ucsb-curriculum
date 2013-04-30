@@ -27,6 +27,8 @@ import java.util.ArrayList;
 public class UCSBCurriculumSearch
 {  
 
+    public static final boolean debug=true;
+
     /** default URL used in the main */
 
     public static final String MAINPAGE_URL =
@@ -102,11 +104,15 @@ public class UCSBCurriculumSearch
 	
 	final String afterValue="\" />";
 	
-	// System.out.println("page=" + page);
+	if (debug) { System.out.println("extractHiddenFieldValue: page=" + page); }
+	if (debug) { System.out.println("extractHiddenFieldValue: name=" + name); }
+
 	int firstPos = page.indexOf(beforeValue) + beforeValue.length();
-	// System.out.println("firstPos="+firstPos);
+	if (debug) { System.out.println("extractHiddenFieldValue: firstPos="+firstPos); }
+
 	int afterPos = page.indexOf(afterValue,firstPos); 
-	// System.out.println("afterPos="+afterPos);
+	if (debug) { System.out.println("afterPos="+afterPos); }
+
 	return page.substring(firstPos,afterPos);
     }
 

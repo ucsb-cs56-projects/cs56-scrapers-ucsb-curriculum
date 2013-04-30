@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project default="compile">
 
-  <!-- build.xml for Mantis issue 396
-       name: James Neally for CS56, W12 -->
+  <!-- build.xml for cs56-scrapers-ucsb-curriculum
+       Authors: James Neally, CS56, W12
+       P. Conrad, CS56 S13 -->
 
   <property environment="env"/> <!-- load the environment variables --> 
    <property name="webRoot" value="${env.HOME}/public_html/" />
@@ -22,7 +23,7 @@
 
   <path id="project.class.path">
          <pathelement location="build"/>
-         <pathelement location="/cs/faculty/pconrad/public_html/cs56/lib/junit-4.8.2.jar"/>
+         <pathelement location="lib/junit-4.8.2.jar"/>
   </path>
 
   <target name="compile" >
