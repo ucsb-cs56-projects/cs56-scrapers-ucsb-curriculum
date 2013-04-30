@@ -7,6 +7,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.cert.Certificate;
+import java.io.*;
+ 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 /**
    This object is designed to parse input from the Curriculum Search 
    page at:
@@ -27,12 +36,14 @@ import java.util.ArrayList;
 public class UCSBCurriculumSearch
 {  
 
+
+
     public static final boolean debug=true;
 
     /** default URL used in the main */
 
     public static final String MAINPAGE_URL =
-	"http://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
+	"https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
 
     public static final String MAINPAGE_EXPECTED_TITLE = "Curriculum Search";
     public static final String MAINPAGE_EXPECTED_FORM = "aspnetForm";
@@ -56,9 +67,9 @@ public class UCSBCurriculumSearch
 	    String encodedData = "";
 	    URL endpoint = new URL(MAINPAGE_URL);
 	    // URL endpoint = new URL("http://foo.cs.ucsb.edu:21000");
-	    HttpURLConnection urlc = null;
+	    HttpsURLConnection urlc = null;
 	    
-	    urlc = (HttpURLConnection) endpoint.openConnection();
+	    urlc = (HttpsURLConnection) endpoint.openConnection();
 	    urlc.setRequestMethod("GET");
 	    urlc.setDoInput(true);
 	    urlc.setUseCaches(false);
@@ -628,6 +639,8 @@ public class UCSBCurriculumSearch
 
     public static void main(String [] args) {
 	try {
+	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
+
 	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 	    final String dept = "CMPSC   "; // must be 8 spaces
 	    final String qtr = "20112";  // 2012 = S11 [yyyyQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
