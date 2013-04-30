@@ -32,7 +32,7 @@ public class UCSBCurriculumSearch
     /** default URL used in the main */
 
     public static final String MAINPAGE_URL =
-	"http://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
+	"https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
 
     public static final String MAINPAGE_EXPECTED_TITLE = "Curriculum Search";
     public static final String MAINPAGE_EXPECTED_FORM = "aspnetForm";
@@ -104,9 +104,11 @@ public class UCSBCurriculumSearch
 	
 	final String afterValue="\" />";
 	
-	if (debug) { System.out.println("extractHiddenFieldValue: page=" + page); }
-	if (debug) { System.out.println("extractHiddenFieldValue: name=" + name); }
-
+	if (debug) {
+	    System.out.println("extractHiddenFieldValue: page=" + page); 
+	    System.out.println("extractHiddenFieldValue: name=" + name); 
+	}
+	
 	int firstPos = page.indexOf(beforeValue) + beforeValue.length();
 	if (debug) { System.out.println("extractHiddenFieldValue: firstPos="+firstPos); }
 
