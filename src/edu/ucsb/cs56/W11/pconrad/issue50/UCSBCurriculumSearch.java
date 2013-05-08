@@ -644,7 +644,7 @@ public class UCSBCurriculumSearch
 	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
 
 	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-	    final String dept = "CMPSC   "; // must be 8 spaces
+	    final String dept = "CMPSC"; // the department
 	    final String qtr = "20112";  // 2012 = S11 [yyyyQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
 	    final String level = "Undergraduate"; // other options: "Graduate", "All".
 	    
