@@ -661,5 +661,91 @@ public class UCSBCurriculumSearch
 	    e.printStackTrace();
 	}
     }  // main
+
+
+    /**
+     * Builds a query to submit to the UCSBCourseCurriculumSearch 
+     * by enumerating Quarters, CourseLevels, etc.  We also handle 
+     * formatting.
+     * @author Mark Nguyen
+     * @author Daniel Vicory
+     * @see UCSBCourseCurriculumSearch
+     */ 
+    private static class Query {
 	
+	/**
+	 * Enumerates possible quarters to query for and translates them 
+	 * to values that are understood by the search API.
+	 */
+	public static enum Quarter {
+		Winter(1),
+		Spring(2),
+		Summer(3),
+		Fall(4);
+		
+		private final int value;
+		
+		Quarter(int value) {
+			this.value = value;
+		}
+		
+		/**
+		 * Converts to String representation of integer value 
+		 * of this Quarter that can be understood by the API. 
+		 * For example, Winter = 1, Spring = 2, Summer = 3, Fall = 4.
+                 */
+		public String toString() {
+			return String.valueOf(value);
+		}
+	}
+
+	
+	/**
+	 * Enumerates the possible course levels offered by the API 
+	 */
+	public static enum CourseLevel {
+		Undergraduate("Undergraduate"),
+		Graduate("Graduate"),
+		All("All");
+		
+		private final String value;
+		CourseLevel(String value) {
+			this.value = value;
+		}
+
+		public String toString() {
+			return value;
+		}
+
+	}
+	
+	private String department;
+	private int year;
+	private Quarter quarter;
+	private CourseLevel courseLevel;
+	
+	/**
+	 * Initializes this query and performs necessary vield validation
+	 * @param department the name of the department.  we will trim and put to uppercase
+	 * @param quarter the quarter to search for
+	 * @param year the integer representation of the year (e.g., 2013 or 1996)
+	 * @param courseLevel the course level to filter by, if at all
+	 */
+	Query(String department, Quarter quarter, int year, CourseLevel courseLevel) {
+		this.department = department.trim().toUpperCase();
+		this.year = year;
+		this.quarter = quarter;
+		this.courseLevel = courseLevel;
+	}
+	
+	public String getTerm() {
+		// Append the quarter's integer value to the end of the year.
+		return String.valueOf(year) + quarter;
+	}
+	
+	/** @return the parsed department name */
+	public String getDepartment() {
+		return department;
+	}
+    }
 }
