@@ -38,7 +38,7 @@ public class UCSBCurriculumSearch
 
 
 
-    public static final boolean debug=true;
+    public static final boolean debug=false;
 
     /** default URL used in the main */
 
@@ -449,14 +449,14 @@ public class UCSBCurriculumSearch
 
 
     /** getPage() returns the contents of a page of HTML containing the courses
-       for a given department, quarter, and level.    It is NOT a static method--it can
+       for a given department, quarter, and level. It is NOT a static method--it can
        only be invoked from an object, because it needs the instance variables
        for viewstate and event validation that were initialized in the constructor.
 
        This is primarily used internally to get the HTML that loadCourses
        parses to load courses into the object.
 
-       @param dept 8-character department code.  (Pad on right with spaces if needed)
+       @param dept the abbreviated name of the department (eg. "CMPSC"). Previously, 
        @param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
        @param level one of "Undergraduate","Graduate","All"
        @return HTML code for the page
