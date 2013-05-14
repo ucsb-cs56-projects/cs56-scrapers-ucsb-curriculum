@@ -5,61 +5,57 @@
        James Neally, CS56, W12
        Mark Nguyen, CS56, S13
        Daniel Vicory, CS56, S13
-       P. Conrad, CS56 S13 -->
+       P. Conrad, CS56, S13 -->
 
-  <property environment="env"/> <!-- load the environment variables --> 
-   <property name="webRoot" value="${env.HOME}/public_html/" />
-   <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}/" />
+  <property environment="env" /> <!-- load the environment variables -->
+  <property name="webRoot" value="${env.HOME}/public_html/" />
+  <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}/" />
 
   <property name="course" value="cs56" />
   <property name="quarter" value="W12" />
   <property name="issueNum" value="0000660" />
   <property name="mainClass" value="edu.ucsb.cs56.W11.pconrad.issue50.UCSBCurriculumSearch" />
 
-
   <property name="projectName" value="${course}_${quarter}_${issueNum}" />
   <property name="projectPath" value="${course}/${quarter}/issues/${issueNum}" />
-  <property name="javadocDest" value="${webRoot}/${projectPath}/javadoc" /> 
-  <property name="javadocURL" value="${webBaseUrl}/${projectPath}/javadoc" /> 
-
+  <property name="javadocDest" value="${webRoot}/${projectPath}/javadoc" />
+  <property name="javadocURL" value="${webBaseUrl}/${projectPath}/javadoc" />
 
   <path id="project.class.path">
-         <pathelement location="build"/>
-         <pathelement location="lib/junit-4.8.2.jar"/>
+    <pathelement location="build" />
+    <pathelement location="lib/junit-4.8.2.jar" />
   </path>
-  
+
   <target name="-check-ssl-file" unless="file.exists">
-    <available property="file.exists" file="jssecacerts"/>
+    <available property="file.exists" file="jssecacerts" />
   </target>
 
-  <target name="setup" 
-	  depends="compile,-check-ssl-file" 
-	  description="downloads ssl certificate for curriculum search page"
-	  unless="${file.exists}" >
+  <target name="setup"
+          depends="compile,-check-ssl-file"
+          description="downloads ssl certificate for curriculum search page"
+          unless="${file.exists}">
     <java classname="InstallCert" inputstring="1">
-      <arg value="my.sa.ucsb.edu:443"/>
+      <arg value="my.sa.ucsb.edu:443" />
       <classpath refid="project.class.path" />
     </java>
   </target>
 
-
   <target name="compile" description="compile the code">
     <mkdir dir="build" />
     <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source">
-     <classpath refid="project.class.path" />
+      <classpath refid="project.class.path" />
     </javac>
-
   </target>
 
   <target name="run" depends="compile,setup" description="run the main">
-    <java classname="${mainClass}"  >  
-       <classpath refid="project.class.path" />
+    <java classname="${mainClass}">
+      <classpath refid="project.class.path" />
     </java>
   </target>
 
   <target name="clean" description="get rid of unnecessary files">
     <delete failonerror="false" verbose="true">
-      <fileset dir="build" includes="**/*.class"/>
+      <fileset dir="build" includes="**/*.class" />
     </delete>
     <delete dir="javadoc" quiet="true" />
     <delete dir="dist" quiet="true" />
@@ -68,127 +64,119 @@
   </target>
 
   <target name="test" depends="compile,setup" description="run junit tests">
-
-   <junit haltonerror="no" haltonfailure="no">
-       <classpath refid="project.class.path" />
-
-       <batchtest fork="yes">
-          <fileset dir="src">
-            <!-- this will pick up every class with a name ending in Test -->
-            <include name="**/*Test.java"/>
-          </fileset>
-       </batchtest>
-
-        <formatter type="plain" usefile="false" /> 
-       
-   </junit>
-  </target>
- <target name="javadoc" depends="compile"> 
- 
-   <delete dir="javadoc" quiet="true" /> 
-   <javadoc  destdir="javadoc" author="true" version="true" use="true" >  
-      <fileset dir="src" includes="**/*.java"/>  
+    <junit haltonerror="no" haltonfailure="no">
       <classpath refid="project.class.path" />
 
-   </javadoc>
+      <batchtest fork="yes">
+        <fileset dir="src">
+          <!-- this will pick up every class with a name ending in Test -->
+          <include name="**/*Test.java" />
+          </fileset>
+      </batchtest>
 
-   <!-- delete the old javadoc -->
-   <delete quiet="true" dir="${javadocDest}" /> 
+      <formatter type="plain" usefile="false" />
 
-   <!-- copy everything you just made to the javadoc destination, and then make it readable --> 
- 
-   <copy todir="${javadocDest}" > 
-     <fileset dir="javadoc"/> 
-   </copy> 
- 
-   <!-- Note: this only does the chmod command on the 
-        javadoc subdirectory and its contents.  You MIGHT have to
-	MANUALLY do the chmod on the parent directories.  However,
-	you should only need to do that once. --> 
- 
-   <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" /> 
-   <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" /> 
-   <echo>Javadoc deployed to ${javadocURL}</echo> 
+    </junit>
+  </target>
 
- </target>
+  <target name="javadoc" depends="compile">
+    <delete dir="javadoc" quiet="true" />
+    <javadoc  destdir="javadoc" author="true" version="true" use="true">
+      <fileset dir="src" includes="**/*.java" />
+      <classpath refid="project.class.path" />
 
- <target name="jar" depends="compile">
-   <mkdir dir="dist" />
-   <jar destfile="dist/${projectName}.jar" basedir="build" >
-       <manifest>
-         <attribute name="Main-Class" value="${mainClass}"/>
-       </manifest>
-   </jar>
- </target>
+    </javadoc>
 
- <target name="download" > 
- 
-  <delete quiet="true"> 
-     <fileset dir="temp" includes="**/*" />  
-     <fileset dir="download" includes="**/*" />  
-  </delete> 
- 
-  <mkdir dir="download" /> 
-  <mkdir dir="temp" />  
-  <mkdir dir="temp/${projectName}" /> 
- 
-  <copy todir="temp/${projectName}"> 
-    <fileset dir="." 
-     excludes="build/**, javadoc/**, **/*~, temp/**, dist/**, download/**"/> 
-  </copy> 
- 
-  <tar destfile="temp/${projectName}.tar"
-       basedir="temp"
-       includes="${projectName}/**" 
-   /> 
- 
-  <gzip zipfile="download/${projectName}.tgz" 
-        src="temp/${projectName}.tar" /> 
- 
-  <zip destfile="download/${projectName}.zip"
-       basedir="temp"
-       includes="${projectName}/**"
-  /> 
- 
-  <delete quiet="true"> 
-     <fileset dir="temp" includes="**/*"/>  
-  </delete> 
-  
-</target> 
- 
- <target name="publish" depends="jar,javadoc,download,linenumbers">
-   <mkdir dir="${webRoot}/${projectPath}" />
-  
-   <delete dir="${webRoot}/${projectPath}/browse" />
-   <mkdir dir="${webRoot}/${projectPath}/browse" />
+    <!-- delete the old javadoc -->
+    <delete quiet="true" dir="${javadocDest}" />
 
-   <delete dir="${webRoot}/${projectPath}/download" />
-   <mkdir dir="${webRoot}/${projectPath}/download" />
+    <!-- copy everything you just made to the javadoc destination, and then make it readable -->
 
-   <copy file="html/index.html" todir="${webRoot}/${projectPath}"/>
-   <copy file="numberedsource.txt" todir="${webRoot}/${projectPath}/browse" />
+    <copy todir="${javadocDest}">
+      <fileset dir="javadoc" />
+    </copy>
 
-   <copy todir="${webRoot}/${projectPath}/download" > 
-     <fileset dir="download"/> 
-     <fileset dir="dist" />
-   </copy> 
+    <!-- Note: this only does the chmod command on the
+         javadoc subdirectory and its contents.  You MIGHT have to
+         MANUALLY do the chmod on the parent directories.  However,
+         you should only need to do that once. -->
 
-   <copy file="build.xml" todir="${webRoot}/${projectPath}/browse"/>
+    <chmod dir="${javadocDest}" perm="755"  type="dir" includes="**" />
+    <chmod dir="${javadocDest}" perm="755"  type="file" includes="**/*" />
+    <echo>Javadoc deployed to ${javadocURL}</echo>
+  </target>
 
-   <copy todir="${webRoot}/${projectPath}/browse/src" > 
-     <fileset dir="src"/> 
-   </copy> 
+  <target name="jar" depends="compile">
+    <mkdir dir="dist" />
+    <jar destfile="dist/${projectName}.jar" basedir="build">
+      <manifest>
+	<attribute name="Main-Class" value="${mainClass}" />
+      </manifest>
+    </jar>
+  </target>
 
-   <copy todir="${webRoot}/${projectPath}/browse/sampleData" > 
-     <fileset dir="sampleData"/> 
-   </copy> 
+  <target name="download">
+    <delete quiet="true">
+      <fileset dir="temp" includes="**/*" />
+      <fileset dir="download" includes="**/*" />
+    </delete>
 
+    <mkdir dir="download" />
+    <mkdir dir="temp" />
+    <mkdir dir="temp/${projectName}" />
 
-   <chmod dir="${webRoot}/${projectPath}" 
-	  perm="755" type="both" includes="**/*"/>
+    <copy todir="temp/${projectName}">
+      <fileset dir="."
+	       excludes="build/**, javadoc/**, **/*~, temp/**, dist/**, download/**" />
+    </copy>
 
-   <echo>Project published to ${webBaseUrl}/${projectPath}</echo> 
- </target>
+    <tar destfile="temp/${projectName}.tar"
+	 basedir="temp"
+	 includes="${projectName}/**" />
+
+    <gzip zipfile="download/${projectName}.tgz"
+          src="temp/${projectName}.tar" />
+
+    <zip destfile="download/${projectName}.zip"
+	 basedir="temp"
+	 includes="${projectName}/**" />
+
+    <delete quiet="true">
+      <fileset dir="temp" includes="**/*" />
+    </delete>
+  </target>
+
+  <target name="publish" depends="jar,javadoc,download,linenumbers">
+    <mkdir dir="${webRoot}/${projectPath}" />
+
+    <delete dir="${webRoot}/${projectPath}/browse" />
+    <mkdir dir="${webRoot}/${projectPath}/browse" />
+
+    <delete dir="${webRoot}/${projectPath}/download" />
+    <mkdir dir="${webRoot}/${projectPath}/download" />
+
+    <copy file="html/index.html" todir="${webRoot}/${projectPath}" />
+    <copy file="numberedsource.txt" todir="${webRoot}/${projectPath}/browse" />
+
+    <copy todir="${webRoot}/${projectPath}/download">
+      <fileset dir="download" />
+      <fileset dir="dist" />
+    </copy>
+
+    <copy file="build.xml" todir="${webRoot}/${projectPath}/browse" />
+
+    <copy todir="${webRoot}/${projectPath}/browse/src">
+      <fileset dir="src" />
+    </copy>
+
+    <copy todir="${webRoot}/${projectPath}/browse/sampleData">
+     <fileset dir="sampleData" />
+    </copy>
+
+    <chmod dir="${webRoot}/${projectPath}"
+           perm="755" type="both" includes="**/*" />
+    <echo>Project published to ${webBaseUrl}/${projectPath}</echo>
+  </target>
 
   <target name="linenumbers" description="Creates a file containing all source files with line numbers">
     <exec executable="bash">
