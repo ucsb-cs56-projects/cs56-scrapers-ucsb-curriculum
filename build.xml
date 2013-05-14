@@ -25,6 +25,21 @@
          <pathelement location="build"/>
          <pathelement location="lib/junit-4.8.2.jar"/>
   </path>
+  
+  <target name="-check-ssl-file" unless="file.exists">
+    <available property="file.exists" file="jssecacerts"/>
+  </target>
+
+  <target name="setup" 
+	  depends="compile,-check-ssl-file" 
+	  description="downloads ssl certificate for curriculum search page"
+	  unless="${file.exists}" >
+    <java classname="InstallCert">
+      <arg value="my.sa.ucsb.edu:443"/>
+      <classpath refid="project.class.path" />
+    </java>
+  </target>
+
 
   <target name="compile" description="compile the code">
     <mkdir dir="build" />
@@ -34,7 +49,7 @@
 
   </target>
 
-  <target name="run" depends="compile" description="run the main">
+  <target name="run" depends="compile,setup" description="run the main">
     <java classname="${mainClass}"  >  
        <classpath refid="project.class.path" />
     </java>
@@ -50,7 +65,7 @@
     <delete dir="temp" quiet="true" />
   </target>
 
-  <target name="test" depends="compile" description="run junit tests">
+  <target name="test" depends="compile,setup" description="run junit tests">
 
    <junit haltonerror="no" haltonfailure="no">
        <classpath refid="project.class.path" />
