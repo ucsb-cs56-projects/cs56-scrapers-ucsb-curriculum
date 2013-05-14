@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project default="compile">
-
   <!-- build.xml for cs56-scrapers-ucsb-curriculum
-       Authors: James Neally, CS56, W12
+       Authors:
+       James Neally, CS56, W12
+       Mark Nguyen, CS56, S13
+       Daniel Vicory, CS56, S13
        P. Conrad, CS56 S13 -->
 
   <property environment="env"/> <!-- load the environment variables --> 
@@ -34,7 +36,7 @@
 	  depends="compile,-check-ssl-file" 
 	  description="downloads ssl certificate for curriculum search page"
 	  unless="${file.exists}" >
-    <java classname="InstallCert">
+    <java classname="InstallCert" inputstring="1">
       <arg value="my.sa.ucsb.edu:443"/>
       <classpath refid="project.class.path" />
     </java>
