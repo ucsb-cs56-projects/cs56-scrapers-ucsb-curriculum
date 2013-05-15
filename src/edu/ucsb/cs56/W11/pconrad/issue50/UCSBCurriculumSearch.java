@@ -169,7 +169,7 @@ public class UCSBCurriculumSearch
        initial call to this constructor by making additional calls to 
        loadCourses.
 
-       @param dept 8-character department code.  (Pad on right with spaces if needed)
+       @param dept department code.  (e.g., "CMPSC" or "ART")
        @param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
        @param level one of "Undergraduate","Graduate","All"
        
@@ -199,7 +199,7 @@ public class UCSBCurriculumSearch
        After courses are loaded into the object, other methods can be used to 
        look up courses by course number and/or enrollment code
 
-       @param dept 8-character department code.  (Pad on right with spaces if needed)
+       @param dept department code.  (e.g., "CMPSC" or "ART")
        @param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
        @param level one of "Undergraduate","Graduate","All"
        @return the number of courses loaded
@@ -456,7 +456,7 @@ public class UCSBCurriculumSearch
        This is primarily used internally to get the HTML that loadCourses
        parses to load courses into the object.
 
-       @param dept the abbreviated name of the department (eg. "CMPSC"). Previously, 
+       @param dept department code.  (e.g., "CMPSC" or "ART")
        @param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
        @param level one of "Undergraduate","Graduate","All"
        @return HTML code for the page
