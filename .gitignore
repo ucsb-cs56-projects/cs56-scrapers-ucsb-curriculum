@@ -1,6 +1,15 @@
 *.class
 
+
 # Package Files #
 *.jar
 *.war
 *.ear
+
+
+# SSL Cert for my.sa.ucsb.edu #
+jssecacerts
+
+
+# Emacs Backup Files #
+*~
