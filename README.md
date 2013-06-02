@@ -9,6 +9,22 @@ The long term goal is to be add UCSB Courses directly into a Calendar program (e
 	* [660](https://foo.cs.ucsb.edu/56mantis/view.php?id=660)
 	* [396](https://foo.cs.ucsb.edu/56mantis/view.php?id=396)
 
+
+The UCSBCurriculumSearch object is designed to load its data automatically from the web page: http://my.sa.ucsb.edu/public/curriculum/. The current version shows a Java approach to solving the "viewstate" problem that arises when working with ASPX websites, as well as illustrating how to do a POST in Java. It also sketches out the java objects needed, though there is lots of work still left to do---mostly, parsing the HTML.
+
+You can find an example of the HTML that you need to be able to parse in the directory [sampleData](https://github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/tree/master/sampleData) in the file [testOutput.html](https://raw.github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/master/sampleData/testOutput.html). This file contains the result of doing a query on CMPSC undergraduate courses for Spring 2011 (retrieved 02/20/2011).
+
+You will see that each lecture or discussion section is represented by a table row that starts with this tag:
+
+			<tr class="CourseInfoRow">
+	
+You will see that the fields in the UCSBLecture and UCSBSection classes correspond to the fields that can be found in these rows. A few observations may help:
+
+* A lot of redundant information (e.g. long form course description, major restrictions) is included in both the lecture section rows and the discussion section rows. We suggest making the simplifying assumption that all of the sections for a given lecture have the same information for these fields, and so we store that only for the lecture sections.
+* In the HTML for each CourseInfoRow there is a field called "section" that has a boolean value of "true" or "false" (spelled out in text). Confusingly, it appears to be "true" for the Lectures, and "false" for the Discussion Sections (which is the opposite of what you might expect.)
+* Note the spacing of course numbers—there is more information about this in the Javadoc
+* The UCSBCurriculumSearch constructor does an initial read of the URL to initialize two instance variables: viewStateString and eventValString. This is because those fields have to be "echoed back" to the server on every subsequent query, or the server will return a bad status code (HTTP status code 500). You shouldn't have to worry too much about that, though. Your main job is to flesh out the UCSBLecture and UCSBSection classes, and add methods to parse the HTML and initialize the fields in those classes.
+
 ## Usage
 
 To run the course scraper, do:
