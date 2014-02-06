@@ -32,3 +32,5 @@ To run the course scraper, do:
 	ant run
 
 If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run and show a course listing.
+
+![](http://i.imgur.com/56aQUiX.png)
