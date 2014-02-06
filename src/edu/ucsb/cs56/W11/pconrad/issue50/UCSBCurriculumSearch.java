@@ -66,6 +66,8 @@ public class UCSBCurriculumSearch {
 
 	    urlc = (HttpsURLConnection) endpoint.openConnection();
 	    urlc.setRequestMethod("GET");
+            urlc.setRequestProperty("User-Agent", agent);
+            urlc.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 	    urlc.setDoInput(true);
 	    urlc.setUseCaches(false);
 	    urlc.setAllowUserInteraction(false);
@@ -142,32 +144,10 @@ public class UCSBCurriculumSearch {
 	     extractHiddenFieldValue("__EVENTVALIDATION",mainPage);
 
 	//System.out.println("__VIEWSTATE=" + viewStateString);
-	// System.out.println("__EVENTVALIDATION=" + eventValString);
+	//System.out.println("__EVENTVALIDATION=" + eventValString);
 
 	// System.out.println("End of Constructor");
    }
-
-    /** This constructor is a convenience method that
-	constructs the object, then calls loadCourses given the
-	parameters to the constructor,
-	loading up the UCSBCurriculumSearch object with a set of
-	courses for a given Department, Quarter, and level.
-
-	After courses are loaded into the object, other methods can be used to
-	look up courses by course number and/or enrollment code.
-
-	Additional departments or quarters can be loaded after the
-	initial call to this constructor by making additional calls to
-	loadCourses.
-
-	@param dept department code.  (e.g., "CMPSC" or "ART")
-	@param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
-	@param level one of "Undergraduate","Graduate","All"
-    */
-    public UCSBCurriculumSearch(String dept, String qtr, String level) throws Exception {
-	this(); // call default constructor
-	this.loadCourses(dept,qtr,level);
-    }
 
     /** When searching for courses, the HTTP POST method must be used---this method
 	helps to encode the HTML Form parameters properly (using URLEncoding)
@@ -273,7 +253,7 @@ public class UCSBCurriculumSearch {
 	return num_lectures;
     }
 
-    /** Find the Course Title given a subsection of HTML only including one section or lecture
+    /** Find the Course Title given a subsection of HTML only including one section or lecture.
 	@param html HTML of only one lecture or section
 	@return String Course Title e.g. "CMPSC     8"
     */
@@ -283,7 +263,9 @@ public class UCSBCurriculumSearch {
         return html.substring(html.substring(0, html.indexOf(after_title_string)).lastIndexOf('>') + 1, html.indexOf(after_title_string)).trim();
     }
 
-    /** Find the Full Course Title given a subsection of HTML only inclduing one section or lecture
+    /** Find the Full Course Title (Abbreviation) given a subsection of HTML only inclduing one section or lecture.
+        If no Course Title abbreviation is found in the given section of HTML, return an empty string ("").
+	(This is how we know this portion of html holds the information of a section, not a lecture.)
 	@param html HTML of only one lecture or section
 	@return String Full Course Title e.g. "APP TO UNIV WRIT"
     */
@@ -293,8 +275,13 @@ public class UCSBCurriculumSearch {
         String ends_in = "</u>";
         String title = "";
         title += html.substring(html.indexOf(search) + search.length());
-        title = title.substring(title.indexOf('>') + 4, title.indexOf(ends_in));
-        return title.trim();
+        //title = title.substring(title.indexOf('>') + 4, title.indexOf(ends_in));
+	//return title.trim();
+	return "stub course abbreviation"; // STUB!
+	// It appears the above code does not work as expected. 
+        // In fact, the commented out code will cause an out of bounds exception.
+        // The curriculum search html structure has changed a bit since this code was written.
+	// Come up with a working way to pull the Course Title from the given html.
     }
 
     /** Find the course description given a subsection of HTML only including on section or lecture
@@ -423,7 +410,7 @@ public class UCSBCurriculumSearch {
 	@param html HTML of section
      */
     public void parseSectionHtml(String html){
-        return; // Stub not implemented in this ticket
+        return; // STUB! not implemented in this ticket
     }
 
     /** getPage() returns the contents of a page of HTML containing the courses
@@ -450,9 +437,12 @@ public class UCSBCurriculumSearch {
 	    encodedData += ("&" + encodedNameValuePair("ctl00$pageContent$courseList",dept));
 	    encodedData += ("&" + encodedNameValuePair("ctl00$pageContent$quarterList",qtr));
 	    encodedData += ("&" + encodedNameValuePair("ctl00$pageContent$dropDownCourseLevels",level));
+	    encodedData += ("&" + encodedNameValuePair("ctl00$pageContent$searchButton.x", "0"));
+	    encodedData += ("&" + encodedNameValuePair("ctl00$pageContent$searchButton.y", "0"));
 
+	    byte[] encodedBytes = encodedData.getBytes();
 
-	    encodedData += "&ctl00%24pageContent%24searchButton.x=34&ctl00%24pageContent%24searchButton.y=6";
+	    //	    encodedData += "&ctl00%24pageContent%24searchButton.x=34&ctl00%24pageContent%24searchButton.y=6";
 
 	    String type = "application/x-www-form-urlencoded";
 
@@ -462,17 +452,18 @@ public class UCSBCurriculumSearch {
 
 	    urlc = (HttpURLConnection) endpoint.openConnection();
 	    urlc.setRequestMethod("POST");
+	    urlc.setRequestProperty("User-Agent", agent);
+	    urlc.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 	    urlc.setDoOutput(true);
 	    urlc.setDoInput(true);
 	    urlc.setUseCaches(false);
 	    urlc.setAllowUserInteraction(false);
 	    urlc.setRequestProperty("Content-type", type);
 	    urlc.setRequestProperty("Referer",MAINPAGE_URL);
-	    urlc.setRequestProperty( "Content-Length", Integer.toString(encodedData.length()) );
+	    urlc.setRequestProperty( "Content-Length", Integer.toString(encodedBytes.length) );
 
 	    OutputStream os = urlc.getOutputStream();
-	    os.write( encodedData.getBytes() );
-	    os.write("\n".getBytes());
+	    os.write( encodedBytes );
 	    os.flush();
 
 	    int rc = urlc.getResponseCode();
@@ -616,12 +607,10 @@ public class UCSBCurriculumSearch {
 
 	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 	    final String dept = "CMPSC"; // the department
-	    final String qtr = "20112";  // 2012 = S11 [yyyyQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	    final String qtr = "20142";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
 	    final String level = "Undergraduate"; // other options: "Graduate", "All".
 
-	    String page = uccs.getPage(dept,qtr,level);
-
-	    // Pulls from the CMPSC page of Spring '11 and calls
+	    // Pulls from the CMPSC page of Spring '14 and calls
 	    // the toString() of the UCSBLectures
 
 	    uccs.loadCourses(dept, qtr, level);
