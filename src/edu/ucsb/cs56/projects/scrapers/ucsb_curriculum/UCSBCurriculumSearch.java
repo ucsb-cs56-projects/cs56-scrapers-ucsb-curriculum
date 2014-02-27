@@ -409,7 +409,7 @@ public class UCSBCurriculumSearch {
      */
     public void parseSectionHtml(String html){
 	//Create a default Section object
-	String sect = new UCSBSection();
+	UCSBSection sect = new UCSBSection();
 
 	
 

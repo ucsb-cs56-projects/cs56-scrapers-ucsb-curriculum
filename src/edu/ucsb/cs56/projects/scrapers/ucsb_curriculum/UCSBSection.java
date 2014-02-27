@@ -19,7 +19,46 @@ public class UCSBSection {
     private int capacity;
   
     // TODO: Write constructor(s), getters/setters, toString(), equals()
-    
-  
+    /**
+     * Default Constructor
+     */
+    public UCSBSection(){ };
+
+    /**
+     * Detailed Constructor
+     */
+    public UCSBSection(UCSBLecture parent, String status, int enrollCode, 
+		       String sectionTime, String sectionRoom, int enrolled, int capacity)
+    {
+	this.parent = parent;	
+	this.status = status;
+	this.enrollCode = enrollCode;
+	this.sectionTime = sectionTime;
+	this.sectionRoom = sectionRoom;
+	this.enrolled = enrolled;
+	this.capacity = capacity;
+    }
+
+    //Getters and Setters
+    public UCSBLecture getParent(){ return parent;}
+    public void setParent(UCSBLecture p){ this.parent = p;}
+
+    public String getStatus(){return status;}
+    public void setStatus(String s){ this.status = s;}
+
+    public int getEnrollCode(){ return enrollCode;}
+    public void setEnrollCode(int enrollCode){ this.enrollCode = enrollCode;}
+
+    public String getSectionTime(){ return sectionTime;}
+    public void setSectionTime(String sectionTime){ this.sectionTime = sectionTime;}
+
+    public String getSectionRoom(){ return sectionRoom;}
+    public void setSectionRoom(String sectionRoom){ this.sectionRoom = sectionRoom;}
+
+    public int getEnrolled(){ return enrolled;}
+    public void getEnrolled(int enrolled){ this.enrolled = enrolled;}
+
+    public int getCapacity(){ return capacity;}
+    public void setCapacity(int capacity){ this.capacity = capacity;}
     
 }
