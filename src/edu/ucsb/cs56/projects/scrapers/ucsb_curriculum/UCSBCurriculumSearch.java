@@ -1,6 +1,5 @@
 package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
-
 import java.net.*;
 import java.io.*;
 import org.junit.Test;
@@ -25,7 +24,6 @@ import javax.net.ssl.SSLPeerUnverifiedException;
    Getting information from this site is especially challenging
    because of the ASPX viewstate issue; the viewstate must be
    preserved from transaction to transaction.
-
 
    @author Phill Conrad
    @author James Neally
@@ -282,10 +280,6 @@ public class UCSBCurriculumSearch {
 	title = title.substring(0, title.indexOf("</span>"));
 	
 	return title;
-	// It appears the above code does not work as expected. 
-        // In fact, the commented out code will cause an out of bounds exception.
-        // The curriculum search html structure has changed a bit since this code was written.
-	// Come up with a working way to pull the Course Title from the given html.
     }
 
     /** Find the course description given a subsection of HTML only including on section or lecture
@@ -414,6 +408,11 @@ public class UCSBCurriculumSearch {
 	@param html HTML of section
      */
     public void parseSectionHtml(String html){
+	//Create a default Section object
+	String sect = new UCSBSection();
+
+	
+
         return; // STUB! not implemented in this ticket
     }
 
