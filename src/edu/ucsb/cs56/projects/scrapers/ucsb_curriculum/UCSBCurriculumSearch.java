@@ -29,7 +29,8 @@ import javax.net.ssl.SSLPeerUnverifiedException;
    @author James Neally
    @author Mark Nguyen
    @author Daniel Vicory
-   @version Mantis ticket 396, W12, extended from Mantis ticket 50, W11, CS56
+   @author Kevin Mai
+   @version W14, extended from Matis ticket 396, W12, CS56
 */
 
 public class UCSBCurriculumSearch {
@@ -244,7 +245,8 @@ public class UCSBCurriculumSearch {
             if(course_abbr.equals(""))
                 parseSectionHtml(html); // Parses the HTML of a section.
             else{
-                parseLectureHtml(html); // Parses the HTML of a lecture.
+		// Parses the HTML of a lecture.
+                lectures.add(parseLectureHtml(html));
                 num_lectures++;
             }
         }
@@ -311,7 +313,8 @@ public class UCSBCurriculumSearch {
 	@param html HTML to parse. Only looks at the end
 	@param lect Lecture to set with the parsed elements
      */
-    private void parseEnd(String html, UCSBLecture lect){
+    private UCSBLecture parseEnd(String html, UCSBLecture lect){
+	UCSBLecture temp = lect;
         // Throw away the last part because it doesn't mean anything.
         html = removeLastElement(html);
 
@@ -349,12 +352,13 @@ public class UCSBCurriculumSearch {
         html = removeLastElement(html);
 
         // Set all the fields
-        lect.setEnrolled(enrollment);
-        lect.setCapacity(capacity);
-        lect.setLectRoom(lectRoom);
-        lect.setLectTime(lectTime);
-        lect.setLectDays(lectDays);
-        lect.setInstructor(instructor);
+	temp.setEnrolled(enrollment);
+        temp.setCapacity(capacity);
+        temp.setLectRoom(lectRoom);
+        temp.setLectTime(lectTime);
+        temp.setLectDays(lectDays);
+        temp.setInstructor(instructor);
+	return temp;
 
     }
 
@@ -381,7 +385,7 @@ public class UCSBCurriculumSearch {
     /**  Parses the HTML of a Lecture and creates a new UCSBLecture object, which is added to the arrayList of lectures
 	 @param html HTML of a lecture.
      */
-    public void parseLectureHtml(String html){
+    public UCSBLecture parseLectureHtml(String html){
         // Create a default Lecture object
         UCSBLecture lect = new UCSBLecture();
 
@@ -397,10 +401,11 @@ public class UCSBCurriculumSearch {
         lect.setStatus(status);
 
         // Set the other properties
-        parseEnd(html, lect);
+        lect = parseEnd(html, lect);
 
         // Whew! Finally add it to the lectures arraylist
-        lectures.add(lect);
+	return lect;
+	//        lectures.add(lect);
 
     }
 

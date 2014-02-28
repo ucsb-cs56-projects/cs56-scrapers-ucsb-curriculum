@@ -60,5 +60,13 @@ public class UCSBSection {
 
     public int getCapacity(){ return capacity;}
     public void setCapacity(int capacity){ this.capacity = capacity;}
+
+    @Override
+    public String toString() {
+	return "UCSBSection [parent=" + parent + ", status=" + status
+	    + ", enrollCode=" + enrollCode + ", sectionTime=" + sectionTime
+	    + ", sectionRoom=" + sectionRoom + ", enrolled=" + enrolled
+	    + ", capacity=" + capacity + "]";
+    }
     
 }
