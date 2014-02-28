@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 @author Phill Conrad
 @author James Neally
+@author Kevin Mai
 @version W12 Issue 396 extension of cs56.projects.W11, Issue 50
 @see UCSBLectureTest
 

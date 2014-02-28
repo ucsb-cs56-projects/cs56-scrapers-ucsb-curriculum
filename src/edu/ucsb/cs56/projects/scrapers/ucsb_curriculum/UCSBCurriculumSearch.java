@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -603,7 +604,9 @@ public class UCSBCurriculumSearch {
 	       get an ArrayList, and countLectures to determine how many there are.)
      */
 
-    public UCSBLecture getLecture(String courseNum, String quarter) {
+    public UCSBLecture getLecture(String Title, String quarter) {
+	String department;
+	String CourseNum;
 	return null; // STUB!
     }
 
@@ -703,25 +706,58 @@ public class UCSBCurriculumSearch {
 	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
 
 	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-	    final String dept = "CMPSC"; // the department
-	    final String qtr = "20142";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	    final String level = "Undergraduate"; // other options: "Graduate", "All".
-
+	    String dept = "CMPSC"; // the department
+	    String qtr = "20142";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	    String level = "Undergraduate"; // other options: "Graduate", "All".
+	    String year;
 	    // Pulls from the CMPSC page of Spring '14 and calls
 	    // the toString() of the UCSBLectures
 
 	    uccs.loadCourses(dept, qtr, level);
-	    //	    uccs.printLectures();
-
-	    System.out.println(uccs.getSection(8557));
-	    System.out.println(uccs.getSection(53728));
+	    uccs.printLectures();
+	    /*
+	    System.out.println("Enter the dept, qtr, year, and crs lvl: ");
+	    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+	    String s = bufferedReader.readLine();
+	    String[] inputList = s.split(", ");
 	    
-
+	    dept = inputList[0];
+	    qtr = inputList[1];
+	    qtr = qtrParse(qtr);
+	    
+	    year = inputList[2];
+	    qtr = year + qtr;
+	    
+	    level = inputList[3];
+	    
+	    System.out.println(dept + ", " + qtr + ", " + level);
+	    uccs.loadCourses(dept, qtr, level);
+	    uccs.printLectures();
+	    */
 	} catch (Exception e) {
 	    System.err.println(e);
 	    e.printStackTrace();
 	}
     }  // main
+
+    public static String qtrParse(String qtr){
+	String tmp = "";
+	switch(qtr){
+	case "Summer":
+	    tmp = "3";
+	    break;
+	case "Fall":
+	    tmp = "4";
+	    break;
+	case "Winter":
+	    tmp = "1";
+	    break;
+	case "Spring":
+	    tmp = "2";
+	    break;
+	}
+	return tmp;
+    }
 
     /**
      * Builds a query to submit to the UCSBCourseCurriculumSearch 
@@ -770,11 +806,11 @@ public class UCSBCurriculumSearch {
 		
 		private final String value;
 		CourseLevel(String value) {
-			this.value = value;
+		    this.value = value;
 		}
 
 		public String toString() {
-			return value;
+		    return value;
 		}
 
 	}
@@ -792,20 +828,20 @@ public class UCSBCurriculumSearch {
 	 * @param courseLevel the course level to filter by, if at all
 	 */
 	Query(String department, Quarter quarter, int year, CourseLevel courseLevel) {
-		this.department = department.trim().toUpperCase();
-		this.year = year;
-		this.quarter = quarter;
-		this.courseLevel = courseLevel;
+	    this.department = department.trim().toUpperCase();
+	    this.year = year;
+	    this.quarter = quarter;
+	    this.courseLevel = courseLevel;
 	}
 	
 	public String getTerm() {
-		// Append the quarter's integer value to the end of the year.
-		return String.valueOf(year) + quarter;
+	    // Append the quarter's integer value to the end of the year.
+	    return String.valueOf(year) + quarter;
 	}
 	
 	/** @return the parsed department name */
 	public String getDepartment() {
-		return department;
+	    return department;
 	}
     }
 }

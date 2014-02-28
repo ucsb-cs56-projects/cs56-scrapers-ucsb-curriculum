@@ -4,6 +4,7 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
     plus contains a reference to the associated lecture section
 
 @author Phill Conrad
+@author Kevin Mai
 @version cs56.projects.W11, Issue 50
 @see UCSBSectionTest
 
