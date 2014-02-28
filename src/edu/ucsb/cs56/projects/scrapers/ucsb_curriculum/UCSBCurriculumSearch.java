@@ -175,13 +175,8 @@ public class UCSBCurriculumSearch {
     */
     public int loadCourses(String dept, String qtr, String level) throws Exception {
 
-	// @@@ TODO
-	//   For each discussion section, add it to the ArrayList<UCSBSection>
-	// inside the appropriate UCSBLecture object.
-
 	// Then add some methods that can be used to look up courses by
 	// course number and/or enrollment code.
-
 
         // Get the page to parse. This is HTML
         String page = getPage(dept,qtr,level);
@@ -582,10 +577,18 @@ public class UCSBCurriculumSearch {
 
     }
 
-    /** return a UCSBSection object given an enrollcode
+    /** return a UCSBSection object given an enrollcode, if it doesn't exist,
+     *  return a null object
      */
     public UCSBSection getSection(int enrollCode) {
-	return null; // STUB!
+	UCSBSection section = null;
+        for(UCSBLecture lect : lectures){
+   	    for(UCSBSection sect : lect.getSections()){
+		if(sect.getEnrollCode() == enrollCode)
+		    section = sect;
+	    }
+        }
+	return section;
     }
 
     /** return a UCSBLecture object given a course number and quarter
@@ -683,7 +686,7 @@ public class UCSBCurriculumSearch {
 	return -42; // STUB!
     }
 
-    //Prints lectures and sections
+    //Prints lectures and subsequent sections
     public void printLectures(){
         for(UCSBLecture lect : lectures){
             System.out.println(lect);
@@ -708,7 +711,11 @@ public class UCSBCurriculumSearch {
 	    // the toString() of the UCSBLectures
 
 	    uccs.loadCourses(dept, qtr, level);
-            uccs.printLectures();
+	    //	    uccs.printLectures();
+
+	    System.out.println(uccs.getSection(8557));
+	    System.out.println(uccs.getSection(53728));
+	    
 
 	} catch (Exception e) {
 	    System.err.println(e);
