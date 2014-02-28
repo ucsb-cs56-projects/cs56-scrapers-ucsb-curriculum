@@ -311,14 +311,13 @@ public class UCSBCurriculumSearch {
     /**
      *
      */
-    private int findEnrollCode(String html){
+    private String findEnrollCode(String html){
 	String search = "target=\"_self\">";
 	String status = "";
 	status += html.substring(html.indexOf(search) + search.length());
 	status = status.substring(0, status.indexOf("<"));
 	status = status.trim();
-	int enrollCode = Integer.parseInt(status);
-	return enrollCode;
+	return status;
 	
     }
 
@@ -490,7 +489,7 @@ public class UCSBCurriculumSearch {
 	UCSBSection sect = new UCSBSection();
 
 	String status = findStatus(html);
-	int enrollCode = findEnrollCode(html);
+	String enrollCode = findEnrollCode(html);
 
 	sect.setStatus(status);
 	sect.setEnrollCode(enrollCode);
@@ -581,11 +580,11 @@ public class UCSBCurriculumSearch {
     /** return a UCSBSection object given an enrollcode, if it doesn't exist,
      *  return a null object
      */
-    public UCSBSection getSection(int enrollCode) {
+    public UCSBSection getSection(String enrollCode) {
 	UCSBSection section = null;
         for(UCSBLecture lect : lectures){
    	    for(UCSBSection sect : lect.getSections()){
-		if(sect.getEnrollCode() == enrollCode)
+		if(sect.getEnrollCode().equals(enrollCode))
 		    section = sect;
 	    }
         }
@@ -707,7 +706,7 @@ public class UCSBCurriculumSearch {
 
 	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 	    String dept = "CMPSC"; // the department
-	    String qtr = "20142";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	    String qtr = "20133";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
 	    String level = "Undergraduate"; // other options: "Graduate", "All".
 	    String year;
 	    // Pulls from the CMPSC page of Spring '14 and calls

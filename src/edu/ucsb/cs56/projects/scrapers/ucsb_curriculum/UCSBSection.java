@@ -13,7 +13,7 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 public class UCSBSection {
     private UCSBLecture parent;
     private String status; // e.g. "Full"
-    private int enrollCode; // e.g. 07989
+    private String enrollCode; // e.g. "07989"
     private String sectionDay;
     private String sectionTime;
     private String sectionRoom;
@@ -29,7 +29,7 @@ public class UCSBSection {
     /**
      * Detailed Constructor
      */
-    public UCSBSection(UCSBLecture parent, String status, int enrollCode, 
+    public UCSBSection(UCSBLecture parent, String status, String enrollCode, 
 		       String sectionTime, String sectionRoom, int enrolled, int capacity)
     {
 	this.parent = parent;	
@@ -48,8 +48,8 @@ public class UCSBSection {
     public String getStatus(){return status;}
     public void setStatus(String s){ this.status = s;}
 
-    public int getEnrollCode(){ return enrollCode;}
-    public void setEnrollCode(int enrollCode){ this.enrollCode = enrollCode;}
+    public String getEnrollCode(){ return enrollCode;}
+    public void setEnrollCode(String enrollCode){ this.enrollCode = enrollCode;}
 
     public String getSectionDay(){ return sectionDay;}
     public void setSectionDay(String sectionDay){ this.sectionDay = sectionDay;}
