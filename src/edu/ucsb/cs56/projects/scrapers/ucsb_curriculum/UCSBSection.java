@@ -68,13 +68,12 @@ public class UCSBSection {
     @Override
     public String toString() {
 	String result;
-	result =
-	    "\t Course Title: " + parent.getCourseTitle() + "\n"
+	result = "\t Course Title: " + parent.getCourseTitle() + "\n"
 	    + "\t Section Status: " + status + "\n"
 	    + "\t Enroll Code: " + enrollCode + "\n"
 	    + "\t Section Time: " + sectionTime + "\n"
 	    + "\t Section Rm: " + sectionRoom + "\n"
-	    + "\t Enrolled / Capacity " + enrolled + " / " + capacity + "\n";
+	    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
 	return result;
     }
     

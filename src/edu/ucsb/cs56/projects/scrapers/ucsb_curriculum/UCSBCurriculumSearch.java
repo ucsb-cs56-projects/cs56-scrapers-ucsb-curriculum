@@ -302,7 +302,7 @@ public class UCSBCurriculumSearch {
     }
 
     /**
-
+     *
      */
     private String findStatus(String html){
         String search = "class=\"Status\">";
@@ -310,6 +310,20 @@ public class UCSBCurriculumSearch {
         status += html.substring(html.indexOf(search) + search.length());
         status = status.substring(0, status.indexOf('<'));
         return status.trim();
+    }
+
+    /**
+     *
+     */
+    private int findEnrollCode(String html){
+	String search = "target=\"_self\">";
+	String status = "";
+	status += html.substring(html.indexOf(search) + search.length());
+	status = status.substring(0, status.indexOf("<"));
+	status = status.trim();
+	int enrollCode = Integer.parseInt(status);
+	return enrollCode;
+	
     }
 
     /** This method is different because the end of the tables, with info about
@@ -480,17 +494,14 @@ public class UCSBCurriculumSearch {
 	UCSBSection sect = new UCSBSection();
 
 	String status = findStatus(html);
-	int enrollCode;
-	String sectionTime;
-	String sectionRoom;
-	int enrolled;
-	int capacity;
+	int enrollCode = findEnrollCode(html);
 
+	sect.setStatus(status);
+	sect.setEnrollCode(enrollCode);
 	sect.setParent(parent);
-	
-	sect = parseEndSection(html, sect);
+      	sect = parseEndSection(html, sect);
 
-        return sect; // STUB! not implemented in this ticket
+        return sect;
     }
 
     /** getPage() returns the contents of a page of HTML containing the courses
