@@ -37,7 +37,7 @@ public class UCSBLecture {
     private int enrolled; // e.g. from 63 / 88, take the 63
     private int capacity; // e.g. from 63 / 88, take the 88
 
-    private ArrayList<UCSBSection> sections = null; // all of the sections
+    private ArrayList<UCSBSection> sections; // all of the sections
 
     // TODO: Write constructor(s), getters/setters, toString(), equals()
 
@@ -45,7 +45,8 @@ public class UCSBLecture {
      * Default Constructor
      */
     public UCSBLecture(){
-
+	//Need to initialize ArrayList<UCSBSection> --Worst Bug Ever
+	sections = new ArrayList<UCSBSection>();
     }
 
     /**
@@ -103,6 +104,13 @@ public class UCSBLecture {
 
     public int getCapacity(){ return capacity;}
     public void setCapacity(int capacity){ this.capacity = capacity;}
+
+    public ArrayList<UCSBSection> getSections(){ return sections;}
+    public void addSection(UCSBSection section){
+	UCSBSection tmp = new UCSBSection();
+	tmp = section;
+	sections.add(tmp);
+    }
 
     public String toString(){
         String result = "";

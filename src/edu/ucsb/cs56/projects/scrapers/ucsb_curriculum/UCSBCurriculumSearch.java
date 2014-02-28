@@ -488,7 +488,7 @@ public class UCSBCurriculumSearch {
 
 	sect.setParent(parent);
 	
-	
+	sect = parseEndSection(html, sect);
 
         return sect; // STUB! not implemented in this ticket
     }

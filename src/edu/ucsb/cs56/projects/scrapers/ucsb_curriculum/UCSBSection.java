@@ -69,12 +69,12 @@ public class UCSBSection {
     public String toString() {
 	String result;
 	result =
-	    "Course Title: " + parent.getCourseTitle() + "\n"
-	    + "Section Status: " + status + "\n";
-	    // + "Enroll Code: " + enrollCode + "\n"
-	    //	    + "Section Time: " + sectionTime + "\n"
-	    //	    + "Section Rm: " + sectionRoom + "\n"
-	    //	    + "Enrolled / Capacity" + enrolled + " / " + capacity + "\n";
+	    "\t Course Title: " + parent.getCourseTitle() + "\n"
+	    + "\t Section Status: " + status + "\n"
+	    + "\t Enroll Code: " + enrollCode + "\n"
+	    + "\t Section Time: " + sectionTime + "\n"
+	    + "\t Section Rm: " + sectionRoom + "\n"
+	    + "\t Enrolled / Capacity " + enrolled + " / " + capacity + "\n";
 	return result;
     }
     
