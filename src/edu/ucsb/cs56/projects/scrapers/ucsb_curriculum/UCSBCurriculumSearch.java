@@ -242,9 +242,12 @@ public class UCSBCurriculumSearch {
             String course_abbr = findPrimaryCourseAbbr(html);
 
             // If the course abbr is blank, then this is a section.
-            if(course_abbr.equals(""))
+            if(course_abbr.equals("")){
 		// Parses the HTML of a section.
-                parseSectionHtml(html, lectures.get(lecture_index));
+                UCSBSection tmp = new UCSBSection();
+		tmp = parseSectionHtml(html, lectures.get(lecture_index));
+		lectures.get(lecture_index).addSection(tmp);
+	    }
 	    else{
 		// Parses the HTML of a lecture.
                 lectures.add(parseLectureHtml(html));
@@ -360,6 +363,61 @@ public class UCSBCurriculumSearch {
         temp.setLectTime(lectTime);
         temp.setLectDays(lectDays);
         temp.setInstructor(instructor);
+	return temp;
+
+    }
+
+    /** This method is different because the end of the tables, with info about
+	instructor, enrolled, etc. has no unique defining characteristics.
+	We need to simply back up through each and know what they mean.
+	@param html HTML to parse. Only looks at the end
+	@param lect Lecture to set with the parsed elements
+     */
+    private UCSBSection parseEndSection(String html, UCSBSection sect){
+	UCSBSection temp = sect;
+        // Throw away the last part because it doesn't mean anything.
+        html = removeLastElement(html);
+
+        // The enrollment and capacity
+        String enrollment_html = getEndElement(html);
+
+        // First number is enrollment, second is capacity
+        int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
+        int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
+
+        // Take out the enrollment/capacity because it has been parsed
+        html = removeLastElement(html);
+
+        // The location of the lecture or section room
+        String sect_room_html = getEndElement(html);
+        String sectRoom = sect_room_html.trim();
+        html = removeLastElement(html);
+
+        // Secture Time
+        String sect_time_html = getEndElement(html);
+        String sectTime = sect_time_html.trim();
+        html = removeLastElement(html);
+
+        // Sect Days
+        String sect_days_html = getEndElement(html);
+        String sectDays = sect_days_html.trim();
+        html = removeLastElement(html);
+
+        // Instructor
+        String instructor_html = getEndElement(html);
+        int br = instructor_html.indexOf("<br />");
+        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
+            instructor_html = instructor_html.substring(0, br);
+        String instructor = instructor_html.trim();
+        html = removeLastElement(html);
+
+        // Set all the fields
+	temp.setEnrolled(enrollment);
+        temp.setCapacity(capacity);
+        temp.setSectionRoom(sectRoom);
+        temp.setSectionTime(sectTime);
+        temp.setSectionDay(sectDays);
+	//        temp.setInstructor(instructor);
 	return temp;
 
     }
@@ -614,10 +672,13 @@ public class UCSBCurriculumSearch {
 	return -42; // STUB!
     }
 
-
+    //Prints lectures and sections
     public void printLectures(){
         for(UCSBLecture lect : lectures){
             System.out.println(lect);
+	    for(UCSBSection sect : lect.getSections()){
+		System.out.println(sect);
+	    }
         }
     }
 

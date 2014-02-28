@@ -60,7 +60,7 @@ public class UCSBSection {
     public void setSectionRoom(String sectionRoom){ this.sectionRoom = sectionRoom;}
 
     public int getEnrolled(){ return enrolled;}
-    public void getEnrolled(int enrolled){ this.enrolled = enrolled;}
+    public void setEnrolled(int enrolled){ this.enrolled = enrolled;}
 
     public int getCapacity(){ return capacity;}
     public void setCapacity(int capacity){ this.capacity = capacity;}
@@ -68,12 +68,13 @@ public class UCSBSection {
     @Override
     public String toString() {
 	String result;
-	result = "Course Title: " + parent.getCourseTitle() + "\n"
-	    + "Section Status: " + status + "\n"
-	    + "Enroll Code: " + enrollCode + "\n"
-	    + "Section Time: " + sectionTime + "\n"
-	    + "Section Rm: " + sectionRoom + "\n"
-	    + "Enrolled / Capacity" + enrolled + " / " + capacity + "\n";
+	result =
+	    "Course Title: " + parent.getCourseTitle() + "\n"
+	    + "Section Status: " + status + "\n";
+	    // + "Enroll Code: " + enrollCode + "\n"
+	    //	    + "Section Time: " + sectionTime + "\n"
+	    //	    + "Section Rm: " + sectionRoom + "\n"
+	    //	    + "Enrolled / Capacity" + enrolled + " / " + capacity + "\n";
 	return result;
     }
     
