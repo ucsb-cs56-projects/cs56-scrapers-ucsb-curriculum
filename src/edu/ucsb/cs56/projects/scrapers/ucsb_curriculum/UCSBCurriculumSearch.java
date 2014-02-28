@@ -237,16 +237,18 @@ public class UCSBCurriculumSearch {
 
         // Now we go through the separate HTML sections and determine
 	// whether it is a lecture or a section
-
+	int lecture_index = -1;
         for(String html : lecture_html){
             String course_abbr = findPrimaryCourseAbbr(html);
 
             // If the course abbr is blank, then this is a section.
             if(course_abbr.equals(""))
-                parseSectionHtml(html); // Parses the HTML of a section.
-            else{
+		// Parses the HTML of a section.
+                parseSectionHtml(html, lectures.get(lecture_index));
+	    else{
 		// Parses the HTML of a lecture.
                 lectures.add(parseLectureHtml(html));
+		lecture_index++;
                 num_lectures++;
             }
         }
@@ -381,9 +383,11 @@ public class UCSBCurriculumSearch {
         return html.substring(0, index);
     }
 
+    
 
-    /**  Parses the HTML of a Lecture and creates a new UCSBLecture object, which is added to the arrayList of lectures
+    /**  Parses the HTML of a Lecture and returns a new UCSBLecture object
 	 @param html HTML of a lecture.
+	 @return UCSBLecture object with added members
      */
     public UCSBLecture parseLectureHtml(String html){
         // Create a default Lecture object
@@ -403,22 +407,32 @@ public class UCSBCurriculumSearch {
         // Set the other properties
         lect = parseEnd(html, lect);
 
-        // Whew! Finally add it to the lectures arraylist
+	//Returns UCSBLecture object
 	return lect;
-	//        lectures.add(lect);
 
     }
 
-    /** Parses the HTML of a Section and creates a new UCSBSection object, which is added to the appropriate lecture
+    /** Parses the HTML of a Section and returns a new UCSBSection object
 	@param html HTML of section
+	@param parent UCSBLecture object that correlates to the section
+	@return UCSBSection object with added members
      */
-    public void parseSectionHtml(String html){
+    public UCSBSection parseSectionHtml(String html, UCSBLecture parent){
 	//Create a default Section object
 	UCSBSection sect = new UCSBSection();
 
+	String status = findStatus(html);
+	int enrollCode;
+	String sectionTime;
+	String sectionRoom;
+	int enrolled;
+	int capacity;
+
+	sect.setParent(parent);
+	
 	
 
-        return; // STUB! not implemented in this ticket
+        return sect; // STUB! not implemented in this ticket
     }
 
     /** getPage() returns the contents of a page of HTML containing the courses

@@ -13,6 +13,7 @@ public class UCSBSection {
     private UCSBLecture parent;
     private String status; // e.g. "Full"
     private int enrollCode; // e.g. 07989
+    private String sectionDay;
     private String sectionTime;
     private String sectionRoom;
     private int enrolled; 
@@ -49,6 +50,9 @@ public class UCSBSection {
     public int getEnrollCode(){ return enrollCode;}
     public void setEnrollCode(int enrollCode){ this.enrollCode = enrollCode;}
 
+    public String getSectionDay(){ return sectionDay;}
+    public void setSectionDay(String sectionDay){ this.sectionDay = sectionDay;}
+
     public String getSectionTime(){ return sectionTime;}
     public void setSectionTime(String sectionTime){ this.sectionTime = sectionTime;}
 
@@ -63,10 +67,14 @@ public class UCSBSection {
 
     @Override
     public String toString() {
-	return "UCSBSection [parent=" + parent + ", status=" + status
-	    + ", enrollCode=" + enrollCode + ", sectionTime=" + sectionTime
-	    + ", sectionRoom=" + sectionRoom + ", enrolled=" + enrolled
-	    + ", capacity=" + capacity + "]";
+	String result;
+	result = "Course Title: " + parent.getCourseTitle() + "\n"
+	    + "Section Status: " + status + "\n"
+	    + "Enroll Code: " + enrollCode + "\n"
+	    + "Section Time: " + sectionTime + "\n"
+	    + "Section Rm: " + sectionRoom + "\n"
+	    + "Enrolled / Capacity" + enrolled + " / " + capacity + "\n";
+	return result;
     }
     
 }
