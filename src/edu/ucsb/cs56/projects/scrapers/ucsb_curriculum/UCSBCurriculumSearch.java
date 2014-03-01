@@ -703,55 +703,72 @@ public class UCSBCurriculumSearch {
     public static void main(String [] args) {
 	try {
 	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
-
-	    UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-	    String dept = "CMPSC"; // the department
-	    String qtr = "20133";  // 20142 = S14 [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	    String level = "Undergraduate"; // other options: "Graduate", "All".
-	    String year;
 	    // Pulls from the CMPSC page of Spring '14 and calls
 	    // the toString() of the UCSBLectures
 
-	    uccs.loadCourses(dept, qtr, level);
-	    uccs.printLectures();
-	    /*
-	    System.out.println("Enter the dept, qtr, year, and crs lvl: ");
-	    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-	    String s = bufferedReader.readLine();
-	    String[] inputList = s.split(", ");
-	    
-	    dept = inputList[0];
-	    qtr = inputList[1];
-	    qtr = qtrParse(qtr);
-	    
-	    year = inputList[2];
-	    qtr = year + qtr;
-	    
-	    level = inputList[3];
-	    
-	    System.out.println(dept + ", " + qtr + ", " + level);
-	    uccs.loadCourses(dept, qtr, level);
-	    uccs.printLectures();
-	    */
+	    //	    uccs.loadCourses(dept, qtr, level);
+	    //	    uccs.printLectures();
+
+	    while(true){
+		// Creates a new UCSBCurriculumSearch object
+		UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
+		System.out.println("Enter the dept, qtr, year, and crs lvl: ");
+		// Creates a new bufferedReader object
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+		// Reads user input
+		String s = bufferedReader.readLine();
+		// Closes program if user inputs empty string
+		if(s.equals("")){
+		    System.out.println("You have closed the Program.");
+		    break;
+		}
+		// Splits user input into a String array of 4 items.
+		String[] inputList = s.split(", ");
+		// Checks if user inputs 4 items. If not, goes to next iteration
+		// of loop
+		if(inputList.length != 4){
+		    System.out.println("Error in input format! Try again!\n" +
+				       "Ex. CMPSC, Spring, 2014, Undergraduate");
+		    bufferedReader.close();
+		    continue;
+		}
+		String dept = inputList[0]; // The Department
+		String qtr = inputList[1]; // The Quarter
+		qtr = qtrParse(qtr);
+		String year = inputList[2]; //The Year
+		qtr = year + qtr; // [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+		String level = inputList[3]; //The course level: Undergraduate, Graduate, or All
+
+		// Pulls from the html using user input and calls
+		// the toString() of the UCSBLectures
+		uccs.loadCourses(dept, qtr, level);
+		uccs.printLectures();
+		//Closes the bufferedReader
+		bufferedReader.close();
+	    }
 	} catch (Exception e) {
 	    System.err.println(e);
 	    e.printStackTrace();
 	}
     }  // main
 
+    /* Parses the quarter to the correct corresponding number that represents
+     * it.
+     * @Parameter quarter String e.g Summer, Winter, Fall, Spring
+     */
     public static String qtrParse(String qtr){
-	String tmp = "";
-	switch(qtr){
-	case "Summer":
+	String tmp = qtr;
+	switch(tmp.toUpperCase()){
+	case "SUMMER":
 	    tmp = "3";
 	    break;
-	case "Fall":
+	case "FALL":
 	    tmp = "4";
 	    break;
-	case "Winter":
+	case "WINTER":
 	    tmp = "1";
 	    break;
-	case "Spring":
+	case "SPRING":
 	    tmp = "2";
 	    break;
 	}
