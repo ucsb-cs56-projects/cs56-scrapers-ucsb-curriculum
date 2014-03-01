@@ -703,12 +703,8 @@ public class UCSBCurriculumSearch {
     public static void main(String [] args) {
 	try {
 	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
-	    // Pulls from the CMPSC page of Spring '14 and calls
-	    // the toString() of the UCSBLectures
-
-	    //	    uccs.loadCourses(dept, qtr, level);
-	    //	    uccs.printLectures();
-
+	    
+	    // Asks for user input and outputs corresponding lectures/sections
 	    while(true){
 		// Creates a new UCSBCurriculumSearch object
 		UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
