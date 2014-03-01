@@ -14,13 +14,12 @@ public class UCSBSection {
     private UCSBLecture parent;
     private String status; // e.g. "Full"
     private String enrollCode; // e.g. "07989"
-    private String sectionDay;
-    private String sectionTime;
-    private String sectionRoom;
-    private int enrolled; 
-    private int capacity;
+    private String sectionDay; // e.g. "T R"
+    private String sectionTime; // e.g. "3:30pm - 4:45pm"
+    private String sectionRoom; // e.g. Chem 1171"
+    private int enrolled; // e.g. from 63/88 take the 63
+    private int capacity; // e.g. from 63/88 take the 88
   
-    // TODO: Write constructor(s), getters/setters, toString(), equals()
     /**
      * Default Constructor
      */
@@ -76,6 +75,44 @@ public class UCSBSection {
 	    + "\t Section Rm: " + sectionRoom + "\n"
 	    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
 	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	UCSBSection other = (UCSBSection) obj;
+	if (capacity != other.capacity)
+	    return false;
+	if (enrollCode != other.enrollCode)
+	    return false;
+	if (enrolled != other.enrolled)
+	    return false;
+	if (parent == null) {
+	    if (other.parent != null)
+		return false;
+	} else if (!parent.equals(other.parent))
+	    return false;
+	if (sectionRoom == null) {
+	    if (other.sectionRoom != null)
+		return false;
+	} else if (!sectionRoom.equals(other.sectionRoom))
+	    return false;
+	if (sectionTime == null) {
+	    if (other.sectionTime != null)
+		return false;
+	} else if (!sectionTime.equals(other.sectionTime))
+	    return false;
+	if (status == null) {
+	    if (other.status != null)
+		return false;
+	} else if (!status.equals(other.status))
+	    return false;
+	return true;
     }
     
 }
