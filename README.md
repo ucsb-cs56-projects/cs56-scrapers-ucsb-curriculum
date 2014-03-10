@@ -34,4 +34,6 @@ To run the course scraper, do:
 If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Type in a query in the format: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
    Hopefully you will see the following.
 
+NOTE: Be aware that sometimes copying and pasting input will cause an error depending on where you copied the text from.
+
 ![](http://imgur.com/SZbSO5C.png)
