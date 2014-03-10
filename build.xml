@@ -12,19 +12,17 @@
   <property name="webRoot" value="${env.HOME}/public_html/" />
   <property name="webBaseUrl" value="http://www.cs.ucsb.edu/~${env.USER}/" />
 
-  <property name="" value=""/>
-
-
-
   <property name="course" value="cs56" />
   <property name="quarter" value="W14" />
   <property name="issueNum" value="0000660" />
   <property name="mainClass" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBCurriculumSearch" />
+  <property name="InstallCert" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBCurriculumSearch"/>
 
   <property name="projectName" value="${course}_${quarter}_${issueNum}" />
   <property name="projectPath" value="edu/ucsb/cs56/projects/scrapers/ucsb-curriculum" />
   <property name="javadocDest" value="${webRoot}/cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
   <property name="javadocURL" value="${webBaseUrl}cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
+
 
   <path id="project.class.path">
     <pathelement location="build" />
@@ -39,7 +37,7 @@
           depends="compile,-check-ssl-file"
           description="downloads ssl certificate for curriculum search page"
           unless="${file.exists}">
-    <java classname="InstallCert" inputstring="1">
+    <java classname="${mainClass}" inputstring="1">
       <arg value="my.sa.ucsb.edu:443" />
       <classpath refid="project.class.path" />
     </java>
