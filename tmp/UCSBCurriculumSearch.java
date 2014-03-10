@@ -1,4 +1,7 @@
-package edu.ucsb.cs56.W11.pconrad.issue50;
+//   package edu.ucsb.cs56.W11.pconrad.issue50;
+
+package edu.ucsb.cs56.scrapers.ucsb_curriculum;
+
 
 import java.net.*;
 import java.io.*;
