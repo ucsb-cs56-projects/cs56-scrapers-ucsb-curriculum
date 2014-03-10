@@ -12,7 +12,7 @@ The long term goal is to be add UCSB Courses directly into a Calendar program (e
 
 The UCSBCurriculumSearch object is designed to load its data automatically from the web page: http://my.sa.ucsb.edu/public/curriculum/. The current version shows a Java approach to solving the "viewstate" problem that arises when working with ASPX websites, as well as illustrating how to do a POST in Java. It also sketches out the java objects needed, though there is lots of work still left to do---mostly, parsing the HTML.
 
-You can find an example of the HTML that you need to be able to parse in the directory [sampleData](https://github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/tree/master/sampleData) in the file [testOutput.html](https://raw.github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/master/sampleData/testOutput.html). This file contains the result of doing a query on CMPSC undergraduate courses for Spring 2011 (retrieved 02/20/2011).
+You can find an example of the HTML that you need to be able to parse in the directory [sampleData](https://github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/tree/master/sampleData) in the file [coursesearch2014.html](https://raw.github.com/UCSB-CS56-Projects/cs56-scrapers-ucsb-curriculum/master/sampleData/coursesearch2014.html). This file contains the result of doing a query on CMPSC undergraduate courses for Spring 2014 (retrieved 03/10/2014).
 
 You will see that each lecture or discussion section is represented by a table row that starts with this tag:
 
@@ -31,6 +31,7 @@ To run the course scraper, do:
 
 	ant run
 
-If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run and show a course listing.
+If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Type in a query in the format: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
+   Hopefully you will see the following.
 
 ![](http://imgur.com/SZbSO5C.png)
