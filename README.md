@@ -4,11 +4,8 @@ This is a prototype (incomplete) for an object for screen scraping the Curriculu
 
 The long term goal is to be add UCSB Courses directly into a Calendar program (e.g. iCal or Google Calendar). The classes in this package are a first step towards that long-term goal.
 
-* [Archive link](https://foo.cs.ucsb.edu/cs56/issues/0000660/)
-* Relevant Mantis links
-	* [660](https://foo.cs.ucsb.edu/56mantis/view.php?id=660)
-	* [396](https://foo.cs.ucsb.edu/56mantis/view.php?id=396)
 
+## Documentation
 
 The UCSBCurriculumSearch object is designed to load its data automatically from the web page: http://my.sa.ucsb.edu/public/curriculum/. The current version shows a Java approach to solving the "viewstate" problem that arises when working with ASPX websites, as well as illustrating how to do a POST in Java. It also sketches out the java objects needed, though there is lots of work still left to do---mostly, parsing the HTML.
 
@@ -42,3 +39,9 @@ NOTE: Be aware that sometimes copying and pasting input will cause an error depe
 * The untabbed output represents lectures and the tabbed output represents sections.
 * To exit the program, just press enter w/o any input.
 
+
+### Old Archive Info
+* [Archive link](https://foo.cs.ucsb.edu/cs56/issues/0000660/)
+* Relevant Mantis links
+	* [660](https://foo.cs.ucsb.edu/56mantis/view.php?id=660)
+	* [396](https://foo.cs.ucsb.edu/56mantis/view.php?id=396)
