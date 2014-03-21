@@ -36,4 +36,9 @@ If this is the first time running it, it will automatically download the course 
 
 NOTE: Be aware that sometimes copying and pasting input will cause an error depending on where you copied the text from.
 
-![](http://imgur.com/SZbSO5C.png)
+![](http://imgur.com/TIAro8F.png)
+![](http://imgur.com/BC4g9hy.png)
+
+* The untabbed output represents lectures and the tabbed output represents sections.
+* To exit the program, just press enter w/o any input.
+
