@@ -7,7 +7,7 @@ The long term goal is to be add UCSB Courses directly into a Calendar program (e
 project history
 ===============
 ```
- ? | jstaahl 4pm | kmai12 | Parser for the UCSB curriculum search
+ W14 | jstaahl 4pm | kmai12 | Parser for the UCSB curriculum search
 ```
 
 ## Documentation
