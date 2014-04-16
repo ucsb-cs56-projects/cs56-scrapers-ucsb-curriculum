@@ -4,6 +4,11 @@ This is a prototype (incomplete) for an object for screen scraping the Curriculu
 
 The long term goal is to be add UCSB Courses directly into a Calendar program (e.g. iCal or Google Calendar). The classes in this package are a first step towards that long-term goal.
 
+project history
+===============
+```
+ ? | jstaahl 4pm | kmai12 | Parser for the UCSB curriculum search
+```
 
 ## Documentation
 
