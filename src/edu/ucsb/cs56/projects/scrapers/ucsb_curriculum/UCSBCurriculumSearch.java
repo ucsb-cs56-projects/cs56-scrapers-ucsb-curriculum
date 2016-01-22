@@ -276,10 +276,14 @@ public class UCSBCurriculumSearch {
     */
     private String findPrimaryCourseAbbr(String html){
         // If exists, it's the first text after this string:
-        String search = "decoration:underline;\">";
+	String search = "decoration:underline;\">";
         String title = "";
+
 	title = html.substring(html.indexOf(search)+search.length(), 
-			       html.indexOf("<a id=\"pageContent_repeaterSearchResults"));
+			       html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
+	// *ISSUE*
+	// Potential uncaught exception right here ^^^
+	// What would happen if the html on the page would change?
 	title = title.substring(0, title.indexOf("</span>"));
 	
 	return title;
