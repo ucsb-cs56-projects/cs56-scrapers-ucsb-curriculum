@@ -6,23 +6,74 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class UCSBgui{
+	static JFrame frame;
 	
 	public static void main (String [] args){
-		JFrame frame = new JFrame();
+		SwingUtilities.invokeLater(new Runnable() {
+	  public void run()
+	  {
+		  displayJFrame();
+	  }
+		});
+	}
+	
+	static void displayJFrame() {
+		frame = new JFrame();
 		
-		String [] subject = {"ANTH" , "ART", "ART CS", "BIO", "CMPSC"};
-		//TODO: scrape all the subjects and add to array
+		String [] subject = {"ANTH" , "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
+			"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
+			"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
+			"EARTH", "EACS", "EEMB", "ECON", "ED", "ECE", "ENGR", "ENGL", "ESM", "ENV S", "ESS",
+			"ES", "FEMST", "FAMST", "FLMST", "FR", "GEN S", "GEN SCS", "GEOG", "GER", "GPS", "GLOBL",
+			"GREEK", "HEB", "HIST", "INT", "INT CS", "ITAL", "JAPAN", "KOR", "LATIN", "LAIS", "LING",
+			"LIT", "LIT CS", "MARSC", "MATRL", "MATH", "MATH CS", "ME", "MAT", "ME ST", "MES",
+			"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
+			"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
+		
+		String [] quarter = {"SPRING" , "WINTER", "FALL", "SUMMER"};
+		
+		String [] year = {"2016", "2015", "2014"};
+		
+		String [] level = {"Undergaduate", "Graduate", "ALL"};
 		
 		
 		//creates new drop down selection bar
-		JComboBox box = new JComboBox(subject);
-		box.setEditable(false);
-		//cbox.addActionListener(this);
+		JComboBox subjectBox = new JComboBox(subject);
+		subjectBox.setEditable(false);
 		
-
+		
+		JComboBox quarterBox = new JComboBox(quarter);
+		quarterBox.setEditable(false);
+		
+		JComboBox yearBox = new JComboBox(year);
+		yearBox.setEditable(false);
+		
+		JComboBox levelBox = new JComboBox(level);
+		levelBox.setEditable(false);
+		
+		JButton search = new JButton("search");
+		
 		//adds to JPanel so it uses flow layout, uses minimum size
 		JPanel panel = new JPanel();
-		panel.add(box);
+		panel.add(subjectBox);
+		panel.add(quarterBox);
+		panel.add(yearBox);
+		panel.add(levelBox);
+		
+		
+		
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String subject = String.valueOf(subjectBox.getSelectedItem());
+				String quarter = String.valueOf(quarterBox.getSelectedItem());
+				String year = String.valueOf(yearBox.getSelectedItem());
+				String level = String.valueOf(levelBox.getSelectedItem());
+				
+				System.out.println(subject+ ", " + quarter + ", " + year + ", " + level);
+			}
+		});
+		
+		panel.add(search);
 		
 		
 		frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
@@ -34,65 +85,75 @@ public class UCSBgui{
 
 
 
-//BELOW IS CODE FROM EXAMPLE ONLINE
 
-//import java.awt.Container;
-//import java.awt.FlowLayout;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
+
+//package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 //
-//import javax.swing.JApplet;
-//import javax.swing.JButton;
-//import javax.swing.JComboBox;
-//import javax.swing.JFrame;
-//import javax.swing.JTextField;
+//import javax.swing.*;
 //
-//public class UCSBgui extends JApplet {
-//	private String[] description = { "Ebullient", "Obtuse", "Recalcitrant",
-//	"Brilliant", "Somnescent", "Timorous", "Florid", "Putrescent" };
+//import java.awt.*;
+//import java.awt.event.*;
+//
+//public class UCSBgui implements ActionListener{
 //	
-//	private JTextField t = new JTextField(15);
-//	
-//	private JComboBox c = new JComboBox();
-//	
-//	private JButton b = new JButton("Add items");
-//	
-//	private int count = 0;
-//	
-//	public void init() {
-//		for (int i = 0; i < 4; i++)
-//			c.addItem(description[count++]);
-//		t.setEditable(false);
-//		b.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				if (count < description.length)
-//					c.addItem(description[count++]);
-//			}
-//		});
-//		c.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				t.setText("index: " + c.getSelectedIndex() + "   "
-//						  + ((JComboBox) e.getSource()).getSelectedItem());
-//			}
-//		});
-//		Container cp = getContentPane();
-//		cp.setLayout(new FlowLayout());
-//		cp.add(t);
-//		cp.add(c);
-//		cp.add(b);
-//	}
-//	
-//	public static void main(String[] args) {
-//		run(new UCSBgui(), 200, 125);
-//	}
-//	
-//	public static void run(JApplet applet, int width, int height) {
+//	public static void main (String [] args){
 //		JFrame frame = new JFrame();
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.getContentPane().add(applet);
-//		frame.setSize(width, height);
-//		applet.init();
-//		applet.start();
+//		
+//		String [] subject = {"ANTH" , "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
+//			"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
+//			"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
+//			"EARTH", "EACS", "EEMB", "ECON", "ED", "ECE", "ENGR", "ENGL", "ESM", "ENV S", "ESS",
+//			"ES", "FEMST", "FAMST", "FLMST", "FR", "GEN S", "GEN SCS", "GEOG", "GER", "GPS", "GLOBL",
+//			"GREEK", "HEB", "HIST", "INT", "INT CS", "ITAL", "JAPAN", "KOR", "LATIN", "LAIS", "LING",
+//			"LIT", "LIT CS", "MARSC", "MATRL", "MATH", "MATH CS", "ME", "MAT", "ME ST", "MES",
+//			"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
+//			"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
+//		
+//		String [] quarter = {"SPRING" , "WINTER", "FALL", "SUMMER"};
+//		
+//		String [] year = {"2016", "2015", "2014"};
+//		
+//		String [] level = {"Undergaduate", "Graduate", "ALL"};
+//		
+//		
+//		//creates new drop down selection bar
+//		JComboBox subjectBox = new JComboBox(subject);
+//		subjectBox.setEditable(false);
+//
+//		
+//		JComboBox quarterBox = new JComboBox(quarter);
+//		quarterBox.setEditable(false);
+//		
+//		JComboBox yearBox = new JComboBox(year);
+//		yearBox.setEditable(false);
+//		
+//		JComboBox levelBox = new JComboBox(level);
+//		levelBox.setEditable(false);
+//		
+//		JButton search = new JButton("search");
+//
+//		//adds to JPanel so it uses flow layout, uses minimum size
+//		JPanel panel = new JPanel();
+//		panel.add(subjectBox);
+//		panel.add(quarterBox);
+//		panel.add(yearBox);
+//		panel.add(levelBox);
+//		
+//		panel.add(search);
+//		
+//		search.addActionListener(this);
+//		
+//		String x = String.valueOf(subjectBox.getSelectedItem());
+//		
+//		System.out.println(x);
+//		
+//		
+//		frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
+//		frame.getContentPane().add(panel);
+//		frame.setSize(960,540);
 //		frame.setVisible(true);
 //	}
 //}
+//
+//
+//
