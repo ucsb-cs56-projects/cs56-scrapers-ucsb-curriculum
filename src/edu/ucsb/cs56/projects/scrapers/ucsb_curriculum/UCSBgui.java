@@ -77,9 +77,8 @@ public class UCSBgui{
 					String lev = String.valueOf(levelBox.getSelectedItem());
 					String qtr = year + quarter;
 					
-					System.out.println(lev);
 					
-					cssc.loadCourses(dept, qtr , lev);
+					cssc.loadCourses(dept, qtr, lev);
 					cssc.printLectures();
 					
 					
@@ -90,8 +89,7 @@ public class UCSBgui{
 				}
 			});
 			
-				
-			
+		
 			
 			panel.add(search);
 			
