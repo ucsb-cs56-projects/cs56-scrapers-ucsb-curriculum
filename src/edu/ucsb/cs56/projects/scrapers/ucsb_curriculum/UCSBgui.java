@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.io.PrintStream;
+
 public class UCSBgui{
 	static JFrame frame;
 	
@@ -65,9 +67,12 @@ public class UCSBgui{
 		JLabel yearlabel = new JLabel("select year");
 		JLabel levellabel = new JLabel("select level");
 		
+		JTextArea textbox = new JTextArea();
+		PrintStream stream = new PrintStream(new CustomOutputStream(textbox));
+		System.setOut(stream);
+	
+		JScrollPane scrollbar = new JScrollPane(textbox);
 
-		
-		//adds to JPanel so it uses flow layout, uses minimum size
 		JPanel panel = new JPanel(new GridLayout(5,0,45,15));
 		panel.add(subjectlabel);
 		panel.add(subjectBox);
@@ -82,7 +87,8 @@ public class UCSBgui{
 		panel.add(levellabel);
 		panel.add(levelBox);
 		
-		
+		scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		panel.add(scrollbar);
 		
 		search.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ee) { try{
@@ -114,7 +120,7 @@ public class UCSBgui{
 		
 		frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
 		frame.getContentPane().add(panel);
-		frame.setSize(600,300);
+		frame.setSize(1500,720);
 		frame.setVisible(true);
 	}
 }
