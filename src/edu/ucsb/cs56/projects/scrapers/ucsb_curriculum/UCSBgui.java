@@ -4,15 +4,14 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import javax.swing.plaf.basic.*;
 
 import java.io.PrintStream;
 
 public class UCSBgui{
 	static JFrame frame;
-	
-//	static String dept;
-//	static String qtr;
-//	static String lev;
+
 	
 	public static void main (String [] args){
 		SwingUtilities.invokeLater(new Runnable() {
@@ -26,6 +25,7 @@ public class UCSBgui{
 	static void displayJFrame() {
 		frame = new JFrame();
 		
+		//Array of all the different departmens on GOLD
 		String [] subject = {"ANTH" , "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
 			"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
 			"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
@@ -36,10 +36,16 @@ public class UCSBgui{
 			"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
 			"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
 		
-		String [] quarter = {"1" , "2", "3", "4"};
-		
+		//Different quarters with their corresponding number ID (used by previous programmers
+		//to identify each quarter
+		Vector quarter = new Vector();
+		quarter.addElement( new Item("1", "Winter"));
+		quarter.addElement( new Item("2", "Spring"));
+		quarter.addElement( new Item("3", "Summer"));
+		quarter.addElement( new Item("4", "Fall"));
 		String [] year = {"2016", "2015", "2014"};
 		
+		//Array of Course Levels
 		String [] level = {"Undergraduate", "Graduate", "ALL"};
 		
 		
@@ -48,7 +54,7 @@ public class UCSBgui{
 		subjectBox.setEditable(false);
 		
 		
-		
+		//Creates ComboBoxes of the aforementioned search criteria
 		JComboBox quarterBox = new JComboBox(quarter);
 		quarterBox.setEditable(false);
 		
@@ -58,48 +64,56 @@ public class UCSBgui{
 		JComboBox levelBox = new JComboBox(level);
 		levelBox.setEditable(false);
 		
-		JButton search = new JButton("search");
+		//Search Button
+		JButton search = new JButton("SEARCH");
 		
 		
-		JLabel blank = new JLabel(" ");
-		JLabel subjectlabel = new JLabel("select department");
-		JLabel quarterlabel = new JLabel("select quarter: 1=W, 2=S, 3=M, 4=F");
-		JLabel yearlabel = new JLabel("select year");
-		JLabel levellabel = new JLabel("select level");
-		
+		//Creates textArea that displays your search results
 		JTextArea textbox = new JTextArea();
+		textbox.setEditable(false);
+		
+		//Redirects terminal output to GUI
 		PrintStream stream = new PrintStream(new CustomOutputStream(textbox));
 		System.setOut(stream);
-	
+		
+		//Makes it scrollable
 		JScrollPane scrollbar = new JScrollPane(textbox);
 
 		JPanel panel = new JPanel(new GridLayout(5,0,45,15));
-		panel.add(subjectlabel);
+		
 		panel.add(subjectBox);
 
 		
-		panel.add(quarterlabel);
+
 		panel.add(quarterBox);
 		
-		panel.add(yearlabel);
+
 		panel.add(yearBox);
 		
-		panel.add(levellabel);
+
 		panel.add(levelBox);
 		
+		panel.add(search);
+		
 		scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		panel.add(scrollbar);
 		
 		search.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ee) { try{
-				
+				textbox.setText(null);
 				UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
 				
 				String dept = String.valueOf(subjectBox.getSelectedItem());
-				String quarter = String.valueOf(quarterBox.getSelectedItem());
+				
+				Item quarter = (Item) quarterBox.getSelectedItem();
+				String quarter2 = quarter.getId();
+				
 				String year = String.valueOf(yearBox.getSelectedItem());
 				String lev = String.valueOf(levelBox.getSelectedItem());
-				String qtr = year + quarter;
+				
+				
+				String qtr = year + quarter2;
 				
 				
 				cssc.loadCourses(dept, qtr, lev);
@@ -114,8 +128,8 @@ public class UCSBgui{
 		});
 		
 		
-		panel.add(blank,8);
-		panel.add(search,9);
+
+
 		
 		
 		frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
