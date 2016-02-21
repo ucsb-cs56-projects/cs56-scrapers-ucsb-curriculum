@@ -91,10 +91,12 @@ public class UCSBgui{
 			JLabel picLabel = new JLabel();
 			picLabel.setIcon(new ImageIcon(myPicture));
 
+		
 			
 			
+			JPanel panel = new JPanel();
+			panel.setLayout(null);
 			
-			JPanel panel = new JPanel(new GridLayout(5,0,45,15));
 			
 			panel.add(picLabel);
 			panel.add(subjectBox);
@@ -102,9 +104,22 @@ public class UCSBgui{
 			panel.add(yearBox);
 			panel.add(levelBox);
 			panel.add(search);
-			
-			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
 			panel.add(scrollbar);
+			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			
+			
+			picLabel.setBounds(0,0,1280,120);
+			subjectBox.setBounds(445,200,80,20);
+			quarterBox.setBounds(535,200,80,20);
+			yearBox.setBounds(625,200,60,20);
+			levelBox.setBounds(695,200,140,20);
+			search.setBounds(590,240,100,30);
+			scrollbar.setBounds(440,300,400,370);
+
+
+			
+			frame.pack();
 			
 			search.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ee) { try{
