@@ -28,6 +28,9 @@ You will see that the fields in the UCSBLecture and UCSBSection classes correspo
 * The UCSBCurriculumSearch constructor does an initial read of the URL to initialize two instance variables: viewStateString and eventValString. This is because those fields have to be "echoed back" to the server on every subsequent query, or the server will return a bad status code (HTTP status code 500). You shouldn't have to worry too much about that, though. Your main job is to flesh out the UCSBLecture and UCSBSection classes, and add methods to parse the HTML and initialize the fields in those classes.
 
 ## Usage
+To run the course scraper GUI, do: 
+	
+	ant gui
 
 To run the course scraper, do:
 
