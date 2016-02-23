@@ -13,23 +13,38 @@ import java.io.PrintStream;
 
 import javax.swing.ImageIcon;
 
+
+/** UCSBgui -- Graphics User Interface for UCSBCurriculum search,
+ allows user to use drop down menus to search for lectures.
+ 
+ @author Natasha Lee
+ @author Kevin Zaragoza
+ @version W16 
+ 
+ */
+
 public class UCSBgui{
 	static JFrame frame;
 
 	
 	public static void main (String [] args){
 		SwingUtilities.invokeLater(new Runnable() {
-	  public void run()
-	  {
-		  displayJFrame();
-	  }
-		});
+			public void run(){
+				displayJFrame();
+			}
+		} );
+	
 	}
 	
 	static void displayJFrame() {
 		try{
 			
 			frame = new JFrame();
+			
+			/* 
+			 TODO: scrape the subject, years, and course levels so
+			 that if the website makes changes, it reflects in the program
+			*/
 			
 			//Array of all the different departmens on GOLD
 			String [] subject = {"ANTH" , "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
@@ -49,6 +64,8 @@ public class UCSBgui{
 			quarter.addElement( new Item("2", "Spring"));
 			quarter.addElement( new Item("3", "Summer"));
 			quarter.addElement( new Item("4", "Fall"));
+			
+			//Array of years
 			String [] year = {"2016", "2015", "2014"};
 			
 			//Array of Course Levels
@@ -108,7 +125,7 @@ public class UCSBgui{
 			panel.add(scrollbar);
 			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			
-			
+			//setting the layout of the gui
 			picLabel.setBounds(0,0,1280,120);
 			subjectBox.setBounds(445,200,80,20);
 			quarterBox.setBounds(535,200,80,20);
@@ -119,7 +136,7 @@ public class UCSBgui{
 
 
 			
-			frame.pack();
+
 			
 			search.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ee) { try{
@@ -147,17 +164,15 @@ public class UCSBgui{
 					e.printStackTrace();
 				}
 				}
-			});
-			
-			
-			
-			
+			} );
 			
 		
 			frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
 			frame.getContentPane().add(panel);
 			frame.setSize(1280,720);
 			frame.setVisible(true);
+			
+			
 		}catch(Exception e){
 			System.err.println(e);
 			e.printStackTrace();
