@@ -103,19 +103,18 @@ public class UCSBgui{
 			//Makes it scrollable
 			JScrollPane scrollbar = new JScrollPane(textbox);
 			
+			//get current user directory to display ucsb logo
 			String dir = System.getProperty("user.dir") + "/src/edu/ucsb/cs56/projects/scrapers/ucsb_curriculum/logo.png";
 			File logo = new File(dir);
 			BufferedImage myPicture = ImageIO.read(logo);
 			JLabel picLabel = new JLabel();
 			picLabel.setIcon(new ImageIcon(myPicture));
-
-		
 			
 			
 			JPanel panel = new JPanel();
 			panel.setLayout(null);
 			
-			
+			//add widgets to panel
 			panel.add(picLabel);
 			panel.add(subjectBox);
 			panel.add(quarterBox);
@@ -123,6 +122,7 @@ public class UCSBgui{
 			panel.add(levelBox);
 			panel.add(search);
 		
+			//make textbox scrollable
 			panel.add(scrollbar);
 			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			
@@ -140,34 +140,39 @@ public class UCSBgui{
 
 			
 			search.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ee) { try{
-					textbox.setText(null);
-					UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
-					
-					String dept = String.valueOf(subjectBox.getSelectedItem());
-					
-					Item quarter = (Item) quarterBox.getSelectedItem();
-					String quarter2 = quarter.getId();
-					
-					String year = String.valueOf(yearBox.getSelectedItem());
-					String lev = String.valueOf(levelBox.getSelectedItem());
-					
-					
-					String qtr = year + quarter2;
-					
-					
-					cssc.loadCourses(dept, qtr, lev);
-					cssc.printLectures();
-					
-					
-				}catch (Exception e){
-					System.err.println(e);
-					e.printStackTrace();
-				}
+				public void actionPerformed(ActionEvent ee) {
+					try{
+						//reset the textbox so it clears each time you press search
+						textbox.setText(null);
+						
+						//instantiate a new Curriculum search object
+						UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
+						
+						//get the values of the selections
+						String dept = String.valueOf(subjectBox.getSelectedItem());
+						
+						Item quarter = (Item) quarterBox.getSelectedItem();
+						String quarter2 = quarter.getId();
+						
+						String year = String.valueOf(yearBox.getSelectedItem());
+						String lev = String.valueOf(levelBox.getSelectedItem());
+						
+						
+						String qtr = year + quarter2;
+						
+						//search with the corresponding selections in the gui
+						cssc.loadCourses(dept, qtr, lev);
+						cssc.printLectures();
+						
+						
+					}catch (Exception e){
+						System.err.println(e);
+						e.printStackTrace();
+					}
 				}
 			} );
 			
-		
+			//setup the JFrame
 			frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
 			frame.getContentPane().add(panel);
 			frame.setSize(1280,720);
