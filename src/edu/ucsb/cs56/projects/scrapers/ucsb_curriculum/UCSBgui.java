@@ -98,6 +98,7 @@ public class UCSBgui{
 			//Redirects terminal output to GUI
 			PrintStream stream = new PrintStream(new CustomOutputStream(textbox));
 			System.setOut(stream);
+			System.setErr(stream);
 		
 			//Makes it scrollable
 			JScrollPane scrollbar = new JScrollPane(textbox);
