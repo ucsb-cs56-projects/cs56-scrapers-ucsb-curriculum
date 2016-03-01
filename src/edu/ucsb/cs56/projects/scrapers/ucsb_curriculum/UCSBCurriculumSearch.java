@@ -271,18 +271,27 @@ public class UCSBCurriculumSearch {
 	 @return String Full Course Title e.g. "APP TO UNIV WRIT"
     */
 	private String findPrimaryCourseAbbr(String html){
-		// If exists, it's the first text after this string:
-		String search = "decoration:underline;\">";
-		String title = "";
+
+			// If exists, it's the first text after this string:
+			String search = "decoration:underline;\">";
+			String title = "";
 		
-		title = html.substring(html.indexOf(search)+search.length(),
+		try{
+			title = html.substring(html.indexOf(search)+search.length(),
 			       html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
-		// *ISSUE*
-		// Potential uncaught exception right here ^^^
-		// What would happen if the html on the page would change?
-		title = title.substring(0, title.indexOf("</span>"));
+			// *ISSUE*
+			// Potential uncaught exception right here ^^^
+			// What would happen if the html on the page would change?
+			title = title.substring(0, title.indexOf("</span>"));
+
+			
+		}catch (Exception e){
+			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+			System.err.println("This scraper must be updated.");
+		}
 		
 		return title;
+		
     }
 
     /** Find the course description given a subsection of HTML only including on section or lecture
@@ -416,12 +425,12 @@ public class UCSBCurriculumSearch {
         String instructor_html = getEndElement(html);
         int br = instructor_html.indexOf("<br />");
         if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
-            instructor_html = instructor_html.substring(0, br);
+			instructor_html = instructor_html.substring(0, br);
         String instructor = instructor_html.trim();
         html = removeLastElement(html);
 
         // Set all the fields
-	temp.setEnrolled(enrollment);
+		temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setSectionRoom(sectRoom);
         temp.setSectionTime(sectTime);
