@@ -256,11 +256,15 @@ public class UCSBCurriculumSearch {
 	@return String Course Title e.g. "CMPSC     8"
     */
     private String findCourseTitle(String html){
-        // This is always right after a lecture title
-        String after_title_string = "<div class=\"MasterCourseTableDiv\">";
-
-		//return html.substring(0, html.substring(0, html.indexOf(after_title_string)).lastIndexOf('>') + 1);
-		//^^Some how this works
+		String after_title_string = "";
+		try{
+			// This is always right after a lecture title
+			after_title_string = "<div class=\"MasterCourseTableDiv\">";
+		}catch (Exception e){
+			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+			System.err.println("This scraper must be updated.");
+		}
+		
 		return html.substring(html.substring(0, html.indexOf(after_title_string)).lastIndexOf('>') + 1, html.indexOf(after_title_string)).trim();
 	}
 	
@@ -319,11 +323,16 @@ public class UCSBCurriculumSearch {
      *
      */
 	private String findEnrollCode(String html){
-		String search = "target=\"_self\">";
 		String status = "";
-		status += html.substring(html.indexOf(search) + search.length());
-		status = status.substring(0, status.indexOf("<"));
-		status = status.trim();
+		try{
+			String search = "target=\"_self\">";
+			status += html.substring(html.indexOf(search) + search.length());
+			status = status.substring(0, status.indexOf("<"));
+			status = status.trim();
+		} catch (Exception e){
+			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+			System.err.println("This scraper must be updated.");
+		}
 		return status;
 	
     }
