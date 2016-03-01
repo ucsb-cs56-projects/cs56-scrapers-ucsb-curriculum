@@ -188,12 +188,8 @@ public class UCSBCurriculumSearch {
 	// Lectures or sections start with this
         String search_string = "<tr class=\"CourseInfoRow\">";
 
-	// This string exists in HTML of lectures with at least one section
-        String has_section_string = "title=\"Click for Restrictions\" "
-	    + "Class=\"EnrollCodeLink\" target=\"_self\"></a>";
-
         int course_pos = page.indexOf(search_string,0);
-
+	
 	// Where to stop the substring
         int next_course_pos = page.indexOf(search_string,course_pos
 					   + search_string.length());
@@ -467,14 +463,16 @@ public class UCSBCurriculumSearch {
         // Get all the information you need
         String courseTitle = findCourseTitle(html);
         String primaryCourseAbbr = findPrimaryCourseAbbr(html);
-        String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
+       // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
         String status = findStatus(html);
-
+		String enrollcode = findEnrollCode(html);
+		
         // Set them in the obj
         lect.setCourseTitle(courseTitle);
         lect.setPrimaryCourseAbbr(primaryCourseAbbr);
         lect.setStatus(status);
-
+		lect.setEnrollCode(enrollcode);
+		
         // Set the other properties
         lect = parseEnd(html, lect);
 

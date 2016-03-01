@@ -37,6 +37,7 @@ public class UCSBLecture {
     private String lectRoom; // e.g. "CHEM 1171"
     private int enrolled; // e.g. from 63 / 88, take the 63
     private int capacity; // e.g. from 63 / 88, take the 88
+	private String enrollCode;
 
     private ArrayList<UCSBSection> sections; // all of the sections
 
@@ -61,28 +62,30 @@ public class UCSBLecture {
        @param lectRoom e.g. "CHEM 1171"
        @param enrolled e.g. from 63 / 88, take the 63
        @param capacity e.g. from 63 / 88, take the 88
+	   @param enrollCode e.g. "55577"
      */
 
     public UCSBLecture(String courseTitle, String primaryCourseAbbr, String status, String instructor, String lectDays,
-		       String lectTime, String lectRoom, int enrolled, int capacity){
+		       String lectTime, String lectRoom, int enrolled, int capacity, String enro){
 
-	this.courseTitle = courseTitle;
-	this.primaryCourseAbbr = primaryCourseAbbr;
-	this.status = status;
-	this.instructor = instructor;
-	this.lectDays = lectDays;
-	this.lectTime = lectTime;
-	this.lectRoom = lectRoom;
-	this.enrolled = enrolled;
-	this.capacity = capacity;
-
-    }
-
-    /* Getters and Setters */
-    public String getCourseTitle(){ return courseTitle;}
-    public void setCourseTitle(String title){ this.courseTitle = title;}
-
-    public String getPrimaryCourseAbbr(){ return primaryCourseAbbr;}
+		this.courseTitle = courseTitle;
+		this.primaryCourseAbbr = primaryCourseAbbr;
+		this.status = status;
+		this.instructor = instructor;
+		this.lectDays = lectDays;
+		this.lectTime = lectTime;
+		this.lectRoom = lectRoom;
+		this.enrolled = enrolled;
+		this.capacity = capacity;
+		this.enrollCode = enrollCode;
+		
+	}
+	
+	/* Getters and Setters */
+	public String getCourseTitle(){ return courseTitle;}
+	public void setCourseTitle(String title){ this.courseTitle = title;}
+	
+	public String getPrimaryCourseAbbr(){ return primaryCourseAbbr;}
     public void setPrimaryCourseAbbr(String abbr){ this.primaryCourseAbbr = abbr;}
 
     public String getStatus(){ return status;}
@@ -105,8 +108,11 @@ public class UCSBLecture {
 
     public int getCapacity(){ return capacity;}
     public void setCapacity(int capacity){ this.capacity = capacity;}
+	
+	public String getEnrollCode() { return enrollCode; }
+	public void setEnrollCode(String enrollCode) { this.enrollCode = enrollCode; }
 
-    public ArrayList<UCSBSection> getSections(){ return sections;}
+    public ArrayList<UCSBSection> getSections(){ return sections; }
     public void addSection(UCSBSection section){
 	UCSBSection tmp = new UCSBSection();
 	tmp = section;
@@ -122,7 +128,8 @@ public class UCSBLecture {
                 + "Lecture Days: " + lectDays + "\n"
                 + "Lecture Time: " + lectTime + "\n"
                 + "Lecture Room: " + lectRoom + "\n"
-                + "Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
+                + "Enrolled / Capacity: " + enrolled + " / " + capacity + "\n"
+		        + "Enroll Code: " + enrollCode + "\n";
         return result;
     }
 
