@@ -275,15 +275,13 @@ public class UCSBCurriculumSearch {
 			// If exists, it's the first text after this string:
 			String search = "decoration:underline;\">";
 			String title = "";
-		
+
+		//try/catch block in case HTML used to search changes
 		try{
 			title = html.substring(html.indexOf(search)+search.length(),
-			       html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
-			// *ISSUE*
-			// Potential uncaught exception right here ^^^
-			// What would happen if the html on the page would change?
+								   html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
+			
 			title = title.substring(0, title.indexOf("</span>"));
-
 			
 		}catch (Exception e){
 			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
