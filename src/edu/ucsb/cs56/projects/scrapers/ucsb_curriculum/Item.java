@@ -1,6 +1,11 @@
 package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
-
+/**
+ Class item to use in vector of quarter system
+ @param id = 1,2,3,4
+ @param description = Winter, Spring, Summer, Fall
+ 
+ */
 class Item
 {
 	private String id;
