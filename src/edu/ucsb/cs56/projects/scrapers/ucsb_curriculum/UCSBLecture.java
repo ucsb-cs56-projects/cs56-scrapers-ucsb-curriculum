@@ -66,7 +66,7 @@ public class UCSBLecture {
      */
 
     public UCSBLecture(String courseTitle, String primaryCourseAbbr, String status, String instructor, String lectDays,
-		       String lectTime, String lectRoom, int enrolled, int capacity, String enro){
+		       String lectTime, String lectRoom, int enrolled, int capacity, String enrollCode){
 
 		this.courseTitle = courseTitle;
 		this.primaryCourseAbbr = primaryCourseAbbr;
