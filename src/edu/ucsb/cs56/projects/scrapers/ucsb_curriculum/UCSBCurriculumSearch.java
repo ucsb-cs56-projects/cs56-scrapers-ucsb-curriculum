@@ -208,7 +208,7 @@ public class UCSBCurriculumSearch {
         // Cut off the end so the last one doesn't have extra. There are two
 	// </table> tags, we want the second to last, so we do this twice.
         page = page.substring(0, page.lastIndexOf("</table>"));
-	page = page.substring(0, page.lastIndexOf("</table>"));
+		page = page.substring(0, page.lastIndexOf("</table>"));
 
 
         while(course_pos != -1){
@@ -229,24 +229,24 @@ public class UCSBCurriculumSearch {
 
         // Now we go through the separate HTML sections and determine
 	// whether it is a lecture or a section
-	int lecture_index = -1;
+		int lecture_index = -1;
         for(String html : lecture_html){
             String course_abbr = findPrimaryCourseAbbr(html);
 
-            // If the course abbr is blank, then this is a section.
+			// If the course abbr is blank, then this is a section.
             if(course_abbr.equals("")){
-		// Parses the HTML of a section.
-                UCSBSection tmp = new UCSBSection();
-		tmp = parseSectionHtml(html, lectures.get(lecture_index));
-		lectures.get(lecture_index).addSection(tmp);
-	    }
-	    else{
-		// Parses the HTML of a lecture.
-			lectures.add(parseLectureHtml(html));
-			lecture_index++;
-			num_lectures++;
-            }
-        }
+				// Parses the HTML of a section.
+				UCSBSection tmp = new UCSBSection();
+				tmp = parseSectionHtml(html, lectures.get(lecture_index));
+				lectures.get(lecture_index).addSection(tmp);
+			}
+			else{
+				// Parses the HTML of a lecture.
+				lectures.add(parseLectureHtml(html));
+				lecture_index++;
+				num_lectures++;
+			}
+		}
 		
 		return num_lectures;
 	}
@@ -301,24 +301,35 @@ public class UCSBCurriculumSearch {
 	@return String course description
     */
 	private String findDescription(String html){
-		String search = "labelDescription\">";
 		String description = "";
-        description += html.substring(html.indexOf(search) + search.length());
-        description = description.substring(0, description.indexOf('<'));
-        return description.trim();
-    }
+		try{
+			String search = "labelDescription\">";
+			description += html.substring(html.indexOf(search) + search.length());
+			description = description.substring(0, description.indexOf('<'));
+		}catch (Exception e){
+			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+			System.err.println("This scraper must be updated.");
+		}
+		return description.trim();
+	}
 
     /**
      *
      */
     private String findStatus(String html){
-        String search = "class=\"Status\">";
-        String status = "";
-        status += html.substring(html.indexOf(search) + search.length());
-        status = status.substring(0, status.indexOf('<'));
-        return status.trim();
-    }
-
+		String status = "";
+		try{
+			String search = "class=\"Status\">";
+			
+			status += html.substring(html.indexOf(search) + search.length());
+			status = status.substring(0, status.indexOf('<'));
+		}catch (Exception e){
+			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+			System.err.println("This scraper must be updated.");
+		}
+		return status.trim();
+	}
+	
     /**
      *
      */
@@ -382,7 +393,7 @@ public class UCSBCurriculumSearch {
         html = removeLastElement(html);
 
         // Set all the fields
-	temp.setEnrolled(enrollment);
+		temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setLectRoom(lectRoom);
         temp.setLectTime(lectTime);
@@ -479,6 +490,7 @@ public class UCSBCurriculumSearch {
         // Get all the information you need
         String courseTitle = findCourseTitle(html);
         String primaryCourseAbbr = findPrimaryCourseAbbr(html);
+		
        // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
         String status = findStatus(html);
 		String enrollcode = findEnrollCode(html);
@@ -487,7 +499,10 @@ public class UCSBCurriculumSearch {
         lect.setCourseTitle(courseTitle);
         lect.setPrimaryCourseAbbr(primaryCourseAbbr);
         lect.setStatus(status);
+		
+	
 		lect.setEnrollCode(enrollcode);
+		
 		
         // Set the other properties
         lect = parseEnd(html, lect);
@@ -510,6 +525,7 @@ public class UCSBCurriculumSearch {
 		String enrollCode = findEnrollCode(html);
 		
 		sect.setStatus(status);
+
 		sect.setEnrollCode(enrollCode);
 		sect.setParent(parent);
 		sect = parseEndSection(html, sect);
@@ -599,18 +615,18 @@ public class UCSBCurriculumSearch {
      *  return a null object
      */
     public UCSBSection getSection(String enrollCode) {
-	UCSBSection section = null;
-        for(UCSBLecture lect : lectures){
-   	    for(UCSBSection sect : lect.getSections()){
-		if(sect.getEnrollCode().equals(enrollCode))
-		    section = sect;
-	    }
-        }
-	return section;
-    }
+		UCSBSection section = null;
+		for(UCSBLecture lect : lectures){
+			for(UCSBSection sect : lect.getSections()){
+				if(sect.getEnrollCode().equals(enrollCode))
+					section = sect;
+			}
+		}
+		return section;
+	}
 
     /** return a UCSBLecture object given a course number and quarter
-	@param courseNum 13 character course num ddddddddnnnxx where
+	@param title 13 character course num ddddddddnnnxx where
 	       dddddddd is the department, extended with spaces if
 	       needed, nnn is the course number, right justified,
 	       and xx is the extension if any.  Examples:
@@ -639,7 +655,7 @@ public class UCSBCurriculumSearch {
      */
 
     public ArrayList<UCSBLecture> getLectures(String courseNum, String quarter) {
-	return null; // STUB!
+		return null; // STUB!
     }
 
     /** return the number of UCSBLecture objects already loaded that match
@@ -655,7 +671,7 @@ public class UCSBCurriculumSearch {
      */
 
     public int countLectures(String courseNum, String quarter) {
-	return -42; // STUB!
+		return -42; // STUB!
     }
 
 
