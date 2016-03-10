@@ -57,8 +57,8 @@ public class UCSBgui{
 				"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
 				"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
 			
-			//Different quarters with their corresponding number ID (used by previous programmers
-			//to identify each quarter
+			/* Different quarters with their corresponding number ID (used by previous programmers
+			to identify each quarter */
 			Vector quarter = new Vector();
 			quarter.addElement( new Item("1", "Winter"));
 			quarter.addElement( new Item("2", "Spring"));
@@ -72,12 +72,10 @@ public class UCSBgui{
 			String [] level = {"Undergraduate", "Graduate", "ALL"};
 			
 			
-			//creates new drop down selection bar
+			//Creates ComboBoxes of the aforementioned search criteria
 			JComboBox subjectBox = new JComboBox(subject);
 			subjectBox.setEditable(false);
 			
-			
-			//Creates ComboBoxes of the aforementioned search criteria
 			JComboBox quarterBox = new JComboBox(quarter);
 			quarterBox.setEditable(false);
 			
@@ -100,7 +98,7 @@ public class UCSBgui{
 			System.setOut(stream);
 			System.setErr(stream);
 		
-			//Makes it scrollable
+			//Makes textarea scrollable
 			JScrollPane scrollbar = new JScrollPane(textbox);
 			
 			//get current user directory to display ucsb logo

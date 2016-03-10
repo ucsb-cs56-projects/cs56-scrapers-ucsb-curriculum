@@ -19,7 +19,7 @@ public class UCSBSectionTest {
 		//initialize section parent
 		UCSBLecture parent =
 		new UCSBLecture("CMPSC 56", "Computer Science 56", "Full", "Conrad P",
-						"M W", "9:00am - 9:50am", "HFH 1132", 50, 50);
+						"M W", "9:00am - 9:50am", "HFH 1132", 50, 50, "77872");
 		
 		//variables used for section testing
 		String status = "Full";
@@ -62,7 +62,7 @@ public class UCSBSectionTest {
 		//initialize section parent
 		UCSBLecture parent =
 		new UCSBLecture("CMPSC 64", "Computer Science 64", "", "Dewey K",
-						"T R", "3:30pm - 4:45pm", "Phelps 3526", 5, 80);
+						"T R", "3:30pm - 4:45pm", "Phelps 3526", 5, 80, "00000");
 		
 		//variables used for section testing
 		String status = "";
@@ -106,7 +106,7 @@ public class UCSBSectionTest {
 		//initialize section parent
 		UCSBLecture parent =
 		new UCSBLecture("ECON 10A", "Microecon Theory", "", "Hartman J L",
-						"M W F", "12:00pm - 12:50pm", "Buchn 1910", 194, 200);
+						"M W F", "12:00pm - 12:50pm", "Buchn 1910", 194, 200, "");
 
 		//variables used for section testing
 		String status = "Closed";
