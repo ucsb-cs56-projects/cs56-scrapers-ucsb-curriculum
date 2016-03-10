@@ -56,3 +56,12 @@ NOTE: Be aware that sometimes copying and pasting input will cause an error depe
 * Relevant Mantis links
 	* [660](https://foo.cs.ucsb.edu/56mantis/view.php?id=660)
 	* [396](https://foo.cs.ucsb.edu/56mantis/view.php?id=396)
+
+W16 Final Remarks:
+
+To the next set of students working on this project, I encourage you to look through UCSBCirriculumSearch first. That class is the one that actually goes through the course site and scrapes all of the course data in order to display it to us. If you are not familiar with writing or reading programs that scrape data off of a site, the file will seem difficult to understand and thus I would put most of my effort there. To make matters worse we found some instances of code that was written but never used in that class so there may be more throughout the file. If you're planning on adding search criteria, as one of the next issues I recommend you check out JSoup: ---> http://jsoup.org/. It makes writing scraper code much easier and all it takes is a bit of familiarity with HTML and CSS (well, so does writing the code without JSoup). In addition, you could go even further and refactor the previous scraper code with JSoup entirely! That would make it nicer for future students of the course. The rest of the files in this project are not as complex and are much easier to follow, so just take a look at those to familarize yourself with all aspects of the project.
+
+As for bugs, the most troubling one we found in our time with the project was that the program would seemingly not work at times. We found that the fix for it was to simply refresh the course page in our browser. Once that's done the program would once again find your desried course. We couldn't quite figure out the cause of this bug, but it's something to make note of. 
+You could add, as mentioned in the first paragraph, more search criteria to the program as a new feature. Right now you make the search using the aforementioned: DEPT, QUARTER, YEAR, LEVEL system; however, what if you want to just look up "Courses with professor Conrad"? The possibilities here are limited to just what kind of search criteria you may find useful! Porting the program to an Android App would also be pretty handy if you want to search through courses on the go.
+
+
