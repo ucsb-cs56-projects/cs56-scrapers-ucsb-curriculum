@@ -28,17 +28,20 @@ You will see that the fields in the UCSBLecture and UCSBSection classes correspo
 * The UCSBCurriculumSearch constructor does an initial read of the URL to initialize two instance variables: viewStateString and eventValString. This is because those fields have to be "echoed back" to the server on every subsequent query, or the server will return a bad status code (HTTP status code 500). You shouldn't have to worry too much about that, though. Your main job is to flesh out the UCSBLecture and UCSBSection classes, and add methods to parse the HTML and initialize the fields in those classes.
 
 ## Usage
-To run the course scraper GUI, do: 
+To run the course scraper with a GUI, do: 
 	
 	ant gui
 
-To run the course scraper, do:
+To run the course scraper using just the terminal, do:
 
 	ant run
 
-If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Type in a query in the format: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
-   Hopefully you will see the following.
+If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Once you select the search criteria: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
+   Hopefully you will see the following when running the GUI.
 
+![](http://i.imgur.com/GZy6QEG.png)
+
+You should see something similar to this when running the program via terminal. 
 NOTE: Be aware that sometimes copying and pasting input will cause an error depending on where you copied the text from.
 
 ![](http://imgur.com/TIAro8F.png)
