@@ -29,11 +29,12 @@ public class UCSBSection {
      * Detailed Constructor
      */
     public UCSBSection(UCSBLecture parent, String status, String enrollCode, 
-		       String sectionTime, String sectionRoom, int enrolled, int capacity)
+    	String sectionDay, String sectionTime, String sectionRoom, int enrolled, int capacity)
     {
 	this.parent = parent;	
 	this.status = status;
 	this.enrollCode = enrollCode;
+	this.sectionDay = sectionDay;
 	this.sectionTime = sectionTime;
 	this.sectionRoom = sectionRoom;
 	this.enrolled = enrolled;
@@ -71,6 +72,7 @@ public class UCSBSection {
 	result = "\t Course Title: " + parent.getCourseTitle() + "\n"
 	    + "\t Section Status: " + status + "\n"
 	    + "\t Enroll Code: " + enrollCode + "\n"
+	    + "\t Section Day: " + sectionDay + "\n"
 	    + "\t Section Time: " + sectionTime + "\n"
 	    + "\t Section Rm: " + sectionRoom + "\n"
 	    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";

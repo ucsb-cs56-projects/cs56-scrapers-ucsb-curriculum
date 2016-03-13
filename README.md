@@ -28,14 +28,20 @@ You will see that the fields in the UCSBLecture and UCSBSection classes correspo
 * The UCSBCurriculumSearch constructor does an initial read of the URL to initialize two instance variables: viewStateString and eventValString. This is because those fields have to be "echoed back" to the server on every subsequent query, or the server will return a bad status code (HTTP status code 500). You shouldn't have to worry too much about that, though. Your main job is to flesh out the UCSBLecture and UCSBSection classes, and add methods to parse the HTML and initialize the fields in those classes.
 
 ## Usage
+To run the course scraper with a GUI, do: 
+	
+	ant gui
 
-To run the course scraper, do:
+To run the course scraper using just the terminal, do:
 
 	ant run
 
-If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Type in a query in the format: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
-   Hopefully you will see the following.
+If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Once you select the search criteria: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
+   Hopefully you will see the following when running the GUI.
 
+![](http://i.imgur.com/GZy6QEG.png)
+
+You should see something similar to this when running the program via terminal. 
 NOTE: Be aware that sometimes copying and pasting input will cause an error depending on where you copied the text from.
 
 ![](http://imgur.com/TIAro8F.png)
@@ -50,3 +56,12 @@ NOTE: Be aware that sometimes copying and pasting input will cause an error depe
 * Relevant Mantis links
 	* [660](https://foo.cs.ucsb.edu/56mantis/view.php?id=660)
 	* [396](https://foo.cs.ucsb.edu/56mantis/view.php?id=396)
+
+W16 Final Remarks:
+
+To the next set of students working on this project, I encourage you to look through UCSBCirriculumSearch first. That class is the one that actually goes through the course site and scrapes all of the course data in order to display it to us. If you are not familiar with writing or reading programs that scrape data off of a site, the file will seem difficult to understand and thus I would put most of my effort there. To make matters worse we found some instances of code that was written but never used in that class so there may be more throughout the file. If you're planning on adding search criteria, as one of the next issues I recommend you check out JSoup: ---> http://jsoup.org/. It makes writing scraper code much easier and all it takes is a bit of familiarity with HTML and CSS (well, so does writing the code without JSoup). In addition, you could go even further and refactor the previous scraper code with JSoup entirely! That would make it nicer for future students of the course. The rest of the files in this project are not as complex and are much easier to follow, so just take a look at those to familarize yourself with all aspects of the project.
+
+As for bugs, the most troubling one we found in our time with the project was that the program would seemingly not work at times. We found that the fix for it was to simply refresh the course page in our browser. Once that's done the program would once again find your desried course. We couldn't quite figure out the cause of this bug, but it's something to make note of. 
+You could add, as mentioned in the first paragraph, more search criteria to the program as a new feature. Right now you make the search using the aforementioned: DEPT, QUARTER, YEAR, LEVEL system; however, what if you want to just look up "Courses with professor Conrad"? The possibilities here are limited to just what kind of search criteria you may find useful! Porting the program to an Android App would also be pretty handy if you want to search through courses on the go.
+
+

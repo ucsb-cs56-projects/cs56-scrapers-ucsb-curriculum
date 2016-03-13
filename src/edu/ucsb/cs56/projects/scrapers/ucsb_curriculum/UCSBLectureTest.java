@@ -24,6 +24,7 @@ public class UCSBLectureTest {
 	String lectRoom = "CHEM 1171";
 	int enrolled = 63;
 	int capacity = 88;
+	String enrollCode = "00000";
 
     /* Test the constructor written for issue 396
      TODO: Extend test when extended cstruct is written */
@@ -34,7 +35,7 @@ public class UCSBLectureTest {
 
 	UCSBLecture lecture = 
 	    new UCSBLecture(courseTitle, primaryCourseAbbr, status, instructor,
-			    lectDays, lectTime, lectRoom, enrolled, capacity);
+			    lectDays, lectTime, lectRoom, enrolled, capacity, enrollCode);
 
 	// Test Constructor
 	assertEquals(courseTitle, lecture.getCourseTitle());
@@ -46,6 +47,7 @@ public class UCSBLectureTest {
 	assertEquals(lectRoom, lecture.getLectRoom());
 	assertEquals(enrolled, lecture.getEnrolled());
 	assertEquals(capacity, lecture.getCapacity());
+	assertEquals(enrollCode, lecture.getEnrollCode());
 
 	// Test Setters/Getters
 	lecture.setCourseTitle("CMPSC 56");
@@ -57,6 +59,7 @@ public class UCSBLectureTest {
 	lecture.setLectRoom("HFH 1132");
 	lecture.setEnrolled(50);
 	lecture.setCapacity(50);
+	lecture.setEnrollCode("00000");
 
 	assertEquals("CMPSC 56", lecture.getCourseTitle());
 	assertEquals("Computer Science 56", lecture.getPrimaryCourseAbbr());
@@ -67,6 +70,7 @@ public class UCSBLectureTest {
 	assertEquals("HFH 1132", lecture.getLectRoom());
 	assertEquals(50, lecture.getEnrolled());
 	assertEquals(50, lecture.getCapacity());
+	assertEquals("00000", lecture.getEnrollCode());
 
     }
 
@@ -74,7 +78,7 @@ public class UCSBLectureTest {
     public void test_toString(){
         UCSBLecture lecture =
 	    new UCSBLecture(courseTitle, primaryCourseAbbr, status, instructor,
-			    lectDays, lectTime, lectRoom, enrolled, capacity);
+			    lectDays, lectTime, lectRoom, enrolled, capacity, enrollCode);
 
         String expected = "Course Title: CMPSC     8\n"
                         + "Course Abbreviation: INTRO TO COMP SCI\n"
@@ -83,7 +87,9 @@ public class UCSBLectureTest {
                         + "Lecture Days: T R\n"
                         + "Lecture Time: 3:30pm - 4:45pm\n"
                         + "Lecture Room: CHEM 1171\n"
-                        + "Enrolled / Capacity: 63 / 88\n";
+                        + "Enrolled / Capacity: 63 / 88\n"
+						+ "Enroll Code: 00000\n";
+
         assertEquals(expected, lecture.toString());
     }
     
