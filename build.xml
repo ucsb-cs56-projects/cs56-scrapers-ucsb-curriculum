@@ -54,11 +54,11 @@
 		</javac>
 	</target>
 	
- <target name="gui" depends = "compile,setup" description="run the gui">
+ <target name="run" depends = "compile,setup" description="run the gui">
 	 <java fork="true" classpathref="project.class.path" classname="${GUI}" />
  </target>
  
- <target name="run" depends="compile,setup" description="run the main">
+ <target name="cli" depends="compile,setup" description="run the main">
 	 <java classname="${mainClass}">
 		 <classpath refid="project.class.path" />
 	 </java>
