@@ -27,7 +27,15 @@ public class UCSBSection {
 
     /**
      * Detailed Constructor
-     */
+     @param UCSBLecture parent lecture object
+     @param String status  e.g. "Full"
+     @param String enrollCode  e.g. "07989"
+     @param String sectionDay  e.g. "T R"
+     @param String sectionTime  e.g. "3:30pm - 4:45pm"
+     @param String sectionRoom  e.g. Chem 1171"
+     @param int enrolled e.g. from 63/88 take the 63
+     @param int capacity e.g. from 63/88 take the 88
+    */
     public UCSBSection(UCSBLecture parent, String status, String enrollCode, 
     	String sectionDay, String sectionTime, String sectionRoom, int enrolled, int capacity)
     {

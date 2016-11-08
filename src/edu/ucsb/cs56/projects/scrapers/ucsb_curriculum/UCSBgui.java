@@ -18,7 +18,9 @@ import javax.swing.ImageIcon;
  
  @author Natasha Lee
  @author Kevin Zaragoza
- @version W16 
+ @author Jim Vargas
+ @author Richard Young
+ @version F16 
  
  */
 
@@ -155,71 +157,45 @@ public class UCSBgui{
 			constraints.insets = new Insets(10, 0, 100, 0);
 			panel.add(scrollbar, constraints);
 
-
-			//add widgets to panel
-			/*panel.add(picLabel);
-			panel.add(subjectBox);
-			panel.add(quarterBox);
-			panel.add(yearBox);
-			panel.add(levelBox);
-			panel.add(search);*/
-		
-			//make textbox scrollable
-			//panel.add(scrollbar, constraints);
-			//
-			
-			//setting the layout of the gui
-			/*picLabel.setBounds(0,0,1280,120);
-			subjectBox.setBounds(445,200,80,20);
-			quarterBox.setBounds(535,200,80,20);
-			yearBox.setBounds(625,200,60,20);
-			levelBox.setBounds(695,200,140,20);
-			search.setBounds(590,240,100,30);
-			scrollbar.setBounds(440,300,400,370);*/
-
-
-			
-
-			
 			search.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ee) {
-					try{
-						//reset the textbox so it clears each time you press search
-						textbox.setText(null);
-						
-						//instantiate a new Curriculum search object
-						UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
-						
-						//get the values of the selections
-						String dept = String.valueOf(subjectBox.getSelectedItem());
-						
-						Item quarter = (Item) quarterBox.getSelectedItem();
-						String quarter2 = quarter.getId();
-						
-						String year = String.valueOf(yearBox.getSelectedItem());
-						String lev = String.valueOf(levelBox.getSelectedItem());
-						
-						
-						String qtr = year + quarter2;
-						
-						//search with the corresponding selections in the gui
-						cssc.loadCourses(dept, qtr, lev);
-						cssc.printLectures();
-
-
-						//set scrollbar to top of scrollpane
-						javax.swing.SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								scrollbar.getVerticalScrollBar().setValue(0);
-							}
-						});
-					}
-					catch (Exception e){
-						System.err.println(e);
-						e.printStackTrace();
-					}
+				    try{
+					//reset the textbox so it clears each time you press search
+					textbox.setText(null);
+					
+					//instantiate a new Curriculum search object
+					UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
+					
+					//get the values of the selections
+					String dept = String.valueOf(subjectBox.getSelectedItem());
+					
+					Item quarter = (Item) quarterBox.getSelectedItem();
+					String quarter2 = quarter.getId();
+					
+					String year = String.valueOf(yearBox.getSelectedItem());
+					String lev = String.valueOf(levelBox.getSelectedItem());
+					
+					
+					String qtr = year + quarter2;
+					
+					//search with the corresponding selections in the gui
+					cssc.loadCourses(dept, qtr, lev);
+					cssc.printLectures();
+					
+					
+					//set scrollbar to top of scrollpane
+					javax.swing.SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+						    scrollbar.getVerticalScrollBar().setValue(0);
+						}
+					    });
+				    }
+				    catch (Exception e){
+					System.err.println(e);
+					e.printStackTrace();
+				    }
 				}
-			} );
+			    } );
 			
 			//setup the JFrame
 			frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
@@ -229,8 +205,8 @@ public class UCSBgui{
 			
 			
 		}catch(Exception e){
-			System.err.println(e);
-			e.printStackTrace();
+		    System.err.println(e);
+		    e.printStackTrace();
 		}
 		
 	}
