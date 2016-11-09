@@ -60,7 +60,7 @@ public class UCSBCurriculumSearch {
 	    String agent = "Mozilla/4.0";
 	    String encodedData = "";
 	    URL endpoint = new URL(MAINPAGE_URL);
-	    // URL endpoint = new URL("http://foo.cs.ucsb.edu:21000");
+
 	    HttpsURLConnection urlc = null;
 
 	    urlc = (HttpsURLConnection) endpoint.openConnection();
@@ -141,11 +141,6 @@ public class UCSBCurriculumSearch {
 	    extractHiddenFieldValue("__VIEWSTATE",mainPage);
 	this.eventValString =
 	    extractHiddenFieldValue("__EVENTVALIDATION",mainPage);
-	
-	//System.out.println("__VIEWSTATE=" + viewStateString);
-	//System.out.println("__EVENTVALIDATION=" + eventValString);
-
-	// System.out.println("End of Constructor");
     }
     
     /** When searching for courses, the HTTP POST method must be used---this method
@@ -174,37 +169,22 @@ public class UCSBCurriculumSearch {
     */
     public int loadCourses(String dept, String qtr, String level) throws Exception {
 
-	// Then add some methods that can be used to look up courses by
-	// course number and/or enrollment code.
 
-        // Get the page to parse. This is HTML
         String page = getPage(dept,qtr,level);
 
-	// To return the total number at the end
         int num_lectures = 0;
 
-	// Lectures or sections start with this
         String search_string = "<tr class=\"CourseInfoRow\">";
 
         int course_pos = page.indexOf(search_string,0);
 	
-	// Where to stop the substring
         int next_course_pos = page.indexOf(search_string,course_pos
 					   + search_string.length());
 
-
-        // Separate each lecture into separate smaller HTML Strings and
-	// put them into an ArrayList. Includes the section HTML as well
         ArrayList<String> lecture_html = new ArrayList<String>();
 
 
-        // Since the first found of a certain name is always a lecture,
-	// it has sections only if that lecture does not list an Enroll Code.
-	// Subsequent lectures with sections also do not have an enroll code
-
-
-        // Cut off the end so the last one doesn't have extra. There are two
-	// </table> tags, we want the second to last, so we do this twice.
+	
         page = page.substring(0, page.lastIndexOf("</table>"));
 		page = page.substring(0, page.lastIndexOf("</table>"));
 
@@ -213,8 +193,6 @@ public class UCSBCurriculumSearch {
 
             String lect = "";
             if (next_course_pos == -1){
-                // Since we continued the loop, another course exists
-		// but it's the last one.
                 lect += page.substring(course_pos);
             }
 	    else{
@@ -225,21 +203,17 @@ public class UCSBCurriculumSearch {
             next_course_pos = page.indexOf(search_string, course_pos + search_string.length());
         }
 
-        // Now we go through the separate HTML sections and determine
-	// whether it is a lecture or a section
 		int lecture_index = -1;
         for(String html : lecture_html){
             String course_abbr = findPrimaryCourseAbbr(html);
 
 			// If the course abbr is blank, then this is a section.
             if(course_abbr.equals("")){
-				// Parses the HTML of a section.
 				UCSBSection tmp = new UCSBSection();
 				tmp = parseSectionHtml(html, lectures.get(lecture_index));
 				lectures.get(lecture_index).addSection(tmp);
 			}
 			else{
-				// Parses the HTML of a lecture.
 				lectures.add(parseLectureHtml(html));
 				lecture_index++;
 				num_lectures++;
@@ -256,7 +230,6 @@ public class UCSBCurriculumSearch {
     private String findCourseTitle(String html){
 		String after_title_string = "";
 		try{
-			// This is always right after a lecture title
 			after_title_string = "<div class=\"MasterCourseTableDiv\">";
 		}catch (Exception e){
 			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
@@ -278,7 +251,6 @@ public class UCSBCurriculumSearch {
 			String search = "decoration:underline;\">";
 			String title = "";
 
-		//try/catch block in case HTML used to search changes
 		try{
 			title = html.substring(html.indexOf(search)+search.length(),
 								   html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
@@ -356,49 +328,43 @@ public class UCSBCurriculumSearch {
      */
     private UCSBLecture parseEnd(String html, UCSBLecture lect){
 	UCSBLecture temp = lect;
-        // Throw away the last part because it doesn't mean anything.
+   
         html = removeLastElement(html);
-
-        // The enrollment and capacity
         String enrollment_html = getEndElement(html);
 
-        // First number is enrollment, second is capacity
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
 
         // Take out the enrollment/capacity because it has been parsed
         html = removeLastElement(html);
 
-        // The location of the lecture or section room
         String lect_room_html = getEndElement(html);
         String lectRoom = lect_room_html.trim();
         html = removeLastElement(html);
 
-        // Lecture Time
         String lect_time_html = getEndElement(html);
         String lectTime = lect_time_html.trim();
         html = removeLastElement(html);
 
-        // Lect Days
         String lect_days_html = getEndElement(html);
         String lectDays = lect_days_html.trim();
         html = removeLastElement(html);
 
-        // Instructor
         String instructor_html = getEndElement(html);
         int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
+        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
             instructor_html = instructor_html.substring(0, br);
         String instructor = instructor_html.trim();
         html = removeLastElement(html);
 
-        // Set all the fields
-		temp.setEnrolled(enrollment);
+
+	temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setLectRoom(lectRoom);
         temp.setLectTime(lectTime);
         temp.setLectDays(lectDays);
         temp.setInstructor(instructor);
+	
 	return temp;
 
     }
@@ -411,50 +377,42 @@ public class UCSBCurriculumSearch {
      */
     private UCSBSection parseEndSection(String html, UCSBSection sect){
 	UCSBSection temp = sect;
-        // Throw away the last part because it doesn't mean anything.
+	
         html = removeLastElement(html);
-
-        // The enrollment and capacity
         String enrollment_html = getEndElement(html);
 
-        // First number is enrollment, second is capacity
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
 
         // Take out the enrollment/capacity because it has been parsed
         html = removeLastElement(html);
 
-        // The location of the lecture or section room
         String sect_room_html = getEndElement(html);
         String sectRoom = sect_room_html.trim();
         html = removeLastElement(html);
 
-        // Secture Time
         String sect_time_html = getEndElement(html);
         String sectTime = sect_time_html.trim();
         html = removeLastElement(html);
 
-        // Sect Days
         String sect_days_html = getEndElement(html);
         String sectDays = sect_days_html.trim();
         html = removeLastElement(html);
 
-        // Instructor
         String instructor_html = getEndElement(html);
         int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
-			instructor_html = instructor_html.substring(0, br);
+        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
+	    instructor_html = instructor_html.substring(0, br);
         String instructor = instructor_html.trim();
         html = removeLastElement(html);
 
-        // Set all the fields
-		temp.setEnrolled(enrollment);
+	temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setSectionRoom(sectRoom);
         temp.setSectionTime(sectTime);
         temp.setSectionDay(sectDays);
-		//temp.setInstructor(instructor);
-		return temp;
+  
+	return temp;
 
     }
 
@@ -489,18 +447,16 @@ public class UCSBCurriculumSearch {
 	 @return UCSBLecture object with added members
      */
     public UCSBLecture parseLectureHtml(String html){
-        // Create a default Lecture object
+	
         UCSBLecture lect = new UCSBLecture();
 
-        // Get all the information you need
         String courseTitle = findCourseTitle(html);
         String primaryCourseAbbr = findPrimaryCourseAbbr(html);
 		
        // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
         String status = findStatus(html);
-		String enrollcode = findEnrollCode(html);
+	String enrollcode = findEnrollCode(html);
 		
-        // Set them in the obj
         lect.setCourseTitle(courseTitle);
         lect.setPrimaryCourseAbbr(primaryCourseAbbr);
         lect.setStatus(status);
@@ -509,10 +465,8 @@ public class UCSBCurriculumSearch {
 		lect.setEnrollCode(enrollcode);
 		
 		
-        // Set the other properties
         lect = parseEnd(html, lect);
 
-	//Returns UCSBLecture object
 	return lect;
 
     }
@@ -523,7 +477,6 @@ public class UCSBCurriculumSearch {
 	 @return UCSBSection object with added members
      */
     public UCSBSection parseSectionHtml(String html, UCSBLecture parent){
-		//Create a default Section object
 		UCSBSection sect = new UCSBSection();
 		
 		String status = findStatus(html);
@@ -566,12 +519,10 @@ public class UCSBCurriculumSearch {
 
 	    byte[] encodedBytes = encodedData.getBytes();
 
-	    //	    encodedData += "&ctl00%24pageContent%24searchButton.x=34&ctl00%24pageContent%24searchButton.y=6";
 
 	    String type = "application/x-www-form-urlencoded";
 
 	    URL endpoint = new URL(MAINPAGE_URL);
-	    // URL endpoint = new URL("http://foo.cs.ucsb.edu:21000");
 	    HttpURLConnection urlc = null;
 
 	    urlc = (HttpURLConnection) endpoint.openConnection();
@@ -748,22 +699,17 @@ public class UCSBCurriculumSearch {
 	    
 	    // Asks for user input and outputs corresponding lectures/sections
 	    while(true){
-		// Creates a new UCSBCurriculumSearch object
 		UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 		System.out.println("Enter the dept, qtr, year, and crs lvl: ");
-		// Creates a new bufferedReader object
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		// Reads user input
 		String s = bufferedReader.readLine();
 		// Closes program if user inputs empty string
 		if(s.equals("")){
 		    System.out.println("You have closed the Program.");
 		    break;
 		}
-		// Splits user input into a String array of 4 items.
 		String[] inputList = s.split(", ");
 		// Checks if user inputs 4 items. If not, goes to next iteration
-		// of loop
 		if(inputList.length != 4){
 		    System.out.println("Error in input format! Try again!\n" +
 				       "Ex. CMPSC, Spring, 2014, Undergraduate");
@@ -781,14 +727,13 @@ public class UCSBCurriculumSearch {
 		// the toString() of the UCSBLectures
 		uccs.loadCourses(dept, qtr, level);
 		uccs.printLectures();
-		//Closes the bufferedReader
 		bufferedReader.close();
 	    }
 	} catch (Exception e) {
 	    System.err.println(e);
 	    e.printStackTrace();
 	}
-    }  // main
+    }
     
     /** Parses the quarter to the correct corresponding number that represents it.
 	@param qtr string of the quarter e.g Summer, Winter, Fall, Spring
