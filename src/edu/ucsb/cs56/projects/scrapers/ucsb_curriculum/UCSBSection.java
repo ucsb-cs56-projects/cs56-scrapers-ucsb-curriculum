@@ -2,12 +2,12 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
 /** UCSBSection -- Stores information from a single discussion section,
     plus contains a reference to the associated lecture section
-
 @author Phill Conrad
 @author Kevin Mai
+@author Richard Young
+@author Jim Vargas
 @version cs56.projects.W11, Issue 50
 @see UCSBSectionTest
-
 */
 
 public class UCSBSection {
@@ -27,7 +27,15 @@ public class UCSBSection {
 
     /**
      * Detailed Constructor
-     */
+     @param parent UCSB lecture object
+     @param status string object of the status of a class  e.g. "Full"
+     @param enrollCode string object of the enroll code of a class  e.g. "07989"
+     @param sectionDay string object of the days where section is held  e.g. "T R"
+     @param sectionTime string object of the times when section is held  e.g. "3:30pm - 4:45pm"
+     @param sectionRoom  string object of the room where section is held  e.g. Chem 1171"
+     @param enrolled integer object of the number of students that are enrolled in the class  e.g. from 63/88 take the 63
+     @param capacity integer object of the amount of students that can enroll in the class  e.g. from 63/88 take the 88
+    */
     public UCSBSection(UCSBLecture parent, String status, String enrollCode, 
     	String sectionDay, String sectionTime, String sectionRoom, int enrolled, int capacity)
     {
