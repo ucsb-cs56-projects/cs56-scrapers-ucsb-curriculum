@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.plaf.basic.*;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.awt.image.BufferedImage;
@@ -24,7 +23,7 @@ import javax.swing.ImageIcon;
  */
 
 public class UCSBgui{
-	static JFrame frame;
+	static  JFrame frame;
 
 	
 	public static void main (String [] args){
@@ -90,7 +89,7 @@ public class UCSBgui{
 			
 			
 			//Creates textArea that displays your search results
-			JTextArea textbox = new JTextArea();
+			JTextArea textbox = new JTextArea(20, 40);
 			textbox.setEditable(false);
 			
 			//Redirects terminal output to GUI
@@ -110,28 +109,73 @@ public class UCSBgui{
 			
 			
 			JPanel panel = new JPanel();
-			panel.setLayout(null);
-			
+			panel.setLayout(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+
+			//set constraints and add Piclabel at top of panel
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			constraints.weightx = .5;
+			constraints.weighty = .5;
+			constraints.gridwidth = 4;
+			panel.add(picLabel, constraints);
+
+			//constraints for second row of subject, quarter, year, and level boxes
+			//then add them to pane
+			constraints.gridwidth = 1;
+			constraints.gridy = 1;
+			constraints.insets = new Insets(0, 15, 0, 15);
+			panel.add(subjectBox, constraints);
+			constraints.gridx = 1;
+			panel.add(quarterBox,constraints);
+			constraints.gridx = 2;
+			panel.add(yearBox, constraints);
+			constraints.gridx = 3;
+			panel.add(levelBox, constraints);
+
+			//constraints for third row of search button
+			//then add them to pane
+			constraints.insets = new Insets(0, 0, 0, 0);
+			constraints.gridy = 2;
+			constraints.gridx = 1;
+			constraints.gridwidth = 2;
+			panel.add(search, constraints);
+
+			//constraints for displayed text field (scrollbar)
+			//then add them to pane
+			constraints.gridx = 1;
+			constraints.gridy = 3;
+			constraints.gridheight = 5;
+			constraints.weighty = 0.5;
+			constraints.ipady = 200;
+			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollbar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			constraints.fill = GridBagConstraints.BOTH;
+			constraints.insets = new Insets(10, 0, 100, 0);
+			panel.add(scrollbar, constraints);
+
+
 			//add widgets to panel
-			panel.add(picLabel);
+			/*panel.add(picLabel);
 			panel.add(subjectBox);
 			panel.add(quarterBox);
 			panel.add(yearBox);
 			panel.add(levelBox);
-			panel.add(search);
+			panel.add(search);*/
 		
 			//make textbox scrollable
-			panel.add(scrollbar);
-			scrollbar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			//panel.add(scrollbar, constraints);
+			//
 			
 			//setting the layout of the gui
-			picLabel.setBounds(0,0,1280,120);
+			/*picLabel.setBounds(0,0,1280,120);
 			subjectBox.setBounds(445,200,80,20);
 			quarterBox.setBounds(535,200,80,20);
 			yearBox.setBounds(625,200,60,20);
 			levelBox.setBounds(695,200,140,20);
 			search.setBounds(590,240,100,30);
-			scrollbar.setBounds(440,300,400,370);
+			scrollbar.setBounds(440,300,400,370);*/
 
 
 			
@@ -161,9 +205,16 @@ public class UCSBgui{
 						//search with the corresponding selections in the gui
 						cssc.loadCourses(dept, qtr, lev);
 						cssc.printLectures();
-						
-						
-					}catch (Exception e){
+
+
+						//set scrollbar to top of scrollpane
+						javax.swing.SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								scrollbar.getVerticalScrollBar().setValue(0);
+							}
+						});
+					}
+					catch (Exception e){
 						System.err.println(e);
 						e.printStackTrace();
 					}
