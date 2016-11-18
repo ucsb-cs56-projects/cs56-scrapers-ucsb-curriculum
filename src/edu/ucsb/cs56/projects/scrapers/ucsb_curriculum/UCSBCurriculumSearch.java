@@ -19,19 +19,18 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 /**
    This object is designed to parse input from the Curriculum Search
    page at:
-
        http://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx
-
    Getting information from this site is especially challenging
    because of the ASPX viewstate issue; the viewstate must be
    preserved from transaction to transaction.
-
+   @author Richard Young
+   @author Jim Vargas
    @author Phill Conrad
    @author James Neally
    @author Mark Nguyen
    @author Daniel Vicory
    @author Kevin Mai
-   @version W14, extended from Matis ticket 396, W12, CS56
+   @version F16, extended from Matis ticket 396, W12, CS56
 */
 
 public class UCSBCurriculumSearch {
@@ -53,7 +52,6 @@ public class UCSBCurriculumSearch {
     /** getMainPage() returns the contents of the main page at MAINPAGE_URL
        as a String.   This is primarily used internally to initialize the
        viewstate (needed for screenscraping ASPX websites).
-
        @return HTML code for the page
     */
     public static String getMainPage() {
@@ -62,7 +60,7 @@ public class UCSBCurriculumSearch {
 	    String agent = "Mozilla/4.0";
 	    String encodedData = "";
 	    URL endpoint = new URL(MAINPAGE_URL);
-	    // URL endpoint = new URL("http://foo.cs.ucsb.edu:21000");
+
 	    HttpsURLConnection urlc = null;
 
 	    urlc = (HttpsURLConnection) endpoint.openConnection();
@@ -100,7 +98,6 @@ public class UCSBCurriculumSearch {
 
     /** extractHiddenFielddValue is used to extract the __VIEWSTATE and the
 	__EVENTVALIDATION values from the HTML for an ASPX web page.
-
 	@param name name of the hidden field (e.g. "__VIEWSTATE" or "__EVENTVALIDATION")
 	@param page HTML for the page (e.g. result of getMainPage())
 	@return value of the value attribute of that hidden field
@@ -119,94 +116,75 @@ public class UCSBCurriculumSearch {
 
 	int firstPos = page.indexOf(beforeValue) + beforeValue.length();
 	if (debug) { System.out.println("extractHiddenFieldValue: firstPos="+firstPos); }
-
+	
 	int afterPos = page.indexOf(afterValue,firstPos);
 	if (debug) { System.out.println("afterPos="+afterPos); }
-
+	
 	return page.substring(firstPos,afterPos);
     }
-
-
+    
+    
     /** Constructor---called to initialize the UCSBCurriculumSearch object
-
+	
 	The default constructor initially makes an empty list of
 	lectures, and initializes the viewstate for doing
 	searches---but does not actually load up any courses.
+	@throws java.io.IOException thrown when an error occurs with input and output
     */
     public UCSBCurriculumSearch() throws java.io.IOException {
-
+	
 	this.lectures = new ArrayList<UCSBLecture>(); // initially empty.
-
+	
 	String mainPage = getMainPage();
-
+	
 	this.viewStateString =
-	     extractHiddenFieldValue("__VIEWSTATE",mainPage);
+	    extractHiddenFieldValue("__VIEWSTATE",mainPage);
 	this.eventValString =
-	     extractHiddenFieldValue("__EVENTVALIDATION",mainPage);
-
-	//System.out.println("__VIEWSTATE=" + viewStateString);
-	//System.out.println("__EVENTVALIDATION=" + eventValString);
-
-	// System.out.println("End of Constructor");
-   }
-
+	    extractHiddenFieldValue("__EVENTVALIDATION",mainPage);
+    }
+    
     /** When searching for courses, the HTTP POST method must be used---this method
 	helps to encode the HTML Form parameters properly (using URLEncoding)
-
+	
 	@param name name of the HTML input parameters
 	@param value value of the HTML input parameter
 	@return string that should be appended to the characters to be sent in the payload
-	of the HTML request. The & characters are not included.
+	of the HTML request. The &amp; characters are not included.
+	@throws java.lang.Exception thrown when an error occurs
     */
     public static String encodedNameValuePair(String name, String value) throws Exception {
 	return  URLEncoder.encode(name, "UTF-8") + "=" + URLEncoder.encode(value, "UTF-8");
     }
-
+    
     /** loadCourses is used to load up the UCSBCurriculumSearch object with a set of
 	courses for a given Department, Quarter, and level.
-
+	
 	After courses are loaded into the object, other methods can be used to
 	look up courses by course number and/or enrollment code
-
 	@param dept department code.  (e.g., "CMPSC" or "ART")
 	@param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
 	@param level one of "Undergraduate","Graduate","All"
 	@return the number of courses loaded
-
+	@throws java.lang.Exception thrown when an error occurs
     */
     public int loadCourses(String dept, String qtr, String level) throws Exception {
 
-	// Then add some methods that can be used to look up courses by
-	// course number and/or enrollment code.
 
-        // Get the page to parse. This is HTML
         String page = getPage(dept,qtr,level);
 
-	// To return the total number at the end
         int num_lectures = 0;
 
-	// Lectures or sections start with this
         String search_string = "<tr class=\"CourseInfoRow\">";
 
         int course_pos = page.indexOf(search_string,0);
 	
-	// Where to stop the substring
         int next_course_pos = page.indexOf(search_string,course_pos
 					   + search_string.length());
 
-
-        // Separate each lecture into separate smaller HTML Strings and
-	// put them into an ArrayList. Includes the section HTML as well
         ArrayList<String> lecture_html = new ArrayList<String>();
 
 
-        // Since the first found of a certain name is always a lecture,
-	// it has sections only if that lecture does not list an Enroll Code.
-	// Subsequent lectures with sections also do not have an enroll code
-
-
-        // Cut off the end so the last one doesn't have extra. There are two
-	// </table> tags, we want the second to last, so we do this twice.
+	
         page = page.substring(0, page.lastIndexOf("</table>"));
 		page = page.substring(0, page.lastIndexOf("</table>"));
 
@@ -215,8 +193,6 @@ public class UCSBCurriculumSearch {
 
             String lect = "";
             if (next_course_pos == -1){
-                // Since we continued the loop, another course exists
-		// but it's the last one.
                 lect += page.substring(course_pos);
             }
 	    else{
@@ -227,21 +203,17 @@ public class UCSBCurriculumSearch {
             next_course_pos = page.indexOf(search_string, course_pos + search_string.length());
         }
 
-        // Now we go through the separate HTML sections and determine
-	// whether it is a lecture or a section
 		int lecture_index = -1;
         for(String html : lecture_html){
             String course_abbr = findPrimaryCourseAbbr(html);
 
 			// If the course abbr is blank, then this is a section.
             if(course_abbr.equals("")){
-				// Parses the HTML of a section.
 				UCSBSection tmp = new UCSBSection();
 				tmp = parseSectionHtml(html, lectures.get(lecture_index));
 				lectures.get(lecture_index).addSection(tmp);
 			}
 			else{
-				// Parses the HTML of a lecture.
 				lectures.add(parseLectureHtml(html));
 				lecture_index++;
 				num_lectures++;
@@ -258,7 +230,6 @@ public class UCSBCurriculumSearch {
     private String findCourseTitle(String html){
 		String after_title_string = "";
 		try{
-			// This is always right after a lecture title
 			after_title_string = "<div class=\"MasterCourseTableDiv\">";
 		}catch (Exception e){
 			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
@@ -280,7 +251,6 @@ public class UCSBCurriculumSearch {
 			String search = "decoration:underline;\">";
 			String title = "";
 
-		//try/catch block in case HTML used to search changes
 		try{
 			title = html.substring(html.indexOf(search)+search.length(),
 								   html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
@@ -313,8 +283,9 @@ public class UCSBCurriculumSearch {
 		return description.trim();
 	}
 
-    /**
-     *
+    /** Find the course status given a subsection of HTML only including on section or lecture
+	@param html HTML of one lecture or section
+	@return String course status
      */
     private String findStatus(String html){
 		String status = "";
@@ -330,8 +301,9 @@ public class UCSBCurriculumSearch {
 		return status.trim();
 	}
 	
-    /**
-     *
+    /** Find the course enrollment code given a subsection of HTML only including on section or lecture
+	@param html HTML of one lecture or section
+	@return String course enrollment code
      */
 	private String findEnrollCode(String html){
 		String status = "";
@@ -356,49 +328,43 @@ public class UCSBCurriculumSearch {
      */
     private UCSBLecture parseEnd(String html, UCSBLecture lect){
 	UCSBLecture temp = lect;
-        // Throw away the last part because it doesn't mean anything.
+   
         html = removeLastElement(html);
-
-        // The enrollment and capacity
         String enrollment_html = getEndElement(html);
 
-        // First number is enrollment, second is capacity
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
 
         // Take out the enrollment/capacity because it has been parsed
         html = removeLastElement(html);
 
-        // The location of the lecture or section room
         String lect_room_html = getEndElement(html);
         String lectRoom = lect_room_html.trim();
         html = removeLastElement(html);
 
-        // Lecture Time
         String lect_time_html = getEndElement(html);
         String lectTime = lect_time_html.trim();
         html = removeLastElement(html);
 
-        // Lect Days
         String lect_days_html = getEndElement(html);
         String lectDays = lect_days_html.trim();
         html = removeLastElement(html);
 
-        // Instructor
         String instructor_html = getEndElement(html);
         int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
+        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
             instructor_html = instructor_html.substring(0, br);
         String instructor = instructor_html.trim();
         html = removeLastElement(html);
 
-        // Set all the fields
-		temp.setEnrolled(enrollment);
+
+	temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setLectRoom(lectRoom);
         temp.setLectTime(lectTime);
         temp.setLectDays(lectDays);
         temp.setInstructor(instructor);
+	
 	return temp;
 
     }
@@ -411,50 +377,42 @@ public class UCSBCurriculumSearch {
      */
     private UCSBSection parseEndSection(String html, UCSBSection sect){
 	UCSBSection temp = sect;
-        // Throw away the last part because it doesn't mean anything.
+	
         html = removeLastElement(html);
-
-        // The enrollment and capacity
         String enrollment_html = getEndElement(html);
 
-        // First number is enrollment, second is capacity
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
 
         // Take out the enrollment/capacity because it has been parsed
         html = removeLastElement(html);
 
-        // The location of the lecture or section room
         String sect_room_html = getEndElement(html);
         String sectRoom = sect_room_html.trim();
         html = removeLastElement(html);
 
-        // Secture Time
         String sect_time_html = getEndElement(html);
         String sectTime = sect_time_html.trim();
         html = removeLastElement(html);
 
-        // Sect Days
         String sect_days_html = getEndElement(html);
         String sectDays = sect_days_html.trim();
         html = removeLastElement(html);
 
-        // Instructor
         String instructor_html = getEndElement(html);
         int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though. What is this I don't even
-			instructor_html = instructor_html.substring(0, br);
+        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
+	    instructor_html = instructor_html.substring(0, br);
         String instructor = instructor_html.trim();
         html = removeLastElement(html);
 
-        // Set all the fields
-		temp.setEnrolled(enrollment);
+	temp.setEnrolled(enrollment);
         temp.setCapacity(capacity);
         temp.setSectionRoom(sectRoom);
         temp.setSectionTime(sectTime);
         temp.setSectionDay(sectDays);
-		//temp.setInstructor(instructor);
-		return temp;
+  
+	return temp;
 
     }
 
@@ -472,6 +430,11 @@ public class UCSBCurriculumSearch {
         return element_html.substring(element_html.indexOf(">") + 1, element_html.indexOf(end_tag)).trim();
     }
 
+    /** Removes last element because it doesn't do anything
+	@param html HTML to remove last element of
+	@return String with last element removed
+    */
+    
     private String removeLastElement(String html){
         int index = html.lastIndexOf("<td");
         return html.substring(0, index);
@@ -484,18 +447,16 @@ public class UCSBCurriculumSearch {
 	 @return UCSBLecture object with added members
      */
     public UCSBLecture parseLectureHtml(String html){
-        // Create a default Lecture object
+	
         UCSBLecture lect = new UCSBLecture();
 
-        // Get all the information you need
         String courseTitle = findCourseTitle(html);
         String primaryCourseAbbr = findPrimaryCourseAbbr(html);
 		
        // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
         String status = findStatus(html);
-		String enrollcode = findEnrollCode(html);
+	String enrollcode = findEnrollCode(html);
 		
-        // Set them in the obj
         lect.setCourseTitle(courseTitle);
         lect.setPrimaryCourseAbbr(primaryCourseAbbr);
         lect.setStatus(status);
@@ -504,10 +465,8 @@ public class UCSBCurriculumSearch {
 		lect.setEnrollCode(enrollcode);
 		
 		
-        // Set the other properties
         lect = parseEnd(html, lect);
 
-	//Returns UCSBLecture object
 	return lect;
 
     }
@@ -518,7 +477,6 @@ public class UCSBCurriculumSearch {
 	 @return UCSBSection object with added members
      */
     public UCSBSection parseSectionHtml(String html, UCSBLecture parent){
-		//Create a default Section object
 		UCSBSection sect = new UCSBSection();
 		
 		String status = findStatus(html);
@@ -537,14 +495,13 @@ public class UCSBCurriculumSearch {
 	for a given department, quarter, and level. It is NOT a static method--it can
 	only be invoked from an object, because it needs the instance variables
 	for viewstate and event validation that were initialized in the constructor.
-
 	This is primarily used internally to get the HTML that loadCourses
 	parses to load courses into the object.
-
 	@param dept department code.  (e.g., "CMPSC" or "ART")
 	@param qtr 5 character quarter code (yyyyq where q=1,2,3,4 for Winter,Spring,Summer,Fall)
 	@param level one of "Undergraduate","Graduate","All"
 	@return HTML code for the page
+	@throws java.lang.Exception thrown when an error occurs
     */
     public String getPage(String dept, String qtr, String level) throws Exception {
 	StringBuffer wholeResponse = null;
@@ -562,12 +519,10 @@ public class UCSBCurriculumSearch {
 
 	    byte[] encodedBytes = encodedData.getBytes();
 
-	    //	    encodedData += "&ctl00%24pageContent%24searchButton.x=34&ctl00%24pageContent%24searchButton.y=6";
 
 	    String type = "application/x-www-form-urlencoded";
 
 	    URL endpoint = new URL(MAINPAGE_URL);
-	    // URL endpoint = new URL("http://foo.cs.ucsb.edu:21000");
 	    HttpURLConnection urlc = null;
 
 	    urlc = (HttpURLConnection) endpoint.openConnection();
@@ -613,6 +568,8 @@ public class UCSBCurriculumSearch {
 
     /** return a UCSBSection object given an enrollcode, if it doesn't exist,
      *  return a null object
+     @param enrollCode string of an enrollment code
+     @return UCSBSection section object correlating to the right enrollment code
      */
     public UCSBSection getSection(String enrollCode) {
 		UCSBSection section = null;
@@ -626,185 +583,181 @@ public class UCSBCurriculumSearch {
 	}
 
     /** return a UCSBLecture object given a course number and quarter
-	@param title 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param Title 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
 	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
 	@return a UCSBLecture object for that courseNum.  If there are multiple
-	       instances, only the first one is returned. (Use getLectures() to
-	       get an ArrayList, and countLectures to determine how many there are.)
-     */
-
+	instances, only the first one is returned. (Use getLectures() to
+	get an ArrayList, and countLectures to determine how many there are.)
+    */
+    
     public UCSBLecture getLecture(String Title, String quarter) {
-		String department;
-		String CourseNum;
-		return null; // STUB!
+	String department;
+	String CourseNum;
+	return null; // STUB!
     }
-
-	/** return an ArrayList of  UCSBLecture objects given a course number and quarter
-	 @param courseNum 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	 @param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	 @return an ArrayList of  UCSBLecture objects for that courseNum.
-	       If there are none, an empty ArrayList is returned.
-     */
-
+    
+    /** return an ArrayList of  UCSBLecture objects given a course number and quarter
+	@param courseNum 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	@return an ArrayList of  UCSBLecture objects for that courseNum.
+	If there are none, an empty ArrayList is returned.
+    */
+    
     public ArrayList<UCSBLecture> getLectures(String courseNum, String quarter) {
-		return null; // STUB!
+	return null; // STUB!
     }
-
+    
     /** return the number of UCSBLecture objects already loaded that match
-	 the given course number and quarter
-	 @param courseNum 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	 @param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	 @return how many instances there are of that lecture
-
-     */
-
+	the given course number and quarter
+	@param courseNum 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	@return how many instances there are of that lecture
+	
+    */
+    
     public int countLectures(String courseNum, String quarter) {
-		return -42; // STUB!
+	return -42; // STUB!
     }
-
-
+    
+    
     /** return a UCSBSection object given a course number and quarter
-	 @param courseNum 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	 @param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	 @return a UCSBSection object for that courseNum.  If there are multiple
-	       instances, only the first one is returned. (Use getSections() to
-	       get an ArrayList, and countSections to determine how many there are.)
-     */
-
+	@param courseNum 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	@return a UCSBSection object for that courseNum.  If there are multiple
+	instances, only the first one is returned. (Use getSections() to
+	get an ArrayList, and countSections to determine how many there are.)
+    */
+    
     public UCSBSection getSection(String courseNum, String quarter) {
-		return null; // STUB!
+	return null; // STUB!
     }
-
+    
     /** return an ArrayList of  UCSBSection objects given a course number and quarter
-	 @param courseNum 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	 @param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	 @return an ArrayList of  UCSBSection objects for that courseNum (possibly
-	       spanning multiple lectures sections).
-	       If there are none, an empty ArrayList is returned.
-     */
-
+	@param courseNum 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	@return an ArrayList of  UCSBSection objects for that courseNum (possibly
+	spanning multiple lectures sections).
+	If there are none, an empty ArrayList is returned.
+    */
+    
     public ArrayList<UCSBSection> getSections(String courseNum, String quarter) {
-		return null; // STUB!
+	return null; // STUB!
     }
-
+    
     /** return the number of UCSBSection objects already loaded that match
 	the given course number and quarter
-	 @param courseNum 13 character course num ddddddddnnnxx where
-	       dddddddd is the department, extended with spaces if
-	       needed, nnn is the course number, right justified,
-	       and xx is the extension if any.  Examples:
-	       "CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	 @param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	 @return how many sections there are for that course (possibly across multiple lectures)
-     */
-
+	@param courseNum 13 character course num ddddddddnnnxx where
+	dddddddd is the department, extended with spaces if
+	needed, nnn is the course number, right justified,
+	and xx is the extension if any.  Examples:
+	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
+	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+	@return how many sections there are for that course (possibly across multiple lectures)
+    */
+    
     public int countSections(String courseNum, String quarter) {
-		return -42; // STUB!
+	return -42; // STUB!
     }
-
-    //Prints lectures and subsequent sections
-	public void printLectures(){
-		for(UCSBLecture lect : lectures){
-			System.out.println(lect);
-			for(UCSBSection sect : lect.getSections()){
-				System.out.println(sect);
-			}
+    
+    /** Prints lectures and subsquent section
+     */
+    public void printLectures(){
+	for(UCSBLecture lect : lectures){
+	    System.out.println(lect);
+	    for(UCSBSection sect : lect.getSections()){
+		System.out.println(sect);
+	    }
         }
     }
-
+    
     /** main method to demonstrate that the page is being accessed
-     */
+	@param args String arguments in the order of: Department (CMPSC), quarter (Spring), year (2014), and level (Undergraduate)
+    */
     public static void main(String [] args) {
 	try {
-		System.setProperty("javax.net.ssl.trustStore","jssecacerts");
-		
-		// Asks for user input and outputs corresponding lectures/sections
-		while(true){
-			// Creates a new UCSBCurriculumSearch object
-			UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-			System.out.println("Enter the dept, qtr, year, and crs lvl: ");
-			// Creates a new bufferedReader object
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			// Reads user input
-			String s = bufferedReader.readLine();
-			// Closes program if user inputs empty string
-			if(s.equals("")){
-				System.out.println("You have closed the Program.");
-				break;
-			}
-			// Splits user input into a String array of 4 items.
-			String[] inputList = s.split(", ");
-			// Checks if user inputs 4 items. If not, goes to next iteration
-			// of loop
-			if(inputList.length != 4){
-				System.out.println("Error in input format! Try again!\n" +
+	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
+	    
+	    // Asks for user input and outputs corresponding lectures/sections
+	    while(true){
+		UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
+		System.out.println("Enter the dept, qtr, year, and crs lvl: ");
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+		String s = bufferedReader.readLine();
+		// Closes program if user inputs empty string
+		if(s.equals("")){
+		    System.out.println("You have closed the Program.");
+		    break;
+		}
+		String[] inputList = s.split(", ");
+		// Checks if user inputs 4 items. If not, goes to next iteration
+		if(inputList.length != 4){
+		    System.out.println("Error in input format! Try again!\n" +
 				       "Ex. CMPSC, Spring, 2014, Undergraduate");
-				bufferedReader.close();
-				continue;
-			}
-			String dept = inputList[0]; // The Department
-			String qtr = inputList[1]; // The Quarter
-			qtr = qtrParse(qtr);
-			String year = inputList[2]; //The Year
-			qtr = year + qtr; // [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-			String level = inputList[3]; //The course level: Undergraduate, Graduate, or All
-			
-			// Pulls from the html using user input and calls
-			// the toString() of the UCSBLectures
-			uccs.loadCourses(dept, qtr, level);
-			uccs.printLectures();
-			//Closes the bufferedReader
-			bufferedReader.close();
+		    bufferedReader.close();
+		    continue;
 		}
+		String dept = inputList[0]; // The Department
+		String qtr = inputList[1]; // The Quarter
+		qtr = qtrParse(qtr);
+		String year = inputList[2]; //The Year
+		qtr = year + qtr; // [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
+		String level = inputList[3]; //The course level: Undergraduate, Graduate, or All
+		
+		// Pulls from the html using user input and calls
+		// the toString() of the UCSBLectures
+		uccs.loadCourses(dept, qtr, level);
+		uccs.printLectures();
+		bufferedReader.close();
+	    }
 	} catch (Exception e) {
-		System.err.println(e);
-		e.printStackTrace();
+	    System.err.println(e);
+	    e.printStackTrace();
 	}
-    }  // main
-
-    /* Parses the quarter to the correct corresponding number that represents
-     * it.
-     * @Parameter quarter String e.g Summer, Winter, Fall, Spring
-     */
+    }
+    
+    /** Parses the quarter to the correct corresponding number that represents it.
+	@param qtr string of the quarter e.g Summer, Winter, Fall, Spring
+	@return String quarter number (Winter - 1, Spring - 2, Summer - 3, Fall - 4)
+    */
     public static String qtrParse(String qtr){
-		String tmp = qtr;
-		switch(tmp.toUpperCase()){
-			case "SUMMER":
-				tmp = "3";
-				break;
-			case "FALL":
-				tmp = "4";
-				break;
-			case "WINTER":
-				tmp = "1";
-				break;
-			case "SPRING":
-				tmp = "2";
-				break;
-		}
-		return tmp;
+	String tmp = qtr;
+	switch(tmp.toUpperCase()){
+	case "SUMMER":
+	    tmp = "3";
+	    break;
+	case "FALL":
+	    tmp = "4";
+	    break;
+	case "WINTER":
+	    tmp = "1";
+	    break;
+	case "SPRING":
+	    tmp = "2";
+	    break;
 	}
-
+	return tmp;
+    }
+    
     /**
      * Builds a query to submit to the UCSBCourseCurriculumSearch 
      * by enumerating Quarters, CourseLevels, etc.  We also handle 
@@ -819,75 +772,79 @@ public class UCSBCurriculumSearch {
 	 * Enumerates possible quarters to query for and translates them 
 	 * to values that are understood by the search API.
 	 */
-		public static enum Quarter {
-			Winter(1),
-			Spring(2),
-			Summer(3),
-			Fall(4);
-			
-			private final int value;
-			
-			Quarter(int value) {
-				this.value = value;
-			}
-			
-			/**
-			 * Converts to String representation of integer value
-			 * of this Quarter that can be understood by the API.
-			 * For example, Winter = 1, Spring = 2, Summer = 3, Fall = 4.
-			 */
-			public String toString() {
-				return String.valueOf(value);
-			}
-		}
-		
+	public static enum Quarter {
+	    Winter(1),
+	    Spring(2),
+	    Summer(3),
+	    Fall(4);
+	    
+	    private final int value;
+	    
+	    Quarter(int value) {
+		this.value = value;
+	    }
+	    
+	    /**
+	     * Converts to String representation of integer value
+	     * of this Quarter that can be understood by the API.
+	     * For example, Winter = 1, Spring = 2, Summer = 3, Fall = 4.
+	     */
+	    public String toString() {
+		return String.valueOf(value);
+	    }
+	}
+	
 	
 	/**
 	 * Enumerates the possible course levels offered by the API
 	 */
-		public static enum CourseLevel {
-			Undergraduate("Undergraduate"),
-			Graduate("Graduate"),
-			All("All");
-			
-			private final String value;
-			CourseLevel(String value) {
-				this.value = value;
-			}
-			
-			public String toString() {
-				return value;
-			}
-			
-		}
-		
-		private String department;
-		private int year;
-		private Quarter quarter;
-		private CourseLevel courseLevel;
-		
-		/**
-		 * Initializes this query and performs necessary vield validation
-		 * @param department the name of the department.  we will trim and put to uppercase
-		 * @param quarter the quarter to search for
-		 * @param year the integer representation of the year (e.g., 2013 or 1996)
-		 * @param courseLevel the course level to filter by, if at all
-		 */
-		Query(String department, Quarter quarter, int year, CourseLevel courseLevel) {
-			this.department = department.trim().toUpperCase();
-			this.year = year;
-			this.quarter = quarter;
-			this.courseLevel = courseLevel;
-		}
-	
-		public String getTerm() {
-			// Append the quarter's integer value to the end of the year.
-			return String.valueOf(year) + quarter;
-		}
-		
-		/** @return the parsed department name */
-		public String getDepartment() {
-			return department;
-		}
+	public static enum CourseLevel {
+	    Undergraduate("Undergraduate"),
+	    Graduate("Graduate"),
+	    All("All");
+	    
+	    private final String value;
+	    CourseLevel(String value) {
+		this.value = value;
+	    }
+	    
+	    public String toString() {
+		return value;
+	    }
+	    
 	}
+	
+	private String department;
+	private int year;
+	private Quarter quarter;
+	private CourseLevel courseLevel;
+	
+	/**
+	 * Initializes this query and performs necessary vield validation
+	 * @param department the name of the department.  we will trim and put to uppercase
+	 * @param quarter the quarter to search for
+	 * @param year the integer representation of the year (e.g., 2013 or 1996)
+	 * @param courseLevel the course level to filter by, if at all
+	 */
+	Query(String department, Quarter quarter, int year, CourseLevel courseLevel) {
+	    this.department = department.trim().toUpperCase();
+	    this.year = year;
+	    this.quarter = quarter;
+	    this.courseLevel = courseLevel;
+	}
+
+	/** 
+	    @return String with quarter integer appended
+	 */
+	public String getTerm() {
+	    return String.valueOf(year) + quarter;
+	}
+	
+	/** 
+	    @return the parsed department name 
+	*/
+	public String getDepartment() {
+	    return department;
+	}
+    }
 }
