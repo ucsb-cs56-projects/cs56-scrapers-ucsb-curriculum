@@ -22,12 +22,13 @@
 	<property name="mainClass" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBCurriculumSearch" />
 	<property name="installCert" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.InstallCert"/>
 	<property name="GUI" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBgui" />
+	<property name="golder_gui" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.SearchGui_Curriculum" />
 	
 	<property name="projectName" value="${course}_${quarter}_${issueNum}" />
 	<property name="projectPath" value="edu/ucsb/cs56/projects/scrapers/ucsb-curriculum" />
 	<property name="javadocDest" value="${webRoot}/cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
 	<property name="javadocURL" value="${webBaseUrl}cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
-	<property name="jar.file" value="cs56-scrapers-ucsb-curriculum.jar"/>
+	<property name="jar.file" value="SearchGui_Curriculum.jar"/>
 	
 	
 	
@@ -57,11 +58,11 @@
 	  </javac>
 	</target>
 
-	<target name="jar" depends="compile" description="create a jar">
+	<target name="golderJar" depends="compile" description="create a jar">
 	  <mkdir dir="build/jar"/>
 	  <jar destfile="${jar.file}" basedir="build">
 	    <manifest>
-              <attribute name="Main-Class" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBCurriculumSearch"/>
+              <attribute name="Main-Class" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.SearchGui_Curriculum"/>
 	    </manifest>
 	  </jar>
 	</target>
@@ -69,7 +70,11 @@
 	<target name="run" depends = "compile,setup" description="run the gui">
 	  <java fork="true" classpathref="project.class.path" classname="${GUI}" />
 	</target>
-	
+
+	<target name="golderTest" depends = "compile,setup" description="run golder search gui">
+	  <java fork="true" classpathref="project.class.path" classname="${golder_gui}" />
+	</target>
+	  
 	<target name="cli" depends="compile,setup" description="run the main">
 	  <java classname="${mainClass}">
 	    <classpath refid="project.class.path" />

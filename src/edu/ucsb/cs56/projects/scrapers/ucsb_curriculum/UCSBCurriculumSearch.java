@@ -186,7 +186,7 @@ public class UCSBCurriculumSearch {
 
 	
         page = page.substring(0, page.lastIndexOf("</table>"));
-		page = page.substring(0, page.lastIndexOf("</table>"));
+	//page = page.substring(0, page.lastIndexOf("</table>"));
 
 
         while(course_pos != -1){

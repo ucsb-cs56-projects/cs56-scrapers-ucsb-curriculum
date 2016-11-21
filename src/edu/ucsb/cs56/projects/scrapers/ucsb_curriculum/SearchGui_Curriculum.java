@@ -13,16 +13,17 @@ import java.io.PrintStream;
 import javax.swing.ImageIcon;
 
 
-/** UCSBgui -- Graphics User Interface for UCSBCurriculum search,
- allows user to use drop down menus to search for lectures.
+/** SearchGui_Curriculum -- Graphics User Interface for UCSBCurriculum search, going to be utilized within then Golder Scheduler app.
  
+ @author Jim Vargas
+ @author Richard Young
  @author Natasha Lee
  @author Kevin Zaragoza
  @version W16 
  
  */
 
-public class UCSBgui{
+public class SearchGui_Curriculum{
 	static  JFrame frame;
 
 	
@@ -119,7 +120,7 @@ public class UCSBgui{
 			constraints.weightx = .5;
 			constraints.weighty = .5;
 			constraints.gridwidth = 4;
-			panel.add(picLabel, constraints);
+			//panel.add(picLabel, constraints);
 
 			//constraints for second row of subject, quarter, year, and level boxes
 			//then add them to pane
@@ -226,7 +227,7 @@ public class UCSBgui{
 			//setup the JFrame
 			frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE) ;
 			frame.getContentPane().add(panel);
-			frame.setSize(1280, 720);
+			frame.setSize(910, 650);
 			frame.setVisible(true);
 			
 			
@@ -237,6 +238,7 @@ public class UCSBgui{
 		
 	}
 }
+
 
 
 
