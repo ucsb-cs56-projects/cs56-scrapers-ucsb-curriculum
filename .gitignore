@@ -2,7 +2,8 @@
 
 
 # Package Files #
-*.jar
+lib/*.jar
+temp.jar
 *.war
 *.ear
 
