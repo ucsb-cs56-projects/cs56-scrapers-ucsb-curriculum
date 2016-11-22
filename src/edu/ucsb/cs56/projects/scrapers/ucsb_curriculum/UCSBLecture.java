@@ -80,6 +80,28 @@ public class UCSBLecture {
 		this.enrollCode = enrollCode;
 		
 	}
+
+     /**
+       Copy constructor does not set all the possible/needed attributes. TODO: Constructor with more params
+       
+       @param orig object to be copied
+
+     */
+
+    public UCSBLecture(UCSBLecture orig) {
+
+		this.courseTitle = orig.courseTitle;
+		this.primaryCourseAbbr = orig.primaryCourseAbbr;
+		this.status = orig.status;
+		this.instructor = orig.instructor;
+		this.lectDays = orig.lectDays;
+		this.lectTime = orig.lectTime;
+		this.lectRoom = orig.lectRoom;
+		this.enrolled = orig.enrolled;
+		this.capacity = orig.capacity;
+		this.enrollCode = orig.enrollCode;
+		
+	}
 	
 	/* Getters and Setters */
 	public String getCourseTitle(){ return courseTitle;}

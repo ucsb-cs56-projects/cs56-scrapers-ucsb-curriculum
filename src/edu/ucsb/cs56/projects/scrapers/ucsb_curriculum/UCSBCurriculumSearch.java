@@ -189,7 +189,7 @@ public class UCSBCurriculumSearch {
 	
         page = page.substring(0, page.lastIndexOf("</table>"));
 		//next line causes problems
-		page = page.substring(0, page.lastIndexOf("</table>"));
+	page = page.substring(0, page.lastIndexOf("</table>"));
 
 
         while(course_pos != -1){
@@ -615,7 +615,12 @@ public class UCSBCurriculumSearch {
     */
     
     public ArrayList<UCSBLecture> getLectures(String courseNum, String quarter) {
-	return null; // STUB!
+	ArrayList<UCSBLecture> retval = new ArrayList<UCSBLecture>(lectures.size());
+	for (UCSBLecture l: lectures) {
+	    retval.add(new UCSBLecture(l));  
+	}
+
+	return retval;
     }
     
     /** return the number of UCSBLecture objects already loaded that match
