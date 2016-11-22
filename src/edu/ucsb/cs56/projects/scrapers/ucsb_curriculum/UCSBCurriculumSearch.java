@@ -136,6 +136,8 @@ public class UCSBCurriculumSearch {
 	this.lectures = new ArrayList<UCSBLecture>(); // initially empty.
 	
 	String mainPage = getMainPage();
+		//refresh page to make sure that search results show up
+		mainPage = getMainPage();
 	
 	this.viewStateString =
 	    extractHiddenFieldValue("__VIEWSTATE",mainPage);
@@ -186,7 +188,8 @@ public class UCSBCurriculumSearch {
 
 	
         page = page.substring(0, page.lastIndexOf("</table>"));
-	//page = page.substring(0, page.lastIndexOf("</table>"));
+		//next line causes problems
+		page = page.substring(0, page.lastIndexOf("</table>"));
 
 
         while(course_pos != -1){
