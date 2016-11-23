@@ -173,7 +173,7 @@ public class UCSBCurriculumSearch {
 
 
         String page = getPage(dept,qtr,level);
-
+	String origpage = page;
         int num_lectures = 0;
 
         String search_string = "<tr class=\"CourseInfoRow\">";
@@ -185,12 +185,15 @@ public class UCSBCurriculumSearch {
 
         ArrayList<String> lecture_html = new ArrayList<String>();
 
-
-	
+	try {
+	    
         page = page.substring(0, page.lastIndexOf("</table>"));
 		//next line causes problems
 	page = page.substring(0, page.lastIndexOf("</table>"));
-
+	}
+	catch (Exception e) {
+	    throw new Exception ("webpage did not have expected structure"+origpage);
+	}
 
         while(course_pos != -1){
 
