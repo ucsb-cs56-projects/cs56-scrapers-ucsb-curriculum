@@ -606,18 +606,12 @@ public class UCSBCurriculumSearch {
 	return null; // STUB!
     }
     
-    /** return an ArrayList of  UCSBLecture objects given a course number and quarter
-	@param courseNum 13 character course num ddddddddnnnxx where
-	dddddddd is the department, extended with spaces if
-	needed, nnn is the course number, right justified,
-	and xx is the extension if any.  Examples:
-	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	@return an ArrayList of  UCSBLecture objects for that courseNum.
+    /** return an ArrayList of  UCSBLecture objects
+	@return an ArrayList of UCSBLecture objects.
 	If there are none, an empty ArrayList is returned.
     */
     
-    public ArrayList<UCSBLecture> getLectures(String courseNum, String quarter) {
+    public ArrayList<UCSBLecture> getLectures() {
 	ArrayList<UCSBLecture> retval = new ArrayList<UCSBLecture>(lectures.size());
 	for (UCSBLecture l: lectures) {
 	    retval.add(new UCSBLecture(l));  
