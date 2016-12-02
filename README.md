@@ -7,7 +7,8 @@ The long term goal is to be add UCSB Courses directly into a Calendar program (e
 project history
 ===============
 ```
- W14 | jstaahl 4pm | kmai12 | Parser for the UCSB curriculum search
+F16 | jimvargas 6pm | ryoung141 | Jar compatibility for webapp
+W14 | jstaahl 4pm | kmai12 | Parser for the UCSB curriculum search
 ```
 
 ## Documentation
@@ -63,5 +64,11 @@ To the next set of students working on this project, I encourage you to look thr
 
 As for bugs, the most troubling one we found in our time with the project was that the program would seemingly not work at times. We found that the fix for it was to simply refresh the course page in our browser. Once that's done the program would once again find your desried course. We couldn't quite figure out the cause of this bug, but it's something to make note of. 
 You could add, as mentioned in the first paragraph, more search criteria to the program as a new feature. Right now you make the search using the aforementioned: DEPT, QUARTER, YEAR, LEVEL system; however, what if you want to just look up "Courses with professor Conrad"? The possibilities here are limited to just what kind of search criteria you may find useful! Porting the program to an Android App would also be pretty handy if you want to search through courses on the go.
+
+F16 Final Remarks:
+
+To the next group of students, we would recommend looking frist at the UCSBCurriculumSearch file as that one contains all of the actual accessing and scraping of the UCSB Curriculum website. It's a fairly complex file, but with some perserverance, things begin to become clear. The rest of the files are much more simple to understand once you understand what is going on in the UCSBCurriculumSearch file. In regards to the UCSBGui file, it has now taken on the role of being a demo for both testing, and presentation, and as such, I would not recommend spending too much time working there. Focus your efforts more on refactoring the UCSBCurriculumSearch file and expanding JUNIT test coverage. 
+
+In addition, make sure to work closely with the group that has  cs56-webapps-curriculum as their project to ensure the things you may be changing are still compatible with their needs as well as expanding functionality to suit their needs. The two projects combined can grow into something awesome, so go out there and make it awesome! 
 
 
