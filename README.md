@@ -31,11 +31,21 @@ You will see that the fields in the UCSBLecture and UCSBSection classes correspo
 ## Usage
 To run the course scraper with a GUI, do: 
 	
-	ant gui
+	ant run
 
 To run the course scraper using just the terminal, do:
 
-	ant run
+	ant cli
+	
+To generate the Jar file for the cs56-webapps-curriculum repo, do:
+```
+	ant golderJar
+```
+The golderTest target is largely unused, except for demo purposes, but can be accessed by:
+```
+	ant golderTest
+```
+
 
 If this is the first time running it, it will automatically download the course curriculum search page's SSL certificate. You should verify that this is the correct SSL certificate. After it has installed the SSL certificate, the course scraper will run. Once you select the search criteria: DEPARTMENT, Quarter, Year, Level. (e.g. CMPSC, Spring, 2014, Undergraduate)
    Hopefully you will see the following when running the GUI.
