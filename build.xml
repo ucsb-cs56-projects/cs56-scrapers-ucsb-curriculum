@@ -22,11 +22,13 @@
 	<property name="mainClass" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBCurriculumSearch" />
 	<property name="installCert" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.InstallCert"/>
 	<property name="GUI" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.UCSBgui" />
+	<property name="golder_gui" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.SearchGui_Curriculum" />
 	
 	<property name="projectName" value="${course}_${quarter}_${issueNum}" />
 	<property name="projectPath" value="edu/ucsb/cs56/projects/scrapers/ucsb-curriculum" />
 	<property name="javadocDest" value="${webRoot}/cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
 	<property name="javadocURL" value="${webBaseUrl}cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
+	<property name="jar.file" value="CurriculumScraper-v1.0.1.jar"/>
 	
 	
 	
@@ -34,6 +36,16 @@
 		<pathelement location="build" />
 		<pathelement location="lib/junit-4.8.2.jar" />
 	</path>
+
+	<pathconvert property="mf.classpath" pathsep=" ">
+		<path refid="project.class.path"/>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper/>
+				<globmapper from="*.jar" to="lib/*.jar"/>
+			</chainedmapper>
+		</mapper>
+	</pathconvert>
 	
 	<target name="-check-ssl-file" unless="file.exists">
 		<available property="file.exists" file="jssecacerts" />
@@ -50,31 +62,52 @@
 	</target>
 	
 	<target name="compile" description="compile the code">
-		<mkdir dir="build" />
-		<javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">
-			<classpath refid="project.class.path" />
-		</javac>
+	  <mkdir dir="build" />
+	  <javac srcdir="src" destdir="build" debug="true" debuglevel="lines,source" includeantruntime="false">
+	    <classpath refid="project.class.path" />
+	  </javac>
+	</target>
+
+	<target name="golderJar" depends="compile" description="create a jar">
+	  <mkdir dir="build/jar"/>
+	  <jar destfile="temp.jar" basedir="build">
+	    <manifest>
+              <attribute name="Main-Class" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.SearchGui_Curriculum"/>
+	    </manifest>
+	  </jar>
+		<jar destfile="${jar.file}" basedir="build" filesetmanifest="skip">
+			<zipgroupfileset dir="build" includes="*.jar"/>
+			<zipgroupfileset dir="lib" includes="*.jar"/>
+			<manifest>
+				<attribute name="Class-Path" value="${mf.classpath}"/>
+				<attribute name="Main-Class" value="edu.ucsb.cs56.projects.scrapers.ucsb_curriculum.SearchGui_Curriculum"/>
+			</manifest>
+		</jar>
 	</target>
 	
- <target name="run" depends = "compile,setup" description="run the gui">
-	 <java fork="true" classpathref="project.class.path" classname="${GUI}" />
- </target>
- 
- <target name="cli" depends="compile,setup" description="run the main">
-	 <java classname="${mainClass}">
-		 <classpath refid="project.class.path" />
-	 </java>
- </target>
- 
- <target name="clean" description="get rid of unnecessary files">
-	 <delete failonerror="false" verbose="true">
-		 <fileset dir="build" includes="**/*.class" />
-	 </delete>
-	 <delete dir="javadoc" quiet="true" />
-	 <delete dir="dist" quiet="true" />
-	 <delete dir="download" quiet="true" />
-	 <delete dir="temp" quiet="true" />
- </target>
+	<target name="run" depends = "compile,setup" description="run the gui">
+	  <java fork="true" classpathref="project.class.path" classname="${GUI}" />
+	</target>
+
+	<target name="golderTest" depends = "compile,setup" description="run golder search gui">
+	  <java fork="true" classpathref="project.class.path" classname="${golder_gui}" />
+	</target>
+	  
+	<target name="cli" depends="compile,setup" description="run the main">
+	  <java classname="${mainClass}">
+	    <classpath refid="project.class.path" />
+	  </java>
+	</target>
+	
+	<target name="clean" description="get rid of unnecessary files">
+	  <delete failonerror="false" verbose="true">
+	    <fileset dir="build" includes="**/*.class" />
+	  </delete>
+	  <delete dir="javadoc" quiet="true" />
+	  <delete dir="dist" quiet="true" />
+	  <delete dir="download" quiet="true" />
+	  <delete dir="temp" quiet="true" />
+	</target>
  
  <target name="test" depends="compile,setup" description="run junit tests">
 	 <junit haltonerror="no" haltonfailure="no">

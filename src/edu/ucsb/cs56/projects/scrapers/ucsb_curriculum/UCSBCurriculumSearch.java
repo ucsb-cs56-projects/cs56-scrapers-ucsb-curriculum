@@ -136,6 +136,8 @@ public class UCSBCurriculumSearch {
 	this.lectures = new ArrayList<UCSBLecture>(); // initially empty.
 	
 	String mainPage = getMainPage();
+		//refresh page to make sure that search results show up
+		mainPage = getMainPage();
 	
 	this.viewStateString =
 	    extractHiddenFieldValue("__VIEWSTATE",mainPage);
@@ -171,7 +173,7 @@ public class UCSBCurriculumSearch {
 
 
         String page = getPage(dept,qtr,level);
-
+	String origpage = page;
         int num_lectures = 0;
 
         String search_string = "<tr class=\"CourseInfoRow\">";
@@ -183,11 +185,15 @@ public class UCSBCurriculumSearch {
 
         ArrayList<String> lecture_html = new ArrayList<String>();
 
-
-	
+	try {
+	    
         page = page.substring(0, page.lastIndexOf("</table>"));
-		page = page.substring(0, page.lastIndexOf("</table>"));
-
+		//next line causes problems
+	page = page.substring(0, page.lastIndexOf("</table>"));
+	}
+	catch (Exception e) {
+	    throw new Exception ("webpage did not have expected structure"+origpage);
+	}
 
         while(course_pos != -1){
 
@@ -600,19 +606,18 @@ public class UCSBCurriculumSearch {
 	return null; // STUB!
     }
     
-    /** return an ArrayList of  UCSBLecture objects given a course number and quarter
-	@param courseNum 13 character course num ddddddddnnnxx where
-	dddddddd is the department, extended with spaces if
-	needed, nnn is the course number, right justified,
-	and xx is the extension if any.  Examples:
-	"CMPSC     5JA", "CMPSC   130A ","MATH      3C "
-	@param quarter quarter in yyyyQ format, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-	@return an ArrayList of  UCSBLecture objects for that courseNum.
+    /** return an ArrayList of  UCSBLecture objects
+	@return an ArrayList of UCSBLecture objects.
 	If there are none, an empty ArrayList is returned.
     */
     
-    public ArrayList<UCSBLecture> getLectures(String courseNum, String quarter) {
-	return null; // STUB!
+    public ArrayList<UCSBLecture> getLectures() {
+	ArrayList<UCSBLecture> retval = new ArrayList<UCSBLecture>(lectures.size());
+	for (UCSBLecture l: lectures) {
+	    retval.add(new UCSBLecture(l));  
+	}
+
+	return retval;
     }
     
     /** return the number of UCSBLecture objects already loaded that match
