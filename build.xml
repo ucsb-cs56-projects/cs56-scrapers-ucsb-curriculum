@@ -29,7 +29,8 @@
 	<property name="javadocDest" value="${webRoot}/cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
 	<property name="javadocURL" value="${webBaseUrl}cs56/cs56-scrapers-ucsb-curriculum/javadoc" />
 	<property name="jar.file" value="CurriculumScraper-v1.0.1.jar"/>
-	
+	<property name="javadoc_path" location="javadoc"/>
+	<property name="public_javadoc_path" location="../cs56-scrapers-ucsb-curriculum-javadoc/javadoc"/>
 	
 	
 	<path id="project.class.path">

@@ -46,15 +46,20 @@ public class UCSBgui{
 			*/
 			
 			//Array of all the different departmens on GOLD
-			String [] subject = {"ANTH" , "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
-				"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
-				"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
-				"EARTH", "EACS", "EEMB", "ECON", "ED", "ECE", "ENGR", "ENGL", "ESM", "ENV S", "ESS",
-				"ES", "FEMST", "FAMST", "FLMST", "FR", "GEN S", "GEN SCS", "GEOG", "GER", "GPS", "GLOBL",
-				"GREEK", "HEB", "HIST", "INT", "INT CS", "ITAL", "JAPAN", "KOR", "LATIN", "LAIS", "LING",
-				"LIT", "LIT CS", "MARSC", "MATRL", "MATH", "MATH CS", "ME", "MAT", "ME ST", "MES",
-				"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
-				"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
+			
+			UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
+		//		System.out.println(cssc.getMainPage());
+			Object[] subject = cssc.findSubjectAreas(cssc.getMainPage()).toArray();
+			
+	        	    // { "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
+			    //	"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
+			    //	"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
+			    //	"EARTH", "EACS", "EEMB", "ECON", "ED", "ECE", "ENGR", "ENGL", "ESM", "ENV S", "ESS",
+			    //	"ES", "FEMST", "FAMST", "FLMST", "FR", "GEN S", "GEN SCS", "GEOG", "GER", "GPS", "GLOBL",
+			    //	"GREEK", "HEB", "HIST", "INT", "INT CS", "ITAL", "JAPAN", "KOR", "LATIN", "LAIS", "LING",
+			    //	"LIT", "LIT CS", "MARSC", "MATRL", "MATH", "MATH CS", "ME", "MAT", "ME ST", "MES",
+			    //	"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
+			    //	"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
 			
 			/* Different quarters with their corresponding number ID (used by previous programmers
 			to identify each quarter */
@@ -65,7 +70,7 @@ public class UCSBgui{
 			quarter.addElement( new Item("4", "Fall"));
 			
 			//Array of years
-			String [] year = {"2016", "2015", "2014"};
+			Object [] year = cssc.findQuarterAndYear(cssc.getMainPage()).toArray();
 			
 			//Array of Course Levels
 			String [] level = {"Undergraduate", "Graduate", "ALL"};
@@ -75,8 +80,8 @@ public class UCSBgui{
 			JComboBox subjectBox = new JComboBox(subject);
 			subjectBox.setEditable(false);
 			
-			JComboBox quarterBox = new JComboBox(quarter);
-			quarterBox.setEditable(false);
+			//	JComboBox quarterBox = new JComboBox(quarter);
+			//	quarterBox.setEditable(false);
 			
 			JComboBox yearBox = new JComboBox(year);
 			yearBox.setEditable(false);
@@ -128,7 +133,7 @@ public class UCSBgui{
 			constraints.insets = new Insets(0, 15, 0, 15);
 			panel.add(subjectBox, constraints);
 			constraints.gridx = 1;
-			panel.add(quarterBox,constraints);
+			//	panel.add(quarterBox,constraints);
 			constraints.gridx = 2;
 			panel.add(yearBox, constraints);
 			constraints.gridx = 3;
@@ -195,15 +200,35 @@ public class UCSBgui{
 						//get the values of the selections
 						String dept = String.valueOf(subjectBox.getSelectedItem());
 						
-						Item quarter = (Item) quarterBox.getSelectedItem();
-						String quarter2 = quarter.getId();
+						//	Item quarter = (Item) quarterBox.getSelectedItem();
+						//	String quarter2 = quarter.getId();
+					       
+						String year = String.valueOf(yearBox.getSelectedItem()).substring(String.valueOf(yearBox.getSelectedItem()).length()-4, String.valueOf(yearBox.getSelectedItem()).length());
+						String quarter = String.valueOf(yearBox.getSelectedItem());
+						String quarter2 = "";
+						if(quarter.substring(0,2).equals("FA"))
+						    {
+							quarter2 = "4";
+						    }
+						if(quarter.substring(0,2).equals("WI"))
+						    {
+							quarter2 = "1";
+						    }
+						if(quarter.substring(0,2).equals("SP"))
+						    {
+							quarter2 = "2";
+						    }
+						if(quarter.substring(0,2).equals("SU"))
+						    {
+							quarter2 = "3";
+						    }
+
 						
-						String year = String.valueOf(yearBox.getSelectedItem());
+						//get the 
 						String lev = String.valueOf(levelBox.getSelectedItem());
 						
 						
 						String qtr = year + quarter2;
-						
 						//search with the corresponding selections in the gui
 						cssc.loadCourses(dept, qtr, lev);
 						cssc.printLectures();

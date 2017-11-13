@@ -28,7 +28,7 @@ public class UCSBLectureTest {
 
     /* Test the constructor written for issue 396
      TODO: Extend test when extended cstruct is written */
-    @Test
+     @Test
 	public void test_Constructor() {
 
 	
