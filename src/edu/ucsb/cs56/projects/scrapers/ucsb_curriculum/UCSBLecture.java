@@ -82,7 +82,7 @@ public class UCSBLecture {
 	}
 
      /**
-       Copy constructor does not set all the possible/needed attributes. TODO: Constructor with more params
+       Copy constructor
        
        @param orig object to be copied
 
@@ -91,8 +91,17 @@ public class UCSBLecture {
     public UCSBLecture(UCSBLecture orig) {
 
 		this.courseTitle = orig.courseTitle;
+		this.fullTitle = orig.fullTitle;
+		this.description = orig.description;
+		this.preRequisite = orig.preRequisite;
+		this.college = orig.college;
+		this.units = orig.units;
+		this.grading = orig.grading;
 		this.primaryCourseAbbr = orig.primaryCourseAbbr;
 		this.status = orig.status;
+		this.majorLimitPass = orig.majorLimitPass;
+		this.majorLimit = orig.majorLimit;
+		this.messages = orig.messages;
 		this.instructor = orig.instructor;
 		this.lectDays = orig.lectDays;
 		this.lectTime = orig.lectTime;

@@ -40,26 +40,10 @@ public class UCSBgui{
 			
 			frame = new JFrame();
 			
-			/* 
-			 TODO: scrape the subject, years, and course levels so
-			 that if the website makes changes, it reflects in the program
-			*/
-			
-			//Array of all the different departmens on GOLD
 			
 			UCSBCurriculumSearch cssc = new UCSBCurriculumSearch();
-		//		System.out.println(cssc.getMainPage());
 			Object[] subject = cssc.findSubjectAreas(cssc.getMainPage()).toArray();
 			
-	        	    // { "ART", "ART CS", "ARTHI", "ARTST", "AS AM", "ASTRO", "BIOL",
-			    //	"BIOL CS", "BMSE","BL ST", "CH E", "CHEM CS", "CHEM", "CH ST", "CHIN", "CLASS",
-			    //	"COMM", "C LIT", "CMPSC", "CMPSCCS", "CMPTG", "CMPTGCS", "CNCSP", "DANCE", "DYNS",
-			    //	"EARTH", "EACS", "EEMB", "ECON", "ED", "ECE", "ENGR", "ENGL", "ESM", "ENV S", "ESS",
-			    //	"ES", "FEMST", "FAMST", "FLMST", "FR", "GEN S", "GEN SCS", "GEOG", "GER", "GPS", "GLOBL",
-			    //	"GREEK", "HEB", "HIST", "INT", "INT CS", "ITAL", "JAPAN", "KOR", "LATIN", "LAIS", "LING",
-			    //	"LIT", "LIT CS", "MARSC", "MATRL", "MATH", "MATH CS", "ME", "MAT", "ME ST", "MES",
-			    //	"MS", "MCDB", "MUS", "MUS CS", "MUS A", "PHIL", "PHYS", "PHYS CS", "POL S", "PORT", "PSY", "RG ST",
-			    //	"RENST", "SLAV", "SOC", "SPAN", "SHS", "PSTAT", "TMP", "THTR", "WRIT", "W&L", "W&L CS"};
 			
 			/* Different quarters with their corresponding number ID (used by previous programmers
 			to identify each quarter */
@@ -80,8 +64,6 @@ public class UCSBgui{
 			JComboBox subjectBox = new JComboBox(subject);
 			subjectBox.setEditable(false);
 			
-			//	JComboBox quarterBox = new JComboBox(quarter);
-			//	quarterBox.setEditable(false);
 			
 			JComboBox yearBox = new JComboBox(year);
 			yearBox.setEditable(false);
@@ -133,7 +115,6 @@ public class UCSBgui{
 			constraints.insets = new Insets(0, 15, 0, 15);
 			panel.add(subjectBox, constraints);
 			constraints.gridx = 1;
-			//	panel.add(quarterBox,constraints);
 			constraints.gridx = 2;
 			panel.add(yearBox, constraints);
 			constraints.gridx = 3;
@@ -163,31 +144,6 @@ public class UCSBgui{
 			panel.add(scrollbar, constraints);
 
 
-			//add widgets to panel
-			/*panel.add(picLabel);
-			panel.add(subjectBox);
-			panel.add(quarterBox);
-			panel.add(yearBox);
-			panel.add(levelBox);
-			panel.add(search);*/
-		
-			//make textbox scrollable
-			//panel.add(scrollbar, constraints);
-			//
-			
-			//setting the layout of the gui
-			/*picLabel.setBounds(0,0,1280,120);
-			subjectBox.setBounds(445,200,80,20);
-			quarterBox.setBounds(535,200,80,20);
-			yearBox.setBounds(625,200,60,20);
-			levelBox.setBounds(695,200,140,20);
-			search.setBounds(590,240,100,30);
-			scrollbar.setBounds(440,300,400,370);*/
-
-
-			
-
-			
 			search.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ee) {
 					try{
@@ -200,8 +156,6 @@ public class UCSBgui{
 						//get the values of the selections
 						String dept = String.valueOf(subjectBox.getSelectedItem());
 						
-						//	Item quarter = (Item) quarterBox.getSelectedItem();
-						//	String quarter2 = quarter.getId();
 					       
 						String year = String.valueOf(yearBox.getSelectedItem()).substring(String.valueOf(yearBox.getSelectedItem()).length()-4, String.valueOf(yearBox.getSelectedItem()).length());
 						String quarter = String.valueOf(yearBox.getSelectedItem());
