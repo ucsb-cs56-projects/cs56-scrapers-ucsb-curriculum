@@ -269,19 +269,16 @@ public class UCSBCurriculumSearch {
 	String[] all_quarters_split;
 	try{
 	    all_quarters  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string)+after_list_string.length());
-	    //    System.out.println(all_quarters);
 	}catch (Exception e){
 	     System.err.println("The HTML of UCSB Curriculum Serach has changed.");
 	     System.err.println("This scraper must be updated.");
 	}
-	//System.out.println(all_quarters);
 	all_quarters_split = all_quarters.split("\n");
 	for(int i = 1; i < all_quarters_split.length; i++)
 	    {
 		int startQuarterName = all_quarters_split[i].indexOf(">") + 1;
 		String temp = all_quarters_split[i].substring(startQuarterName, all_quarters_split[i].lastIndexOf("<"));
 		temp = temp.trim();
-		System.out.println(temp);
 		availableQuarters.add(temp);
 	    }
 	return availableQuarters;
