@@ -388,6 +388,7 @@ public class UCSBCurriculumSearch {
 	@param lect Lecture to set with the parsed elements
      */
     private UCSBLecture parseEnd(String html, UCSBLecture lect){
+	System.out.println(html);
 	UCSBLecture temp = lect;
    
         html = removeLastElement(html);
@@ -658,7 +659,12 @@ public class UCSBCurriculumSearch {
     public UCSBLecture getLecture(String Title, String quarter) {
 	String department;
 	String CourseNum;
-	return null; // STUB!
+	UCSBLecture lecture = null;
+                for(UCSBLecture lect : lectures){
+                                if(lect.getCourseTitle().equals(Title))
+                                        lecture = lect;
+                }
+                return lecture;
     }
     
     /** return an ArrayList of  UCSBLecture objects
@@ -688,7 +694,9 @@ public class UCSBCurriculumSearch {
     */
     
     public int countLectures(String courseNum, String quarter) {
-	return -42; // STUB!
+	ArrayList<UCSBLecture> retval = getLectures();
+	    
+	    return retval.size();	
     }
     
     
@@ -705,7 +713,13 @@ public class UCSBCurriculumSearch {
     */
     
     public UCSBSection getSection(String courseNum, String quarter) {
-	return null; // STUB!
+	UCSBSection section = null;
+               for(UCSBLecture lect : lectures){
+                     if(lect.getCourseTitle().equals(courseNum)){
+                           section = lect.getSections().get(0);
+                        }
+                }
+                return section;
     }
     
     /** return an ArrayList of  UCSBSection objects given a course number and quarter
