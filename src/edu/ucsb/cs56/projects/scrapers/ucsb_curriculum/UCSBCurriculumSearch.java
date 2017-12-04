@@ -189,7 +189,6 @@ public class UCSBCurriculumSearch {
 	    
         page = page.substring(0, page.lastIndexOf("</table>"));
 		//next line causes problems
-	page = page.substring(0, page.lastIndexOf("</table>"));
 	}
 	catch (Exception e) {
 	    throw new Exception ("webpage did not have expected structure"+origpage);
@@ -269,19 +268,16 @@ public class UCSBCurriculumSearch {
 	String[] all_quarters_split;
 	try{
 	    all_quarters  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string)+after_list_string.length());
-	    //    System.out.println(all_quarters);
 	}catch (Exception e){
 	     System.err.println("The HTML of UCSB Curriculum Serach has changed.");
 	     System.err.println("This scraper must be updated.");
 	}
-	//System.out.println(all_quarters);
 	all_quarters_split = all_quarters.split("\n");
 	for(int i = 1; i < all_quarters_split.length; i++)
 	    {
 		int startQuarterName = all_quarters_split[i].indexOf(">") + 1;
 		String temp = all_quarters_split[i].substring(startQuarterName, all_quarters_split[i].lastIndexOf("<"));
 		temp = temp.trim();
-		System.out.println(temp);
 		availableQuarters.add(temp);
 	    }
 	return availableQuarters;
@@ -392,6 +388,7 @@ public class UCSBCurriculumSearch {
 	@param lect Lecture to set with the parsed elements
      */
     private UCSBLecture parseEnd(String html, UCSBLecture lect){
+	System.out.println(html);
 	UCSBLecture temp = lect;
    
         html = removeLastElement(html);
@@ -662,7 +659,12 @@ public class UCSBCurriculumSearch {
     public UCSBLecture getLecture(String Title, String quarter) {
 	String department;
 	String CourseNum;
-	return null; // STUB!
+	UCSBLecture lecture = null;
+                for(UCSBLecture lect : lectures){
+                                if(lect.getCourseTitle().equals(Title))
+                                        lecture = lect;
+                }
+                return lecture;
     }
     
     /** return an ArrayList of  UCSBLecture objects
@@ -692,7 +694,9 @@ public class UCSBCurriculumSearch {
     */
     
     public int countLectures(String courseNum, String quarter) {
-	return -42; // STUB!
+	ArrayList<UCSBLecture> retval = getLectures();
+	    
+	    return retval.size();	
     }
     
     
@@ -709,7 +713,13 @@ public class UCSBCurriculumSearch {
     */
     
     public UCSBSection getSection(String courseNum, String quarter) {
-	return null; // STUB!
+	UCSBSection section = null;
+               for(UCSBLecture lect : lectures){
+                     if(lect.getCourseTitle().equals(courseNum)){
+                           section = lect.getSections().get(0);
+                        }
+                }
+                return section;
     }
     
     /** return an ArrayList of  UCSBSection objects given a course number and quarter
@@ -752,74 +762,6 @@ public class UCSBCurriculumSearch {
 		System.out.println(sect);
 	    }
         }
-    }
-    
-    /** main method to demonstrate that the page is being accessed
-	@param args String arguments in the order of: Department (CMPSC), quarter (Spring), year (2014), and level (Undergraduate)
-    */
-    public static void main(String [] args) {
-	try {
-	    System.setProperty("javax.net.ssl.trustStore","jssecacerts");
-	    
-	    // Asks for user input and outputs corresponding lectures/sections
-	    while(true){
-		UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-		System.out.println("Enter the dept, qtr, year, and crs lvl: ");
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		String s = bufferedReader.readLine();
-		// Closes program if user inputs empty string
-		if(s.equals("")){
-		    System.out.println("You have closed the Program.");
-		    break;
-		}
-		String[] inputList = s.split(", ");
-		// Checks if user inputs 4 items. If not, goes to next iteration
-		if(inputList.length != 4){
-		    System.out.println("Error in input format! Try again!\n" +
-				       "Ex. CMPSC, Spring, 2014, Undergraduate");
-		    bufferedReader.close();
-		    continue;
-		}
-		String dept = inputList[0]; // The Department
-		String qtr = inputList[1]; // The Quarter
-		qtr = qtrParse(qtr);
-		String year = inputList[2]; //The Year
-		qtr = year + qtr; // [YYYYQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
-		String level = inputList[3]; //The course level: Undergraduate, Graduate, or All
-		
-		// Pulls from the html using user input and calls
-		// the toString() of the UCSBLectures
-		uccs.loadCourses(dept, qtr, level);
-		uccs.printLectures();
-		bufferedReader.close();
-	    }
-	} catch (Exception e) {
-	    System.err.println(e);
-	    e.printStackTrace();
-	}
-    }
-    
-    /** Parses the quarter to the correct corresponding number that represents it.
-	@param qtr string of the quarter e.g Summer, Winter, Fall, Spring
-	@return String quarter number (Winter - 1, Spring - 2, Summer - 3, Fall - 4)
-    */
-    public static String qtrParse(String qtr){
-	String tmp = qtr;
-	switch(tmp.toUpperCase()){
-	case "SUMMER":
-	    tmp = "3";
-	    break;
-	case "FALL":
-	    tmp = "4";
-	    break;
-	case "WINTER":
-	    tmp = "1";
-	    break;
-	case "SPRING":
-	    tmp = "2";
-	    break;
-	}
-	return tmp;
     }
     
     /**
