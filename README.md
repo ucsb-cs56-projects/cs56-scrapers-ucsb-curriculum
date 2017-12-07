@@ -81,4 +81,6 @@ To the next group of students, we would recommend looking frist at the UCSBCurri
 
 In addition, make sure to work closely with the group that has  cs56-webapps-curriculum as their project to ensure the things you may be changing are still compatible with their needs as well as expanding functionality to suit their needs. The two projects combined can grow into something awesome, so go out there and make it awesome! 
 
+F17 Final Remarks:
 
+To the next group of students, we would reccomend reading as much of the code as you can before doing aything. Read UCSBCurriculumSearch first that will give you the best idea of how the whole project works. This file will look very ambigous until you inspect the actual HTML code found at the main page URL (https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx). Once you read this you will understand how the scraping process works. By the time you read this the main page URL may have changed and many  of the scraping functions will no longer function. We'd suggest checking out the test files then running ant test first to see what has broken. 
