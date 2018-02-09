@@ -9,10 +9,11 @@ c) The program runs and opens the GUI for the program, however there's no functi
 d) Potential user Stories: 
 - As a user I can add my class schedule to my calendar app so that I can be more organized.
 
-e)
 
-
-
+e) 
+Overall, it is a good quality README but there're some things that could be improved. 
+- The README starts by saying "The UCSBCurriculumSearch object is designed to load its data automatically from the web page: http://my.sa.ucsb.edu/public/curriculum/." but unfortunately the website just displays a forbidden access page when you go on it. It'd be helpful if a functioning link was added.
+- It talks about the Java approach to solving the "viewstate" problem with no brief description of the viewstate problem which would  make the passage more clear.
 
 
 f) The `build.xml` file is built using `ant`. It appears that all of the targets need descriptions, however the README details several targets and what their functions are. The targets and dependencies themselves appear to be up-to-date and accurate. 
@@ -26,4 +27,3 @@ i) The bulk of the code is contained in `UCSBCirriculumSearch.java`. This file i
 
 
 j) The test coverage appears to be a little sparse. The main file (`UCSBCurriculumSearch.java`) is be far the largest file and contains the most code, yet its test file, `UCSBCurriculumSearch.java`, contains only two test functions contained in 60 lines. For a class that is well over 800 lines, it seems it deserves more test coverage, especially being such an integral part of the project. There are several other test files as mentioned in the previous answer and they are well documented and clear what they are testing, however they too are relatively sparse. `UCSBLectureTest.java` and `UCSBSectionTest.java` are the two most extensive test classes and they correspond directly with respective `Lecture` and `Section` classes. It would be a good idea to add more test cases and break up the `UCSBCurriculumSearchTest.java` into several new test classes. This would be beneficial especially because we have to begin by deciding what to change and how to handle the new website updates. 
-
