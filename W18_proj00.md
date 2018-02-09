@@ -2,14 +2,18 @@ Justin Owusu, Nathan Inge
 
 a) The project is for scraping the UCSB curriculum search page, the long term goal of the project is having the ability to add UCSB courses directly into a calendar program like Google Calendar.
 
-b) User Stories
+b) Current User Stories:
 - As a user I can search for available classes so that I can plan my upcoming schedule accordingly.
+- As a user I can view details about past, current, and feature lectures and sections.
+- As a user i can search past, current, and feature classes by department, class, and/or level.
 
 c) The program runs and opens the GUI for the program, however there's no functionality because the scraper was made for the Gold website and it received a massive update so now the scraper must be updated for it.
 
-d) Potential user Stories: 
+d) Potential User Stories: 
 - As a user I can add my class schedule to my calendar app so that I can be more organized.
-
+- As a user I can search for a class by proffessor/TA.
+- As a user I can search for a class based on available lecture/section space.
+- As a user I can search for a class/section based on location (lecture hall, building).
 
 e) 
 Overall, it is a good quality README but there're some things that could be improved. 
