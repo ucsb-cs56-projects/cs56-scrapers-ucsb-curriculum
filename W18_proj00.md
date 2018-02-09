@@ -3,7 +3,7 @@ Justin Owusu, Nathan Inge
 a) The project is for scraping the UCSB curriculum search page, the long term goal of the project is having the ability to add UCSB courses directly into a calendar program like Google Calendar.
 
 b) User Stories
--As a user I can search what classes are available so that I can choose my upcoming schedule accordingly.
+- As a user I can search what classes are available so that I can choose my upcoming schedule accordingly.
 
 c) The program runs and opens the GUI for the program, however there's no functionality because the scraper was made for the Gold website and it received a massive update so now the scraper must be updated for it.
 
