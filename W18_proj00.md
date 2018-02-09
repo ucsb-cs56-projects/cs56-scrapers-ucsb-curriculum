@@ -4,7 +4,7 @@ a) The project is for scraping the UCSB curriculum search page, the long term go
 
 b) 
 
-c)
+c) The program runs and opens the GUI for the program, however there's no functionality because the scraper was made for the Gold website and it received a massive update so now the scraper must be updated for it.
 
 d) Potential user Stories: 
 - As a user I can add my class schedule to my calendar app so that I can be more organized.
