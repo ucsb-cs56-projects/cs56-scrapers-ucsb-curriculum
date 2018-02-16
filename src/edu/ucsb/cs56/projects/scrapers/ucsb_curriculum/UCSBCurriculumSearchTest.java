@@ -24,7 +24,7 @@ public class UCSBCurriculumSearchTest {
 			final String qtr = "20112";  // 2012 = S11 [yyyyQ, where Q is 1,2,3,4 (1=W, 2=S, 3=M, 4=F)]
 			final String level = "Undergraduate"; // other options: "Graduate", "All".
 			
-			String page = uccs.getPage(dept,qtr,level);
+			//String page = uccs.getPage(dept,qtr,level);
 			
 			int num_courses = uccs.loadCourses(dept, qtr, level);
 			
@@ -43,10 +43,10 @@ public class UCSBCurriculumSearchTest {
 			
 			UCSBCurriculumSearch uccs2 = new UCSBCurriculumSearch();
 			final String dept = "JAPAN"; //the department
-			final String qtr = "20161"; //2016 Winter quarter
+			final String qtr = "20112"; //2016 Winter quarter
 			final String level = "Undergraduate";
 			
-			String page = uccs2.getPage(dept,qtr,level);
+			//String page = uccs2.getPage(dept,qtr,level);
 			
 			int num_courses = uccs2.loadCourses(dept, qtr, level);
 			

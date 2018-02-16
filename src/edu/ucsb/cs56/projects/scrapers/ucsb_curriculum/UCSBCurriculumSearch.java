@@ -173,7 +173,7 @@ public class UCSBCurriculumSearch {
 
 
         String page = getPage(dept,qtr,level);
-	String origpage = page;
+        String origpage = page;
         int num_lectures = 0;
 
         String search_string = "<tr class=\"CourseInfoRow\">";
@@ -185,22 +185,21 @@ public class UCSBCurriculumSearch {
 
         ArrayList<String> lecture_html = new ArrayList<String>();
 
-	try {
-	    
-        page = page.substring(0, page.lastIndexOf("</table>"));
-		//next line causes problems
-	}
-	catch (Exception e) {
-	    throw new Exception ("webpage did not have expected structure"+origpage);
-	}
+		try {
+		    
+	        page = page.substring(0, page.lastIndexOf("</table>"));
+			//next line causes problems
+		}
+		catch (Exception e) {
+		    throw new Exception ("webpage did not have expected structure"+origpage);
+		}
 
         while(course_pos != -1){
 
             String lect = "";
             if (next_course_pos == -1){
                 lect += page.substring(course_pos);
-            }
-	    else{
+            } else{
                 lect += page.substring(course_pos, next_course_pos);
              }
             lecture_html.add(lect);
@@ -233,54 +232,54 @@ public class UCSBCurriculumSearch {
 	@return ArrayLIst of Strings of offered subject areas
     */
      public ArrayList<String> findSubjectAreas(String html){
-	ArrayList<String> SubjectAreas = new ArrayList<String>();
-	String before_list_string = "<select name=\"ctl00$pageContent$courseList\" id=\"ctl00_pageContent_courseList\" class=\"droplist\">";
-	String after_list_string = "</select>";
-	String all_subjects = "";
-	String[] all_subjects_split;
-	try{
-	    all_subjects  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string) );
-	   // 	    System.out.println(all_subjects);
-
-	}catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-	all_subjects_split = all_subjects.split("\n");
-	for(int i = 1; i < all_subjects_split.length; i++){
-	    // System.out.println(all_subjects_split[i]);
-	     String temp = all_subjects_split[i].substring(all_subjects_split[i].lastIndexOf("=")+2, all_subjects_split[i].lastIndexOf("\""));
-	     SubjectAreas.add(temp);
-	     //	     System.out.println(temp);
-		}
-
-	return SubjectAreas;
+		ArrayList<String> SubjectAreas = new ArrayList<String>();
+		String before_list_string = "<select name=\"ctl00$pageContent$courseList\" id=\"ctl00_pageContent_courseList\" class=\"droplist\">";
+		String after_list_string = "</select>";
+		String all_subjects = "";
+		String[] all_subjects_split;
+		try{
+		    all_subjects  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string) );
+		   // 	    System.out.println(all_subjects);
+	
+		}catch (Exception e){
+				System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+				System.err.println("This scraper must be updated.");
+			}
+		all_subjects_split = all_subjects.split("\n");
+		for(int i = 1; i < all_subjects_split.length; i++){
+		    // System.out.println(all_subjects_split[i]);
+		     String temp = all_subjects_split[i].substring(all_subjects_split[i].lastIndexOf("=")+2, all_subjects_split[i].lastIndexOf("\""));
+		     SubjectAreas.add(temp);
+		     //	     System.out.println(temp);
+			}
+	
+		return SubjectAreas;
      }
     /** Find the list of quarters that are viewable given the HTML
 	@param html HTML of the main URL
         @return ArrayList of Strings of quarters
      */
     public ArrayList<String> findQuarterAndYear(String html){
-	ArrayList<String> availableQuarters = new ArrayList<String>();
-	String before_list_string = "<select name=\"ctl00$pageContent$quarterList\" id=\"ctl00_pageContent_quarterList\" class=\"droplist\">";
-	String after_list_string = "<option value=\"20154\">FALL 2015   </option>";
-	String all_quarters = "";
-	String[] all_quarters_split;
-	try{
-	    all_quarters  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string)+after_list_string.length());
-	}catch (Exception e){
-	     System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-	     System.err.println("This scraper must be updated.");
-	}
-	all_quarters_split = all_quarters.split("\n");
-	for(int i = 1; i < all_quarters_split.length; i++)
-	    {
-		int startQuarterName = all_quarters_split[i].indexOf(">") + 1;
-		String temp = all_quarters_split[i].substring(startQuarterName, all_quarters_split[i].lastIndexOf("<"));
-		temp = temp.trim();
-		availableQuarters.add(temp);
-	    }
-	return availableQuarters;
+		ArrayList<String> availableQuarters = new ArrayList<String>();
+		String before_list_string = "<select name=\"ctl00$pageContent$quarterList\" id=\"ctl00_pageContent_quarterList\" class=\"droplist\">";
+		String after_list_string = "<option value=\"20154\">FALL 2015   </option>";
+		String all_quarters = "";
+		String[] all_quarters_split;
+		try{
+		    all_quarters  = html.substring(html.indexOf(before_list_string)+ before_list_string.length(),html.indexOf(after_list_string)+after_list_string.length());
+		}catch (Exception e){
+		     System.err.println("The HTML of UCSB Curriculum Serach has changed.");
+		     System.err.println("This scraper must be updated.");
+		}
+		all_quarters_split = all_quarters.split("\n");
+		for(int i = 1; i < all_quarters_split.length; i++)
+		    {
+			int startQuarterName = all_quarters_split[i].indexOf(">") + 1;
+			String temp = all_quarters_split[i].substring(startQuarterName, all_quarters_split[i].lastIndexOf("<"));
+			temp = temp.trim();
+			availableQuarters.add(temp);
+		    }
+		return availableQuarters;
 	}
     
     
