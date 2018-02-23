@@ -387,14 +387,18 @@ public class UCSBCurriculumSearch {
 	@param lect Lecture to set with the parsed elements
      */
     private UCSBLecture parseEnd(String html, UCSBLecture lect){
-	System.out.println(html);
-	UCSBLecture temp = lect;
+    	UCSBLecture temp = lect;
    
         html = removeLastElement(html);
         String enrollment_html = getEndElement(html);
+        
+        System.out.println(html.toString());
 
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
+        
+        //int enrollment = 23;
+        //int capacity = 36;
 
         // Take out the enrollment/capacity because it has been parsed
         html = removeLastElement(html);
@@ -516,7 +520,7 @@ public class UCSBCurriculumSearch {
 		
        // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
         String status = findStatus(html);
-	String enrollcode = findEnrollCode(html);
+	    String enrollcode = findEnrollCode(html);
 		
         lect.setCourseTitle(courseTitle);
         lect.setPrimaryCourseAbbr(primaryCourseAbbr);
@@ -528,7 +532,7 @@ public class UCSBCurriculumSearch {
 		
         lect = parseEnd(html, lect);
 
-	return lect;
+        return lect;
 
     }
 
