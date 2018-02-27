@@ -16,6 +16,14 @@ import java.io.*;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.concurrent.TimeUnit;
+
+
 /**
    This object is designed to parse input from the Curriculum Search
    page at:
@@ -386,13 +394,29 @@ public class UCSBCurriculumSearch {
 	@param html HTML to parse. Only looks at the end
 	@param lect Lecture to set with the parsed elements
      */
-    private UCSBLecture parseEnd(String html, UCSBLecture lect){
+    private UCSBLecture parseEnd(String html, UCSBLecture lect) {
     	UCSBLecture temp = lect;
    
         html = removeLastElement(html);
         String enrollment_html = getEndElement(html);
         
-        System.out.println(html.toString());
+        //System.out.println(html.toString());
+        
+         Document doc = Jsoup.parse(html);
+//        String text = doc.body().text();
+//        
+//        Elements el = doc.getElementsByTag("html");
+//        for (Element e : el) {
+//        	System.out.println("***************************************************************************************************************");
+//        	System.out.println(e.select("body"));
+//        }
+        
+   
+        
+        System.out.println("************************************************************************************************");
+        System.out.println(doc.toString());
+        
+        
 
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
