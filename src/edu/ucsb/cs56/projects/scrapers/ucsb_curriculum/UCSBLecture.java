@@ -1,4 +1,4 @@
-package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
+ackage edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
 import java.util.ArrayList;
 
@@ -115,6 +115,23 @@ public class UCSBLecture {
 	/* Getters and Setters */
 	public String getCourseTitle(){ return courseTitle;}
 	public void setCourseTitle(String title){ this.courseTitle = title;}
+	
+	public String getFullTitle(){ return fullTitle;}
+	public void setFullTitle(String fullTitle){ this.fullTitle = fullTitle;}
+	
+	public String getPrerequisite(){ return preRequisite;}
+	public void setPrerequisite(String prerequisite){ this.preRequisite = prerequisite;}
+	
+	public String getUnits(){ return units;}
+	public void setUnits(String units){ this.units = units;}
+	
+	public String getCollege(){ return college;}
+	public void setCollege(String college){ this.college = college;}
+	
+	
+	
+	public String getDescription(){ return description;}
+	public void setDescription(String description){ this.description = description;}
 	
 	public String getPrimaryCourseAbbr(){ return primaryCourseAbbr;}
     public void setPrimaryCourseAbbr(String abbr){ this.primaryCourseAbbr = abbr;}
