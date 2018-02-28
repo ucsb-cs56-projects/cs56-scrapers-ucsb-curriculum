@@ -1,8 +1,10 @@
-package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
-
+p
 import java.net.*;
 import java.io.*;
 import org.junit.Test;
+
+import javafx.util.Pair;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
@@ -15,14 +17,12 @@ import java.io.*;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;
-
 import org.jsoup.Jsoup;
+import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.util.concurrent.TimeUnit;
-
+import java.io.IOException;
 
 /**
    This object is designed to parse input from the Curriculum Search
@@ -178,8 +178,7 @@ public class UCSBCurriculumSearch {
 	@throws java.lang.Exception thrown when an error occurs
     */
     public int loadCourses(String dept, String qtr, String level) throws Exception {
-
-
+    	
         String page = getPage(dept,qtr,level);
         String origpage = page;
         int num_lectures = 0;
@@ -210,6 +209,7 @@ public class UCSBCurriculumSearch {
             } else{
                 lect += page.substring(course_pos, next_course_pos);
              }
+            System.out.println(lect);
             lecture_html.add(lect);
             course_pos = next_course_pos;
             next_course_pos = page.indexOf(search_string, course_pos + search_string.length());
@@ -234,7 +234,229 @@ public class UCSBCurriculumSearch {
 		
 		return num_lectures;
 	}
-
+    public int loadCoursesJsoup(String dept, String qtr, String level) throws Exception {
+    	String html = getPage(dept, qtr, level);
+    	Document doc = Jsoup.parse(html);
+    	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
+    	int numberOfLectures = 0; 
+    	for (Element courseInfoRow: courseInfoRows) {
+    		String line = courseInfoRow.text();
+    		if (isLecture(line) && !isLectureWithoutSection(line)) {
+    		System.out.println(numberOfLectures + ": " + line);
+    		parseLecture(line);
+    	//	while ()
+    		numberOfLectures++;
+    		}
+    	}
+    	System.out.println(courseInfoRows.size());
+    	
+    	return numberOfLectures;
+    }
+  //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
+    public void parseSection(String line) {
+    	
+    }
+    public void parseLectureWithoutSections(String line) {
+    	//stub
+    }
+    //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
+    public void parseLecture(String line) {
+    	//Below is a sample of the input
+    	//	"CMPSC 4 Click box to close. Full Title: Computer Science Boot Camp Description: An introduction to computational thinking," 
+    	//+ 	" computing, data management, and problem solving using computers, for non-majors. Topics include coding basics, representing"
+    	//+	"code and data using a computer, and applications of computing that are important to society. PreRequisite: College: ENGR Units: 4.0 "
+    	//+ "Grading: Letter Textbook Information: http://www.ucsbstuff.com/SelectTermDept.aspx CS BOOT CAMP Restrictions Click box to close. Level-Limit:"
+    	//+ " Major-Limit-Pass: Major-Limit: Not these majors: CMPSC CMPEN Grading: Letter Messages: KOC C K M W 3:30pm - 4:45pm TD-W 1701 102 / 120 True";
+    	int courseTitleEndIndex = line.indexOf(" Click box to close.");
+    	System.out.println(courseTitleEndIndex);
+    	String courseTitle = line.substring(0, courseTitleEndIndex);
+    	System.out.println("Course Title: " + courseTitle);
+    	int fullTitleEndIndex = line.indexOf(" Description: ");
+    	String fullTitle = line.substring(line.indexOf(" Full Title: ") + 13, fullTitleEndIndex);
+    	System.out.println("Full Title: " + fullTitle);
+    	int descriptionEndIndex = line.indexOf(" PreRequisite: ");
+    	String description = line.substring(line.indexOf(" Description: ") + 14, descriptionEndIndex);
+    	System.out.println("Description: " + description);
+    	int prerequisiteEndIndex = line.indexOf(" College:");
+    	String prerequisite = line.substring(line.indexOf(" PreRequisite:") + 14, prerequisiteEndIndex);
+    	System.out.println("Prerequisite: " + prerequisite);
+    	int collegeEndIndex = line.indexOf(" Units:");
+    	String college = line.substring(line.indexOf(" College: ") + 10, collegeEndIndex);
+    	System.out.println("College: " + college);
+    	int unitsEndIndex = line.indexOf(" Grading:");
+    	String units = line.substring(line.indexOf(" Units: ") + 8, unitsEndIndex);
+    	System.out.println("Units: " + units);
+    	int gradingEndIndex = line.indexOf(" Textbook Information: ");
+    	String grading = line.substring(line.indexOf(" Grading: ") + 10, gradingEndIndex);
+    	System.out.println("Grading: " + grading);
+    	//primaryCourseAbbr is going to need ssome extra work because sometimes something comes before "Restrictions Click Box..." but for now just gonna leave as is
+    	int primaryCourseAbbrEndIndex = line.indexOf(" Restrictions Click box to close. ");
+    	String primaryCourseAbbr = line.substring(line.indexOf("http://www.ucsbstuff.com/SelectTermDept.aspx ") + 45, primaryCourseAbbrEndIndex);
+    	System.out.println("Primary Course Abbreviation: " + primaryCourseAbbr);
+    	//System.out.println("Missing status rn");
+    	//System.out.println("Missing level limit rn");
+    	//System.out.println("Missing major limit pass rn");
+    	int majorLimitEndIndex = line.indexOf(" Grading: ", line.indexOf("Grading: ") + 1); // The " Grading: " substring appears twice and we need the 2nd one
+    	String majorLimit = "";
+    	if (!line.substring(line.indexOf(" Major-Limit: ") + 14, line.indexOf(" Major-Limit: ") + 21).equals("Grading")) {
+    		//This means major list is not empty
+    		majorLimit += line.substring(line.indexOf(" Major-Limit: ") + 14, majorLimitEndIndex);
+    	}
+    	
+    	System.out.println("Major-Limit: " + majorLimit);
+    	//System.out.println("Missing Messages rn");
+    	int instructorBeginIndex = line.indexOf("Messages: ");
+    	String lectTime = getLectTime(line.substring(instructorBeginIndex));
+    	System.out.println("Time: " + lectTime);
+    	Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(lectTime)));
+    	String instructor = instructorAndDays.getKey();
+    	String lectDays = instructorAndDays.getValue();
+    	System.out.println("Instructor: " + instructor);
+    	System.out.println("Days: " + lectDays);
+    	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
+    	int enrolled = enrolledAndCapacity.getKey();
+    	int capacity = enrolledAndCapacity.getValue();
+    	System.out.println("Enrolled: " + enrolled);
+    	System.out.println("Capacity: " + capacity);
+    	String enrolledCapacityStr = enrolledAndCapacity.getKey().toString() + " / " + enrolledAndCapacity.getValue().toString();
+    	int lectRoomStartIndex = line.indexOf(lectTime) + lectTime.length() + 1;
+    	int lectRoomEndIndex = line.indexOf(enrolledCapacityStr);
+    	String lectRoom = line.substring(lectRoomStartIndex, lectRoomEndIndex);
+    	System.out.println("Lecture Room: " + lectRoom);
+    	
+    	UCSBLecture lecture = new UCSBLecture();
+        lecture.setCourseTitle(courseTitle);
+        lecture.setFullTitle(fullTitle);
+        lecture.setDescription(description);
+        
+		
+	
+		//lect.setEnrollCode(enrollcode);
+    }
+    public boolean isLectureWithoutSection(String line) {
+    	//String dummy  = 
+    	//		"CMPSC 99 Click box to close. Full Title: Independent Studies in Computer Science Description: Independent studies in "
+    	//		+ "computer science for advanced students. PreRequisite: College: ENGR Units: 1.0 - 4.0 Grading: Pass/No Pass Textbook Information: "
+    	//		+ "http://www.ucsbstuff.com/SelectTermDept.aspx INDEPENDENT STUDIES 08466 Restrictions Click box to close. Level-Limit: L Major-Limit-Pass: "
+    	//		+ "Major-Limit: Grading: Pass/No Pass Messages: DEPT. APPROVAL REQUIRED PRIOR TO REGISTRATION. T B A T B A 0 / 5 True";
+    	int restrictionsIndex = line.indexOf("Restrictions");
+    	String enrollCode = "";
+    	for (int i = restrictionsIndex - 6; i < restrictionsIndex; i++) {
+    		if (Character.isDigit(line.charAt(i))) {
+    			enrollCode += line.charAt(i);
+    		}
+    	}
+    	//System.out.println(enrollCode);
+    	if (enrollCode.length() == 5) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    public Pair<Integer, Integer> getEnrolledAndCapacity(String line) {
+    	int slashIndex = line.indexOf('/');
+    	Integer enrolled, capacity; 
+    	String strReverseEnrolled = "";
+    	String strCapacity = "";
+    	//Reading backwards from slash to get Enrolled number, it'll be in reverse since we're reading it backwards
+    	for (int i = slashIndex; i >= 0; i--) {
+    		if (strReverseEnrolled.length() == 0 && Character.isWhitespace(line.charAt(i))) {
+    			continue;
+    		} else if (Character.isDigit(line.charAt(i))) {
+    			strReverseEnrolled += line.charAt(i);
+    		} else if (Character.isWhitespace(line.charAt(i)) && strReverseEnrolled.length() > 0) {
+    			break;
+    		}
+    	}
+    	String strEnrolled = new StringBuilder(strReverseEnrolled).reverse().toString();
+    	for (int i = slashIndex; i < line.length(); i++) {
+    		if (strCapacity.length() == 0 && Character.isWhitespace(line.charAt(i))) {
+    			continue;
+    		} else if (Character.isDigit(line.charAt(i))) {
+    			strCapacity += line.charAt(i);
+    		} else if (Character.isWhitespace(line.charAt(i)) && strCapacity.length() > 0) {
+    			break;
+    		}
+    	}
+    	enrolled = Integer.parseInt(strEnrolled);
+    	capacity = Integer.parseInt(strCapacity);
+    	System.out.println(enrolled);
+    	System.out.println(capacity);
+    	return new Pair<Integer, Integer>(enrolled, capacity);
+    }
+    public String getLectTime(String line) {
+    	//start represents the index of where the time starts;
+    	int start = 0;
+    	//mCount counts the amount of "m"s (from am and pm) and once two "m"s have been read, we know we've finished reading the time
+    	int mCount = 0;
+    	//end represents the index of where the time ends
+    	int end = 0;
+    	for (int i = 0; i < line.length(); i++) {
+    		if (Character.isDigit(line.charAt(i))) {
+    			start = i;
+    			break;
+    		}
+    	}
+    	for (int i = start; i < line.length(); i++) {
+    		if (line.charAt(i) == 'm') {
+    			mCount += 1;
+    		}
+    		if (mCount == 2) {
+    			end = i + 1;
+    			break;
+    		}
+    	}
+    	return line.substring(start, end);
+    }
+    public Pair <String, String> getInstructorAndDays (String line) {
+    	//Case where instructor is TBA
+    	if (line.substring(0, 5).equals("T B A")) {
+    		String instructor = "T B A";
+    		String days = line.substring(5);
+    		return new Pair<String, String>(instructor, days);
+    	}
+    	String instructor = "";
+    	String unorderedDays = "";
+    	String possibleDays = "MTWRF";
+    	String orderedDays = "";
+    	int instructorEndIndex = 0;
+    	for (int i = line.length() - 1; i >= 0; i--) {
+    		if (Character.isLetter(line.charAt(i))){
+    			//This means the character is a part of the instructor's initial and not a day
+        		if (possibleDays.indexOf(line.charAt(i)) == -1) {
+        			instructorEndIndex = i + 1;
+        			break;
+        		}
+        		//If a certain day character appears twice, that means that the 2nd character is apart of the name and not a day
+    			if (unorderedDays.indexOf(line.charAt(i)) != -1) {
+    				instructorEndIndex = i;
+    				break;
+    			} else if (possibleDays.indexOf(line.charAt(i)) != -1) {
+    				unorderedDays += line.charAt(i);
+    				unorderedDays += " ";
+    			}
+    		}
+    	}
+		instructor = line.substring(0, instructorEndIndex);
+		if (unorderedDays.indexOf('M') != -1)
+			orderedDays += "M ";
+		if (unorderedDays.indexOf('T') != -1)
+			orderedDays += "T ";
+		if (unorderedDays.indexOf('W') != -1)
+			orderedDays += "W ";
+		if (unorderedDays.indexOf('R') != -1)
+			orderedDays += "R ";
+		if (unorderedDays.indexOf('F') != -1)
+			orderedDays += "F";
+		return new Pair <String, String>(instructor, orderedDays);
+    }
+    public boolean isLecture(String line) {
+    	if (line.indexOf("True") != -1) {
+    		return true;
+    	} else {
+		return false;
+    	}
+    }
     /** Find the list of offered Subject Areas given the HTML of the main page
 	@param html HTML of the main url
 	@return ArrayLIst of Strings of offered subject areas
@@ -394,29 +616,13 @@ public class UCSBCurriculumSearch {
 	@param html HTML to parse. Only looks at the end
 	@param lect Lecture to set with the parsed elements
      */
-    private UCSBLecture parseEnd(String html, UCSBLecture lect) {
+    private UCSBLecture parseEnd(String html, UCSBLecture lect){
     	UCSBLecture temp = lect;
    
         html = removeLastElement(html);
         String enrollment_html = getEndElement(html);
         
-        //System.out.println(html.toString());
-        
-         Document doc = Jsoup.parse(html);
-//        String text = doc.body().text();
-//        
-//        Elements el = doc.getElementsByTag("html");
-//        for (Element e : el) {
-//        	System.out.println("***************************************************************************************************************");
-//        	System.out.println(e.select("body"));
-//        }
-        
-   
-        
-        System.out.println("************************************************************************************************");
-        System.out.println(doc.toString());
-        
-        
+        System.out.println(html.toString());
 
         int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
         int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
@@ -580,6 +786,15 @@ public class UCSBCurriculumSearch {
         return sect;
     }
 
+    public String getPageJsoup (String dept, String qtr, String level) throws Exception {
+    	String url = "https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
+    	Document doc = Jsoup.connect(url).get();
+    	System.out.println("Printing the doc!! \n \n \n");
+    	System.out.print(doc);
+    	System.out.println("FINISHED");
+    	//System.out
+    	return "wat";
+    }
     /** getPage() returns the contents of a page of HTML containing the courses
 	for a given department, quarter, and level. It is NOT a static method--it can
 	only be invoked from an object, because it needs the instance variables
