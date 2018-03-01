@@ -12,6 +12,7 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
 public class UCSBSection {
     private UCSBLecture parent;
+    
     private String status; // e.g. "Full"
     private String enrollCode; // e.g. "07989"
     private String sectionDay; // e.g. "T R"
@@ -74,55 +75,55 @@ public class UCSBSection {
     public int getCapacity(){ return capacity;}
     public void setCapacity(int capacity){ this.capacity = capacity;}
 
-    @Override
     public String toString() {
-	String result;
-	result = "\t Course Title: " + parent.getCourseTitle() + "\n"
-	    + "\t Section Status: " + status + "\n"
-	    + "\t Enroll Code: " + enrollCode + "\n"
-	    + "\t Section Day: " + sectionDay + "\n"
-	    + "\t Section Time: " + sectionTime + "\n"
-	    + "\t Section Rm: " + sectionRoom + "\n"
-	    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
-	return result;
+		String result;
+		result = "\t Course Title: " + parent.getCourseTitle() + "\n"
+		    + "\t Section Status: " + status + "\n"
+		    + "\t Enroll Code: " + enrollCode + "\n"
+		    + "\t Section Day: " + sectionDay + "\n"
+		    + "\t Section Time: " + sectionTime + "\n"
+		    + "\t Section Rm: " + sectionRoom + "\n"
+		    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
+		return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	UCSBSection other = (UCSBSection) obj;
-	if (capacity != other.capacity)
-	    return false;
-	if (enrollCode != other.enrollCode)
-	    return false;
-	if (enrolled != other.enrolled)
-	    return false;
-	if (parent == null) {
-	    if (other.parent != null)
-		return false;
-	} else if (!parent.equals(other.parent))
-	    return false;
-	if (sectionRoom == null) {
-	    if (other.sectionRoom != null)
-		return false;
-	} else if (!sectionRoom.equals(other.sectionRoom))
-	    return false;
-	if (sectionTime == null) {
-	    if (other.sectionTime != null)
-		return false;
-	} else if (!sectionTime.equals(other.sectionTime))
-	    return false;
-	if (status == null) {
-	    if (other.status != null)
-		return false;
-	} else if (!status.equals(other.status))
-	    return false;
-	return true;
+		if (this == obj)
+		    return true;
+		if (obj == null)
+		    return false;
+		if (getClass() != obj.getClass())
+		    return false;
+		UCSBSection other = (UCSBSection) obj;
+		if (capacity != other.capacity)
+		    return false;
+		if (enrollCode != other.enrollCode)
+		    return false;
+		if (enrolled != other.enrolled)
+		    return false;
+		if (parent == null) {
+		    if (other.parent != null)
+			return false;
+		} else if (!parent.equals(other.parent))
+		    return false;
+		if (sectionRoom == null) {
+		    if (other.sectionRoom != null)
+			return false;
+		} else if (!sectionRoom.equals(other.sectionRoom))
+		    return false;
+		if (sectionTime == null) {
+		    if (other.sectionTime != null)
+			return false;
+		} else if (!sectionTime.equals(other.sectionTime))
+		    return false;
+		if (status == null) {
+		    if (other.status != null)
+			return false;
+		} else if (!status.equals(other.status))
+		    return false;
+		return true;
     }
     
 }
+
