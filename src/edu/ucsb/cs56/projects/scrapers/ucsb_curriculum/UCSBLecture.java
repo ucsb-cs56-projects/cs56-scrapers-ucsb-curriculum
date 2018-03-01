@@ -1,4 +1,4 @@
-ackage edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
+package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
 import java.util.ArrayList;
 
@@ -22,21 +22,29 @@ public class UCSBLecture {
     
     private String preRequisite; // 
     private String college; // e.g. "ENGR"
-    private double units; // e.g. 4.0
-    private double grading; // e.g. "Letter"
+    private String units; // e.g. 4.0
+    private String grading; // e.g. "Letter"
     // note: leave out textbook info
     private String primaryCourseAbbr; // e.g. "INTRO TO COMP SCI"
-    private String status; // e.g. Closed
+    
     private String levelLimit; // e.g. "S" or "U" (e.g. on CS189B)
+    
+    
     private String majorLimitPass; // e.g. "12"
-    private String majorLimit; // e.g. "These majors only: PRCMP PRCPS CMPEN PRCME EE PRMTH PRECM STATS STSCI ACTSC"
     private String messages; // see CMPSC 189B for example
+    
+    
+    private String majorLimit; // e.g. "These majors only: PRCMP PRCPS CMPEN PRCME EE PRMTH PRECM STATS STSCI ACTSC"
+
     private String instructor; // e.g. "BUONI M J"   (Note: for lecture section)
     private String lectDays; // e.g. "T R"
     private String lectTime; // e.g. "3:30pm - 4:45pm"
     private String lectRoom; // e.g. "CHEM 1171"
     private int enrolled; // e.g. from 63 / 88, take the 63
     private int capacity; // e.g. from 63 / 88, take the 88
+    
+    
+    private String status; //
 	private String enrollCode;
 
     private ArrayList<UCSBSection> sections; // all of the sections
@@ -125,10 +133,11 @@ public class UCSBLecture {
 	public String getUnits(){ return units;}
 	public void setUnits(String units){ this.units = units;}
 	
+	public String getGrading() { return grading; }
+	public void setGrading(String grading) { this.grading = grading; }
+	
 	public String getCollege(){ return college;}
 	public void setCollege(String college){ this.college = college;}
-	
-	
 	
 	public String getDescription(){ return description;}
 	public void setDescription(String description){ this.description = description;}
@@ -159,25 +168,45 @@ public class UCSBLecture {
 	
 	public String getEnrollCode() { return enrollCode; }
 	public void setEnrollCode(String enrollCode) { this.enrollCode = enrollCode; }
+	
+	public String getMajorLimit() { return majorLimit; }
+	public void setMajorLimit(String majorLimit) { this.majorLimit = majorLimit; }
 
     public ArrayList<UCSBSection> getSections(){ return sections; }
     public void addSection(UCSBSection section){
-	UCSBSection tmp = new UCSBSection();
-	tmp = section;
-	sections.add(tmp);
+		UCSBSection tmp = new UCSBSection();
+		tmp = section;
+		sections.add(tmp);
     }
 
-    public String toString(){
+    public String toString(){    		
         String result = "";
         result += "Course Title: " + courseTitle + "\n"
                 + "Course Abbreviation: " + primaryCourseAbbr + "\n"
+                
+                + "\n ---- Course Details for " + courseTitle + "----\n"
+                + "Course Full Title: " + fullTitle + "\n"
+                + "Course Description: " + description + "\n"
+                + "Course Prerequisites: " + preRequisite + "\n"
+                + "College: " + college + "\n"
+                + "Messages: " + messages + "\n"
+                
+                + "\n ---- Enrollment Details for " + courseTitle + "----\n"
                 + "Lecture Status: " + status + "\n"
+                + "Enrolled / Capacity: " + enrolled + " / " + capacity + "\n"
+                + "Units: " + units + "\n"
+                + "Grading: " + grading + "\n"
+                + "Level Limit: " + levelLimit + "\n"
+                + "Major Limit: " + majorLimit + "\n"
+                + "Major Limit Pass: " + majorLimitPass + "\n"
+		        + "Enroll Code: " + enrollCode + "\n"
+                
+                + "\n ---- Lecture Details for " + courseTitle + "----\n"
                 + "Lecture Instructor: " + instructor + "\n"
                 + "Lecture Days: " + lectDays + "\n"
                 + "Lecture Time: " + lectTime + "\n"
-                + "Lecture Room: " + lectRoom + "\n"
-                + "Enrolled / Capacity: " + enrolled + " / " + capacity + "\n"
-		        + "Enroll Code: " + enrollCode + "\n";
+                + "Lecture Room: " + lectRoom + "\n";
+                
         return result;
     }
 
