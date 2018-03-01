@@ -1,4 +1,5 @@
-p
+package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
+
 import java.net.*;
 import java.io.*;
 import org.junit.Test;
@@ -241,15 +242,20 @@ public class UCSBCurriculumSearch {
     	int numberOfLectures = 0; 
     	for (Element courseInfoRow: courseInfoRows) {
     		String line = courseInfoRow.text();
+    		
     		if (isLecture(line) && !isLectureWithoutSection(line)) {
-    		System.out.println(numberOfLectures + ": " + line);
-    		parseLecture(line);
-    	//	while ()
-    		numberOfLectures++;
+	    		System.out.println(numberOfLectures + ": " + line);
+	    		parseLecture(line);
+	    	//	while ()
+	    		numberOfLectures++;
     		}
+//    		if (!isLecture(line)) {
+//    			System.out.println(line);
+//    		}
     	}
-    	System.out.println(courseInfoRows.size());
     	
+    
+    	System.out.println(courseInfoRows.size());
     	return numberOfLectures;
     }
   //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
@@ -267,67 +273,79 @@ public class UCSBCurriculumSearch {
     	//+	"code and data using a computer, and applications of computing that are important to society. PreRequisite: College: ENGR Units: 4.0 "
     	//+ "Grading: Letter Textbook Information: http://www.ucsbstuff.com/SelectTermDept.aspx CS BOOT CAMP Restrictions Click box to close. Level-Limit:"
     	//+ " Major-Limit-Pass: Major-Limit: Not these majors: CMPSC CMPEN Grading: Letter Messages: KOC C K M W 3:30pm - 4:45pm TD-W 1701 102 / 120 True";
+    	
+    	// Create a new lecture
+    	UCSBLecture lecture = new UCSBLecture();
+        
+            	
     	int courseTitleEndIndex = line.indexOf(" Click box to close.");
-    	System.out.println(courseTitleEndIndex);
     	String courseTitle = line.substring(0, courseTitleEndIndex);
-    	System.out.println("Course Title: " + courseTitle);
+    	lecture.setCourseTitle(courseTitle);
+    	
     	int fullTitleEndIndex = line.indexOf(" Description: ");
     	String fullTitle = line.substring(line.indexOf(" Full Title: ") + 13, fullTitleEndIndex);
-    	System.out.println("Full Title: " + fullTitle);
+    	lecture.setFullTitle(fullTitle);
+    	
     	int descriptionEndIndex = line.indexOf(" PreRequisite: ");
     	String description = line.substring(line.indexOf(" Description: ") + 14, descriptionEndIndex);
-    	System.out.println("Description: " + description);
+    	lecture.setDescription(description);
+    	
     	int prerequisiteEndIndex = line.indexOf(" College:");
     	String prerequisite = line.substring(line.indexOf(" PreRequisite:") + 14, prerequisiteEndIndex);
-    	System.out.println("Prerequisite: " + prerequisite);
+    	lecture.setPrerequisite(prerequisite);
+    	
     	int collegeEndIndex = line.indexOf(" Units:");
     	String college = line.substring(line.indexOf(" College: ") + 10, collegeEndIndex);
-    	System.out.println("College: " + college);
+    	lecture.setCollege(college);
+    	
     	int unitsEndIndex = line.indexOf(" Grading:");
     	String units = line.substring(line.indexOf(" Units: ") + 8, unitsEndIndex);
-    	System.out.println("Units: " + units);
+    	lecture.setUnits(units);
+    	
     	int gradingEndIndex = line.indexOf(" Textbook Information: ");
     	String grading = line.substring(line.indexOf(" Grading: ") + 10, gradingEndIndex);
-    	System.out.println("Grading: " + grading);
-    	//primaryCourseAbbr is going to need ssome extra work because sometimes something comes before "Restrictions Click Box..." but for now just gonna leave as is
+    	lecture.setGrading(grading);
+    	
+    	//primaryCourseAbbr is going to need some extra work because sometimes something comes before "Restrictions Click Box..." but for now just gonna leave as is
     	int primaryCourseAbbrEndIndex = line.indexOf(" Restrictions Click box to close. ");
     	String primaryCourseAbbr = line.substring(line.indexOf("http://www.ucsbstuff.com/SelectTermDept.aspx ") + 45, primaryCourseAbbrEndIndex);
-    	System.out.println("Primary Course Abbreviation: " + primaryCourseAbbr);
-    	//System.out.println("Missing status rn");
-    	//System.out.println("Missing level limit rn");
-    	//System.out.println("Missing major limit pass rn");
+    	lecture.setPrimaryCourseAbbr(primaryCourseAbbr);
+    	
     	int majorLimitEndIndex = line.indexOf(" Grading: ", line.indexOf("Grading: ") + 1); // The " Grading: " substring appears twice and we need the 2nd one
     	String majorLimit = "";
     	if (!line.substring(line.indexOf(" Major-Limit: ") + 14, line.indexOf(" Major-Limit: ") + 21).equals("Grading")) {
     		//This means major list is not empty
     		majorLimit += line.substring(line.indexOf(" Major-Limit: ") + 14, majorLimitEndIndex);
     	}
+    	lecture.setMajorLimit(majorLimit);
     	
-    	System.out.println("Major-Limit: " + majorLimit);
-    	//System.out.println("Missing Messages rn");
     	int instructorBeginIndex = line.indexOf("Messages: ");
     	String lectTime = getLectTime(line.substring(instructorBeginIndex));
-    	System.out.println("Time: " + lectTime);
+    	lecture.setLectTime(lectTime);
+    	
     	Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(lectTime)));
     	String instructor = instructorAndDays.getKey();
+    	lecture.setInstructor(instructor);
     	String lectDays = instructorAndDays.getValue();
-    	System.out.println("Instructor: " + instructor);
-    	System.out.println("Days: " + lectDays);
+    	lecture.setLectDays(lectDays);
+    	
     	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
     	int enrolled = enrolledAndCapacity.getKey();
     	int capacity = enrolledAndCapacity.getValue();
-    	System.out.println("Enrolled: " + enrolled);
-    	System.out.println("Capacity: " + capacity);
+    	lecture.setEnrolled(enrolled);
+    	lecture.setCapacity(capacity);
+    	
     	String enrolledCapacityStr = enrolledAndCapacity.getKey().toString() + " / " + enrolledAndCapacity.getValue().toString();
     	int lectRoomStartIndex = line.indexOf(lectTime) + lectTime.length() + 1;
     	int lectRoomEndIndex = line.indexOf(enrolledCapacityStr);
     	String lectRoom = line.substring(lectRoomStartIndex, lectRoomEndIndex);
-    	System.out.println("Lecture Room: " + lectRoom);
+    	lecture.setLectRoom(lectRoom);
     	
-    	UCSBLecture lecture = new UCSBLecture();
-        lecture.setCourseTitle(courseTitle);
-        lecture.setFullTitle(fullTitle);
-        lecture.setDescription(description);
+    	System.out.println("\\n\n");
+    	System.out.println("--------------------------------------------------------------");
+    	System.out.println(lecture.toString());
+    	System.out.println("--------------------------------------------------------------");
+    	System.out.println("\\n\n");
         
 		
 	
