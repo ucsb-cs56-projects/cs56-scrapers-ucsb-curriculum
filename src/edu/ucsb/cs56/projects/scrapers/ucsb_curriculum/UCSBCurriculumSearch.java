@@ -276,8 +276,7 @@ public class UCSBCurriculumSearch {
     	
     	// Create a new lecture
     	UCSBLecture lecture = new UCSBLecture();
-        
-            	
+           	
     	int courseTitleEndIndex = line.indexOf(" Click box to close.");
     	String courseTitle = line.substring(0, courseTitleEndIndex);
     	lecture.setCourseTitle(courseTitle);
@@ -341,15 +340,18 @@ public class UCSBCurriculumSearch {
     	String lectRoom = line.substring(lectRoomStartIndex, lectRoomEndIndex);
     	lecture.setLectRoom(lectRoom);
     	
+    	String levelLimit = line.substring(line.indexOf("Level-Limit:") + 13, line.indexOf("Major-Limit-Pass"));
+    	lecture.setLevelLimit(levelLimit);
+    	
+    	String majorLimitPass = line.substring(line.indexOf("Major-Limit-Pass:") + 17, line.indexOf("Major-Limit:"));
+    	lecture.setMajorLimitPass(majorLimitPass);
+    	
     	System.out.println("\\n\n");
     	System.out.println("--------------------------------------------------------------");
     	System.out.println(lecture.toString());
     	System.out.println("--------------------------------------------------------------");
     	System.out.println("\\n\n");
-        
-		
-	
-		//lect.setEnrollCode(enrollcode);
+
     }
     public boolean isLectureWithoutSection(String line) {
     	//String dummy  = 
@@ -468,6 +470,7 @@ public class UCSBCurriculumSearch {
 			orderedDays += "F";
 		return new Pair <String, String>(instructor, orderedDays);
     }
+    
     public boolean isLecture(String line) {
     	if (line.indexOf("True") != -1) {
     		return true;
