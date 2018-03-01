@@ -19,30 +19,24 @@ public class UCSBLecture {
     private String courseTitle; // e.g. "CMPSC     8"
     private String fullTitle;   // e.g. "Introduction to Computer Science"
     private String description; // e.g. "Introduction to computer program   development for students with little to no   programming experience. Basic programming   concepts, variables and expressions, data and control structures,   algorithms, debugging, program design, and documentation."
-    
     private String preRequisite; // 
     private String college; // e.g. "ENGR"
     private String units; // e.g. 4.0
     private String grading; // e.g. "Letter"
     // note: leave out textbook info
     private String primaryCourseAbbr; // e.g. "INTRO TO COMP SCI"
-    
     private String levelLimit; // e.g. "S" or "U" (e.g. on CS189B)
-    
     
     private String majorLimitPass; // e.g. "12"
     private String messages; // see CMPSC 189B for example
     
-    
-    private String majorLimit; // e.g. "These majors only: PRCMP PRCPS CMPEN PRCME EE PRMTH PRECM STATS STSCI ACTSC"
-
+    private String majorLimit; // e.g. "These majors only: PRCMP PRCPS CMPEN PRCME EE PRMTH PRECM STATS STSCI ACTSC
     private String instructor; // e.g. "BUONI M J"   (Note: for lecture section)
     private String lectDays; // e.g. "T R"
     private String lectTime; // e.g. "3:30pm - 4:45pm"
     private String lectRoom; // e.g. "CHEM 1171"
     private int enrolled; // e.g. from 63 / 88, take the 63
     private int capacity; // e.g. from 63 / 88, take the 88
-    
     
     private String status; //
 	private String enrollCode;
@@ -88,7 +82,7 @@ public class UCSBLecture {
 		this.enrollCode = enrollCode;
 		
 	}
-
+    
      /**
        Copy constructor
        
@@ -171,6 +165,17 @@ public class UCSBLecture {
 	
 	public String getMajorLimit() { return majorLimit; }
 	public void setMajorLimit(String majorLimit) { this.majorLimit = majorLimit; }
+	
+	public String getLevelLimit() { return levelLimit; }
+	public void setLevelLimit(String levelLimit) { this.levelLimit = levelLimit; }
+	
+	public String getMajorLimitPass() { return majorLimitPass; }
+	public void setMajorLimitPass(String majorLimitPass) { this.majorLimitPass = majorLimitPass; }
+	
+	public String getMessages() { return messages; }
+	public void setMessages(String messages) { this.messages = messages; }
+	
+	
 
     public ArrayList<UCSBSection> getSections(){ return sections; }
     public void addSection(UCSBSection section){
