@@ -2,24 +2,11 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
 import java.net.*;
 import java.io.*;
-import org.junit.Test;
-
 import javafx.util.Pair;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
-import java.util.Scanner;
-
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.cert.Certificate;
-import java.io.*;
-
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLPeerUnverifiedException;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -244,8 +231,8 @@ public class UCSBCurriculumSearch {
     	
     	for (Element courseInfoRow: courseInfoRows) {
     		String line = courseInfoRow.text();
-//    		if(isLectureWithoutSection(line)) {
-//    			lectures.add(parseLecture(line));
+//    		if(isLectureWithoutSection(line) && isLecture(line)) {
+//    			//lectures.add(parseLecture(line));
 //    			numberOfLectures++;
 //    			
 //    		} else 
@@ -260,21 +247,13 @@ public class UCSBCurriculumSearch {
     			UCSBSection newSection = parseSection(line);
     			newSection.setParent(currentLecture);
     			currentLecture.addSection(newSection);
-    			
-    			System.out.println(newSection.toString());
     		}
     	}
     	
-    
-    	//System.out.println(courseInfoRows.size());
     	return numberOfLectures;
     }
  
-    
-    public UCSBSection parseSection(String line) {
-    	
-    	System.out.println(line);
-    	
+    public UCSBSection parseSection(String line) {    	
     	UCSBSection section = new UCSBSection();
     	
     	String enrollCode = line.substring(line.indexOf("Restrictions") - 6, line.indexOf("Restrictions") - 1);
@@ -306,15 +285,17 @@ public class UCSBCurriculumSearch {
     	String sectionRoom = line.substring(sectionRoomStartIndex, sectionRoomEndIndex);
     	section.setSectionRoom(sectionRoom);
     	
-    	Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(sectionTime)));
-    	String lectDays = instructorAndDays.getValue();
-    	section.setSectionDay(lectDays);
-    	  
+    	if(sectionTime == "TBA") {
+    		section.setSectionDay("TBA");
+    	} else {
+    		Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(sectionTime)));
+        	String lectDays = instructorAndDays.getValue();
+        	section.setSectionDay(lectDays);
+    	}
     	
     	return section;
-    	
-    	
     }
+    
     public void parseLectureWithoutSections(String line) {
     	//stub
     }
@@ -407,12 +388,6 @@ public class UCSBCurriculumSearch {
     	} else {
     		lecture.setStatus("Open");
     	}
-    	
-//    	System.out.println("\\n\n");
-//    	System.out.println("--------------------------------------------------------------");
-//    	System.out.println(lecture.toString());
-//    	System.out.println("--------------------------------------------------------------");
-//    	System.out.println("\\n\n");
     	
     	return lecture;
 
