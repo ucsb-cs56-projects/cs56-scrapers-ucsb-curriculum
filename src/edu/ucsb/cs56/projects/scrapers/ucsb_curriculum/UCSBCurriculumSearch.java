@@ -223,19 +223,25 @@ public class UCSBCurriculumSearch {
 		return num_lectures;
 	}
     public int loadCoursesJsoup(String dept, String qtr, String level) throws Exception {
+    	
+    	
     	String html = getPage(dept, qtr, level);
     	Document doc = Jsoup.parse(html);
     	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
     	int numberOfLectures = 0; 
     	UCSBLecture currentLecture = null;
     	
+    	System.out.println("Doc: " + doc.toString());
+    	System.out.println("Number of rows: " + courseInfoRows.size());
+    	
     	for (Element courseInfoRow: courseInfoRows) {
-    		String line = courseInfoRow.text();
-//    		if(isLectureWithoutSection(line) && isLecture(line)) {
-//    			//lectures.add(parseLecture(line));
-//    			numberOfLectures++;
-//    			
-//    		} else 
+    		String line = courseInfoRow.text();    		
+    		if(isLectureWithoutSection(line) && isLecture(line)) {
+    			System.out.println("Parsing lecture without section");
+    			lectures.add(parseLecture(line));
+    			numberOfLectures++;
+    			
+    		} else 
     		if(isLecture(line) && !isLectureWithoutSection(line)) {
     			System.out.println("Creating lecture");
     			currentLecture = parseLecture(line);
@@ -356,11 +362,17 @@ public class UCSBCurriculumSearch {
     	String lectTime = getLectTime(line.substring(instructorBeginIndex));
     	lecture.setLectTime(lectTime);
     	
-    	Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(lectTime)));
-    	String instructor = instructorAndDays.getKey();
-    	lecture.setInstructor(instructor);
-    	String lectDays = instructorAndDays.getValue();
-    	lecture.setLectDays(lectDays);
+    	if(lectTime == "TBA") {
+    		lecture.setLectDays("TBA");
+    	} else {
+    		Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(lectTime)));
+        	String instructor = instructorAndDays.getKey();
+        	lecture.setInstructor(instructor);
+        	String lectDays = instructorAndDays.getValue();
+        	lecture.setLectDays(lectDays);
+    	}
+    	
+    	
     	
     	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
     	int enrolled = enrolledAndCapacity.getKey();
@@ -563,7 +575,7 @@ public class UCSBCurriculumSearch {
     public ArrayList<String> findQuarterAndYear(String html){
 		ArrayList<String> availableQuarters = new ArrayList<String>();
 		String before_list_string = "<select name=\"ctl00$pageContent$quarterList\" id=\"ctl00_pageContent_quarterList\" class=\"droplist\">";
-		String after_list_string = "<option value=\"20154\">FALL 2015   </option>";
+		String after_list_string = "<option value=\"20164\">FALL 2016  </option>";
 		String all_quarters = "";
 		String[] all_quarters_split;
 		try{

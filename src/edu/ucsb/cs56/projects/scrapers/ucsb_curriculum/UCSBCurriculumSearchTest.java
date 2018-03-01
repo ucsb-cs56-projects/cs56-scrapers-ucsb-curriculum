@@ -28,9 +28,9 @@ public class UCSBCurriculumSearchTest {
 
 			int num_courses = uccs.loadCoursesJsoup(dept, qtr, level);
 
-			// Should have found 23 lectures
+			// Should have found 27 lectures
 			assertEquals(27, num_courses);
-			
+
 		} catch (Exception e) {
 			System.err.println(e);
 			e.printStackTrace();
@@ -47,11 +47,11 @@ public class UCSBCurriculumSearchTest {
 			final String qtr = "20161"; // 2016 Winter quarter
 			final String level = "Undergraduate";
 
-			String page = uccs2.getPage(dept,qtr,level);
+			String page = uccs2.getPage(dept, qtr, level);
 
 			int num_courses = uccs2.loadCoursesJsoup(dept, qtr, level);
 
-			assertEquals(21, num_courses);
+			assertEquals(23, num_courses);
 
 		} catch (Exception e) {
 			System.err.println(e);
