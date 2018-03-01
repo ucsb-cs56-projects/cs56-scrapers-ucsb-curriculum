@@ -240,33 +240,86 @@ public class UCSBCurriculumSearch {
     	Document doc = Jsoup.parse(html);
     	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
     	int numberOfLectures = 0; 
+    	UCSBLecture currentLecture = null;
+    	
     	for (Element courseInfoRow: courseInfoRows) {
     		String line = courseInfoRow.text();
-    		
-    		if (isLecture(line) && !isLectureWithoutSection(line)) {
-	    		System.out.println(numberOfLectures + ": " + line);
-	    		parseLecture(line);
-	    	//	while ()
-	    		numberOfLectures++;
+//    		if(isLectureWithoutSection(line)) {
+//    			lectures.add(parseLecture(line));
+//    			numberOfLectures++;
+//    			
+//    		} else 
+    		if(isLecture(line) && !isLectureWithoutSection(line)) {
+    			System.out.println("Creating lecture");
+    			currentLecture = parseLecture(line);
+    			lectures.add(currentLecture);
+    			numberOfLectures++;
+    			
+    		} else {
+    			System.out.println("Creating section");
+    			UCSBSection newSection = parseSection(line);
+    			newSection.setParent(currentLecture);
+    			currentLecture.addSection(newSection);
+    			
+    			System.out.println(newSection.toString());
     		}
-//    		if (!isLecture(line)) {
-//    			System.out.println(line);
-//    		}
     	}
     	
     
-    	System.out.println(courseInfoRows.size());
+    	//System.out.println(courseInfoRows.size());
     	return numberOfLectures;
     }
-  //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
-    public void parseSection(String line) {
+ 
+    
+    public UCSBSection parseSection(String line) {
+    	
+    	System.out.println(line);
+    	
+    	UCSBSection section = new UCSBSection();
+    	
+    	String enrollCode = line.substring(line.indexOf("Restrictions") - 6, line.indexOf("Restrictions") - 1);
+    	section.setEnrollCode(enrollCode);
+    	
+    	int instructorBeginIndex = line.indexOf("Messages: ");
+    	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
+    	int enrolled = enrolledAndCapacity.getKey();
+    	int capacity = enrolledAndCapacity.getValue();
+    	section.setEnrolled(enrolled);
+    	section.setCapacity(capacity);
+    	
+    	String closed = "closed";
+    	if(enrolled >= capacity) {
+    		section.setStatus("Full");
+    	} else if (line.toLowerCase().contains(closed.toLowerCase())) {
+    		section.setStatus("Closed");
+    	} else {
+    		section.setStatus("Open");
+    	}
+    	
+    	int timeBeginIndex = line.indexOf("Messages: ");
+    	String sectionTime = getLectTime(line.substring(timeBeginIndex));
+    	section.setSectionTime(sectionTime);
+    	
+    	String enrolledCapacityStr = enrolledAndCapacity.getKey().toString() + " / " + enrolledAndCapacity.getValue().toString();
+    	int sectionRoomStartIndex = line.indexOf(sectionTime) + sectionTime.length() + 1;
+    	int sectionRoomEndIndex = (sectionTime == "TBA") ? line.indexOf("Click box") - 1 : line.indexOf(enrolledCapacityStr);
+    	String sectionRoom = line.substring(sectionRoomStartIndex, sectionRoomEndIndex);
+    	section.setSectionRoom(sectionRoom);
+    	
+    	Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(sectionTime)));
+    	String lectDays = instructorAndDays.getValue();
+    	section.setSectionDay(lectDays);
+    	  
+    	
+    	return section;
+    	
     	
     }
     public void parseLectureWithoutSections(String line) {
     	//stub
     }
     //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
-    public void parseLecture(String line) {
+    public UCSBLecture parseLecture(String line) {
     	//Below is a sample of the input
     	//	"CMPSC 4 Click box to close. Full Title: Computer Science Boot Camp Description: An introduction to computational thinking," 
     	//+ 	" computing, data management, and problem solving using computers, for non-majors. Topics include coding basics, representing"
@@ -346,11 +399,22 @@ public class UCSBCurriculumSearch {
     	String majorLimitPass = line.substring(line.indexOf("Major-Limit-Pass:") + 17, line.indexOf("Major-Limit:"));
     	lecture.setMajorLimitPass(majorLimitPass);
     	
-    	System.out.println("\\n\n");
-    	System.out.println("--------------------------------------------------------------");
-    	System.out.println(lecture.toString());
-    	System.out.println("--------------------------------------------------------------");
-    	System.out.println("\\n\n");
+    	String closed = "closed";
+    	if(enrolled >= capacity) {
+    		lecture.setStatus("Full");
+    	} else if (line.toLowerCase().contains(closed.toLowerCase())) {
+    		lecture.setStatus("Closed");
+    	} else {
+    		lecture.setStatus("Open");
+    	}
+    	
+//    	System.out.println("\\n\n");
+//    	System.out.println("--------------------------------------------------------------");
+//    	System.out.println(lecture.toString());
+//    	System.out.println("--------------------------------------------------------------");
+//    	System.out.println("\\n\n");
+    	
+    	return lecture;
 
     }
     public boolean isLectureWithoutSection(String line) {
@@ -373,6 +437,7 @@ public class UCSBCurriculumSearch {
     		return false;
     	}
     }
+    
     public Pair<Integer, Integer> getEnrolledAndCapacity(String line) {
     	int slashIndex = line.indexOf('/');
     	Integer enrolled, capacity; 
@@ -400,10 +465,9 @@ public class UCSBCurriculumSearch {
     	}
     	enrolled = Integer.parseInt(strEnrolled);
     	capacity = Integer.parseInt(strCapacity);
-    	System.out.println(enrolled);
-    	System.out.println(capacity);
     	return new Pair<Integer, Integer>(enrolled, capacity);
     }
+    
     public String getLectTime(String line) {
     	//start represents the index of where the time starts;
     	int start = 0;
@@ -426,8 +490,19 @@ public class UCSBCurriculumSearch {
     			break;
     		}
     	}
-    	return line.substring(start, end);
+    	
+    	String returnValue;
+    	
+    	try {
+    		returnValue = line.substring(start, end);
+    	} catch(StringIndexOutOfBoundsException siobe){
+    	    returnValue = "TBA";
+    	}
+    	
+    	return returnValue;
+    	
     }
+    
     public Pair <String, String> getInstructorAndDays (String line) {
     	//Case where instructor is TBA
     	if (line.substring(0, 5).equals("T B A")) {
