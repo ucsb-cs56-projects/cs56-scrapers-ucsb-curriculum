@@ -43,7 +43,7 @@ public class UCSBCurriculumSearchTest {
 			System.setProperty("javax.net.ssl.trustStore", "jssecacerts");
 
 			UCSBCurriculumSearch uccs2 = new UCSBCurriculumSearch();
-			final String dept = "JAPAN"; // the department
+			final String dept = "CMPSC"; // the department
 			final String qtr = "20161"; // 2016 Winter quarter
 			final String level = "Undergraduate";
 
