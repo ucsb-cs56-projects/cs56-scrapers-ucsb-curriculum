@@ -20,9 +20,22 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 public class Main{	
 /** main method to demonstrate that the page is being accessed
         @param args String arguments in the order of: Department (CMPSC), quarter (Spring), year (2014), and level (Undergraduate)
+ * @throws Exception 
     */
-    public static void main(String [] args) {
-        try {
+    public static void main(String [] args) throws Exception {
+    	System.out.println("Hello");
+    	//System.out.print("num_lectures = ");
+    	UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
+		final String dept = "CMPSC"; // the department
+		final String qtr = "20181"; // 2012 = S11 [yyyyQ, where Q is 1,2,3,4
+									// (1=W, 2=S, 3=M, 4=F)]
+		final String level = "Undergraduate"; 
+		//uccs.parseLecture("test");
+		uccs.loadCoursesJsoup(dept, qtr, level);
+		//uccs.isLectureWithoutSection("efg");
+    	//System.out.print(uccs.loadCoursesJsoup(dept, "20181", level));
+    	//System.out.println("\n \n \n \n \n" + uccs.getPage(dept, "20181", level));
+        /*try {
             System.setProperty("javax.net.ssl.trustStore","jssecacerts");
 
             // Asks for user input and outputs corresponding lectures/sections
@@ -61,6 +74,11 @@ public class Main{
             System.err.println(e);
             e.printStackTrace();
         }
+        */
+    	
+    	//Testing getMainPag
+    	//String output = UCSBCurriculumSearch.getMainPage();
+    	//System.out.print(output);
     }
 
     /** Parses the quarter to the correct corresponding number that represents it.
