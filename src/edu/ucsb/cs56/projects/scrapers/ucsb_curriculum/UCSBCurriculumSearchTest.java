@@ -46,8 +46,22 @@ UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 			// Should have found 23 lectures
 			assertEquals(23, num_courses);
 			
+			UCSBLecture firstLecture = uccs.getLectures().get(0);
+			assertEquals("Introduction to Computer Science", firstLecture.getFullTitle());
+			assertEquals(0, firstLecture.getEnrolled());
+			assertEquals(125, firstLecture.getCapacity());
+			assertEquals("T B A", firstLecture.getInstructor());
+			assertEquals("T B A", firstLecture.getRoom());
+			assertEquals("Cancelled", firstLecture.getStatus());		
+			assertEquals(4, uccs.getLectures().get(0).getSections().size());
 			
-			assertEquals("Introduction to Computer Science", uccs.getLectures().get(0).getFullTitle());
+			UCSBSection lastSection = firstLecture.getSections().get(3);
+			assertEquals("PHELP3525", lastSection.getRoom());
+			assertEquals("11:00am - 11:50am", lastSection.getTime());
+			assertEquals("Cancelled", lastSection.getStatus());
+			assertEquals("08292", lastSection.getEnrollCode());
+			assertEquals(31, lastSection.getCapacity());
+			
 
 		} catch (Exception e) {
 			System.err.println(e);

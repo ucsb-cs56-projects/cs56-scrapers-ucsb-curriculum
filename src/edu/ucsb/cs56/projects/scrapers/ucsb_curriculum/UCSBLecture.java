@@ -40,7 +40,7 @@ public class UCSBLecture {
     private String status; //e.g Full e.g. Closed
 	private String enrollCode; //e.g. 00026
 
-    private ArrayList<UCSBSection> sections; // all of the sections
+    private ArrayList<UCSBSection> sections = new ArrayList<>(); // all of the sections
 
     // TODO: Write constructor(s), getters/setters, toString(), equals()
 
@@ -139,6 +139,7 @@ public class UCSBLecture {
 		this.enrolled = orig.enrolled;
 		this.capacity = orig.capacity;
 		this.enrollCode = orig.enrollCode;
+		this.sections = orig.sections;
 		
 	}
 	
@@ -207,9 +208,7 @@ public class UCSBLecture {
 
     public ArrayList<UCSBSection> getSections(){ return sections; }
     public void addSection(UCSBSection section){
-		UCSBSection tmp = new UCSBSection();
-		tmp = section;
-		sections.add(tmp);
+		sections.add(section);
     }
 
     public String toString(){    		

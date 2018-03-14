@@ -250,8 +250,11 @@ public class UCSBCurriculumSearch {
     			newSection.setParent(currentLecture);
     			//System.out.println(currentLecture);
     			currentLecture.addSection(newSection);
+    			
+    			
     		}
     	}
+ 
     	
     	return numberOfLectures;
     }
