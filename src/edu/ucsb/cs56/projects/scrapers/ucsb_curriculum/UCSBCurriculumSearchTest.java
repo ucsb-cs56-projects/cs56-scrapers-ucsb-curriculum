@@ -67,6 +67,5 @@ UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
 			System.err.println(e);
 			e.printStackTrace();
 		}
-
 	}
 }
