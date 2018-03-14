@@ -140,6 +140,7 @@ public class UCSBLecture {
 		this.capacity = orig.capacity;
 		this.enrollCode = orig.enrollCode;
 		this.sections = orig.sections;
+		this.levelLimit = orig.levelLimit;
 		
 	}
 	
