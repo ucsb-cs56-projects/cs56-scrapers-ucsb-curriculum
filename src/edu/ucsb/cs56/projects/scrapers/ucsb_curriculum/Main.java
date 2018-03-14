@@ -28,9 +28,10 @@ public class Main{
 		final String dept = "CMPSC"; // the department
 		final String qtr = "20181"; // 2012 = S11 [yyyyQ, where Q is 1,2,3,4
 									// (1=W, 2=S, 3=M, 4=F)]
-		final String level = "Undergraduate"; 
-		uccs.loadCoursesJsoup(dept, qtr, level);
-
+		final String level = "Undergraduate";
+		String html = uccs.getPage(dept, qtr, level);
+		uccs.loadCoursesJsoup(html);
+		uccs.printLecturesAndSections();
     	//System.out.print(uccs.loadCoursesJsoup(dept, "20181", level));
     	//System.out.println("\n \n \n \n \n" + uccs.getPage(dept, "20181", level));
         /*try {

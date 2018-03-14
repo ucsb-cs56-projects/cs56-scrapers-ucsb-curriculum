@@ -228,8 +228,8 @@ public class UCSBCurriculumSearch {
 		
 		return num_lectures;
 	} */
-    public int loadCoursesJsoup(String dept, String qtr, String level) throws Exception {
-    	String html = getPage(dept, qtr, level);
+    
+    public int loadCoursesJsoup(String html) {
 		String isLecture = "";
     	Document doc = Jsoup.parse(html);
     	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
@@ -239,16 +239,16 @@ public class UCSBCurriculumSearch {
     	for (Element courseInfoRow: courseInfoRows) {
     		isLecture = courseInfoRow.getElementsByClass("Section").text();
     		if (isLecture.equals("True")) {
-    			System.out.println("Creating lecture");
+    			//System.out.println("Creating lecture");
     			currentLecture = parseLecture(courseInfoRow);
     			lectures.add(currentLecture);
     			//System.out.println(currentLecture);
     			numberOfLectures++;
     		} else if (isLecture.equals("False")) {
-    			System.out.println("Creating section");
+    			//System.out.println("Creating section");
     			UCSBSection newSection = parseSection(courseInfoRow);
     			newSection.setParent(currentLecture);
-    			System.out.println(currentLecture);
+    			//System.out.println(currentLecture);
     			currentLecture.addSection(newSection);
     		}
     	}
@@ -271,7 +271,7 @@ public class UCSBCurriculumSearch {
 		enrollment = courseInfoRow.getElementsByAttributeValue("style", "text-align: right; vertical-align: middle;").text().trim();
 		int enrolled = Integer.parseInt(enrollment.substring(0, enrollment.indexOf('/')).trim());
 		int capacity = Integer.parseInt(enrollment.substring(enrollment.indexOf('/') + 1).trim());
-		courseTitle =courseInfoRow.getElementById("CourseTitle").ownText();
+		courseTitle = courseInfoRow.getElementById("CourseTitle").ownText();
 		enrollCode = courseInfoRow.getElementsByClass("EnrollCodeLink").text();
 		
 		Elements tableRows = courseInfoRow.select("tr");
@@ -573,6 +573,15 @@ public class UCSBCurriculumSearch {
 	}
 
 	return retval;
+    }
+    
+    public void printLecturesAndSections() {
+    	for (UCSBLecture lecture: lectures) {
+    		System.out.println(lecture);
+    		for (UCSBSection section: lecture.getSections()) {
+    			System.out.println(section);
+    		}
+    	}
     }
     
     /** return the number of UCSBLecture objects already loaded that match
