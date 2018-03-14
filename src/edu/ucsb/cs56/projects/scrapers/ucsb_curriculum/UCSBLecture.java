@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 */
 
-
 public class UCSBLecture {
     
     private String courseTitle; // e.g. "CMPSC     8"
@@ -32,14 +31,14 @@ public class UCSBLecture {
     
     private String majorLimit; // e.g. "These majors only: PRCMP PRCPS CMPEN PRCME EE PRMTH PRECM STATS STSCI ACTSC
     private String instructor; // e.g. "BUONI M J"   (Note: for lecture section)
-    private String lectDays; // e.g. "T R"
-    private String lectTime; // e.g. "3:30pm - 4:45pm"
-    private String lectRoom; // e.g. "CHEM 1171"
+    private String days; // e.g. "T R"
+    private String time; // e.g. "3:30pm - 4:45pm"
+    private String room; // e.g. "CHEM 1171"
     private int enrolled; // e.g. from 63 / 88, take the 63
     private int capacity; // e.g. from 63 / 88, take the 88
     
-    private String status; //
-	private String enrollCode;
+    private String status; //e.g Full e.g. Closed
+	private String enrollCode; //e.g. 00026
 
     private ArrayList<UCSBSection> sections; // all of the sections
 
@@ -59,28 +58,57 @@ public class UCSBLecture {
        @param primaryCourseAbbr e.g. "INTRO TO COMP SCI"
        @param status e.g. "Closed", "Full", etc
        @param instructor e.g. "BUONI M J"   (Note: for lecture)
-       @param lectDays e.g. "T R"
-       @param lectTime e.g. "3:30pm - 4:45pm"
-       @param lectRoom e.g. "CHEM 1171"
+       @param days e.g. "T R"
+       @param time e.g. "3:30pm - 4:45pm"
+       @param room e.g. "CHEM 1171"
        @param enrolled e.g. from 63 / 88, take the 63
        @param capacity e.g. from 63 / 88, take the 88
 	   @param enrollCode e.g. "55577"
      */
 
-    public UCSBLecture(String courseTitle, String primaryCourseAbbr, String status, String instructor, String lectDays,
-		       String lectTime, String lectRoom, int enrolled, int capacity, String enrollCode){
+    public UCSBLecture(
+    		String courseTitle,
+    		String primaryCourseAbbr,
+    		String status,
+    		String instructor,
+    		String days,   		
+		    String time,
+		    String room,
+		    String grading,
+		    String units,
+		    String college,
+		    String preRequisite,
+		    String description,
+		    String fullTitle,
+		    int enrolled,
+		    int capacity,
+		    String enrollCode,
+		    String levelLimit,
+		    String majorLimitPass,
+		    String messages,
+		    String majorLimit){
 
 		this.courseTitle = courseTitle;
 		this.primaryCourseAbbr = primaryCourseAbbr;
 		this.status = status;
 		this.instructor = instructor;
-		this.lectDays = lectDays;
-		this.lectTime = lectTime;
-		this.lectRoom = lectRoom;
+		this.days = days;
+		this.time = time;
+		this.room = room;
 		this.enrolled = enrolled;
 		this.capacity = capacity;
 		this.enrollCode = enrollCode;
-		
+		this.majorLimit = majorLimit;
+		this.messages = messages;
+		this.majorLimitPass = majorLimitPass;
+		this.levelLimit = levelLimit;
+		this.fullTitle = fullTitle;
+		this.description = description;
+		this.preRequisite = preRequisite;
+		this.grading = grading;
+		this.units = units;
+		this.college = college;
+		sections = new ArrayList<UCSBSection>();
 	}
     
      /**
@@ -105,9 +133,9 @@ public class UCSBLecture {
 		this.majorLimit = orig.majorLimit;
 		this.messages = orig.messages;
 		this.instructor = orig.instructor;
-		this.lectDays = orig.lectDays;
-		this.lectTime = orig.lectTime;
-		this.lectRoom = orig.lectRoom;
+		this.days = orig.days;
+		this.time = orig.time;
+		this.room = orig.room;
 		this.enrolled = orig.enrolled;
 		this.capacity = orig.capacity;
 		this.enrollCode = orig.enrollCode;
@@ -145,14 +173,14 @@ public class UCSBLecture {
     public String getInstructor(){ return instructor;}
     public void setInstructor(String instructor){ this.instructor = instructor;}
 
-    public String getLectDays(){ return lectDays;}
-    public void setLectDays(String days){ this.lectDays = days;}
+    public String getDays(){ return days;}
+    public void setDays(String days){ this.days = days;}
 
-    public String getLectTime(){ return lectTime;}
-    public void setLectTime(String time){ this.lectTime = time;}
+    public String getTime(){ return time;}
+    public void setTime(String time){ this.time = time;}
 
-    public String getLectRoom(){ return lectRoom;}
-    public void setLectRoom(String room){ this.lectRoom = room;}
+    public String getRoom(){ return room;}
+    public void setRoom(String room){ this.room = room;}
 
     public int getEnrolled(){ return enrolled;}
     public void setEnrolled(int enrolled){ this.enrolled = enrolled;}
@@ -208,9 +236,9 @@ public class UCSBLecture {
                 
                 + "\n ---- Lecture Details for " + courseTitle + "----\n"
                 + "Lecture Instructor: " + instructor + "\n"
-                + "Lecture Days: " + lectDays + "\n"
-                + "Lecture Time: " + lectTime + "\n"
-                + "Lecture Room: " + lectRoom + "\n";
+                + "Lecture Days: " + days + "\n"
+                + "Lecture Time: " + time + "\n"
+                + "Lecture Room: " + room + "\n";
                 
         return result;
     }

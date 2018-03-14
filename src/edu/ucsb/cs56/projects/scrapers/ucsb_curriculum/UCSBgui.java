@@ -184,7 +184,7 @@ public class UCSBgui{
 						
 						String qtr = year + quarter2;
 						//search with the corresponding selections in the gui
-						cssc.loadCourses(dept, qtr, lev);
+						cssc.loadCoursesJsoup(dept, qtr, lev);
 						cssc.printLectures();
 
 

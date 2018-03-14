@@ -15,9 +15,9 @@ public class UCSBSection {
     
     private String status; // e.g. "Full"
     private String enrollCode; // e.g. "07989"
-    private String sectionDay; // e.g. "T R"
-    private String sectionTime; // e.g. "3:30pm - 4:45pm"
-    private String sectionRoom; // e.g. Chem 1171"
+    private String days; // e.g. "T R"
+    private String time; // e.g. "3:30pm - 4:45pm"
+    private String room; // e.g. Chem 1171"
     private int enrolled; // e.g. from 63/88 take the 63
     private int capacity; // e.g. from 63/88 take the 88
   
@@ -31,21 +31,21 @@ public class UCSBSection {
      @param parent UCSB lecture object
      @param status string object of the status of a class  e.g. "Full"
      @param enrollCode string object of the enroll code of a class  e.g. "07989"
-     @param sectionDay string object of the days where section is held  e.g. "T R"
-     @param sectionTime string object of the times when section is held  e.g. "3:30pm - 4:45pm"
-     @param sectionRoom  string object of the room where section is held  e.g. Chem 1171"
+     @param days string object of the days where section is held  e.g. "T R"
+     @param time string object of the times when section is held  e.g. "3:30pm - 4:45pm"
+     @param room  string object of the room where section is held  e.g. Chem 1171"
      @param enrolled integer object of the number of students that are enrolled in the class  e.g. from 63/88 take the 63
      @param capacity integer object of the amount of students that can enroll in the class  e.g. from 63/88 take the 88
     */
     public UCSBSection(UCSBLecture parent, String status, String enrollCode, 
-    	String sectionDay, String sectionTime, String sectionRoom, int enrolled, int capacity)
+    	String days, String time, String room, int enrolled, int capacity)
     {
 	this.parent = parent;	
 	this.status = status;
 	this.enrollCode = enrollCode;
-	this.sectionDay = sectionDay;
-	this.sectionTime = sectionTime;
-	this.sectionRoom = sectionRoom;
+	this.days = days;
+	this.time = time;
+	this.room = room;
 	this.enrolled = enrolled;
 	this.capacity = capacity;
     }
@@ -60,14 +60,14 @@ public class UCSBSection {
     public String getEnrollCode(){ return enrollCode;}
     public void setEnrollCode(String enrollCode){ this.enrollCode = enrollCode;}
 
-    public String getSectionDay(){ return sectionDay;}
-    public void setSectionDay(String sectionDay){ this.sectionDay = sectionDay;}
+    public String getDays(){ return days;}
+    public void setDays(String sectionDay){ this.days = sectionDay;}
 
-    public String getSectionTime(){ return sectionTime;}
-    public void setSectionTime(String sectionTime){ this.sectionTime = sectionTime;}
+    public String getTime(){ return time;}
+    public void setTime(String sectionTime){ this.time = sectionTime;}
 
-    public String getSectionRoom(){ return sectionRoom;}
-    public void setSectionRoom(String sectionRoom){ this.sectionRoom = sectionRoom;}
+    public String getRoom(){ return room;}
+    public void setRoom(String sectionRoom){ this.room = sectionRoom;}
 
     public int getEnrolled(){ return enrolled;}
     public void setEnrolled(int enrolled){ this.enrolled = enrolled;}
@@ -80,9 +80,9 @@ public class UCSBSection {
 		result = "\t Course Title: " + parent.getCourseTitle() + "\n"
 		    + "\t Section Status: " + status + "\n"
 		    + "\t Enroll Code: " + enrollCode + "\n"
-		    + "\t Section Day: " + sectionDay + "\n"
-		    + "\t Section Time: " + sectionTime + "\n"
-		    + "\t Section Rm: " + sectionRoom + "\n"
+		    + "\t Section Day: " + days + "\n"
+		    + "\t Section Time: " + time + "\n"
+		    + "\t Section Rm: " + room + "\n"
 		    + "\t Enrolled / Capacity: " + enrolled + " / " + capacity + "\n";
 		return result;
     }
@@ -107,15 +107,15 @@ public class UCSBSection {
 			return false;
 		} else if (!parent.equals(other.parent))
 		    return false;
-		if (sectionRoom == null) {
-		    if (other.sectionRoom != null)
+		if (room == null) {
+		    if (other.room != null)
 			return false;
-		} else if (!sectionRoom.equals(other.sectionRoom))
+		} else if (!room.equals(other.room))
 		    return false;
-		if (sectionTime == null) {
-		    if (other.sectionTime != null)
+		if (time == null) {
+		    if (other.time != null)
 			return false;
-		} else if (!sectionTime.equals(other.sectionTime))
+		} else if (!time.equals(other.time))
 		    return false;
 		if (status == null) {
 		    if (other.status != null)

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UCSBSectionTest {
 
-	
+	/*
     @Test
 	public void test1() {
 		//initialize section parent
@@ -154,5 +154,5 @@ public class UCSBSectionTest {
 
 		
 	}
-
+	*/
 }
