@@ -3,6 +3,11 @@ package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * Test class for UCSBCurriculumSearch
  * 
@@ -13,20 +18,32 @@ import static org.junit.Assert.assertEquals;
  */
 
 public class UCSBCurriculumSearchTest {
+	
+	
+	
 
 	@Test
-	public void test_loadCourses() {
+	public void test_loadCourses_ARTHI_S17() {
 		try {
 			System.setProperty("javax.net.ssl.trustStore", "jssecacerts");
 
 			UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
-			final String dept = "ARTHI"; // the department
-			final String qtr = "20172"; // 2012 = S11 [yyyyQ, where Q is 1,2,3,4
-										// (1=W, 2=S, 3=M, 4=F)]
-			final String level = "Undergraduate"; // other options: "Graduate",
-													// "All".
+			
+			BufferedReader reader = new BufferedReader(new FileReader("sampleData/ARTHI_S17_html.txt"));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
+			String ls = System.getProperty("line.separator");
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line);
+				stringBuilder.append(ls);
+			}
+			// delete the last new line separator
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			reader.close();
 
-			int num_courses = uccs.loadCoursesJsoup(dept, qtr, level);
+			String html = stringBuilder.toString();
+			
+			int num_courses = uccs.loadCoursesJsoup(html);
 
 			// Should have found 27 lectures
 			assertEquals(27, num_courses);
@@ -42,15 +59,25 @@ public class UCSBCurriculumSearchTest {
 		try {
 			System.setProperty("javax.net.ssl.trustStore", "jssecacerts");
 
-			UCSBCurriculumSearch uccs2 = new UCSBCurriculumSearch();
-			final String dept = "CMPSC"; // the department
-			final String qtr = "20161"; // 2016 Winter quarter
-			final String level = "Undergraduate";
+UCSBCurriculumSearch uccs = new UCSBCurriculumSearch();
+			
+			BufferedReader reader = new BufferedReader(new FileReader("sampleData/CMPSC_F16_html.txt"));
+			StringBuilder stringBuilder = new StringBuilder();
+			String line = null;
+			String ls = System.getProperty("line.separator");
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line);
+				stringBuilder.append(ls);
+			}
+			// delete the last new line separator
+			stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+			reader.close();
 
-			String page = uccs2.getPage(dept, qtr, level);
+			String html = stringBuilder.toString();
+			
+			int num_courses = uccs.loadCoursesJsoup(html);
 
-			int num_courses = uccs2.loadCoursesJsoup(dept, qtr, level);
-
+			// Should have found 23 lectures
 			assertEquals(23, num_courses);
 
 		} catch (Exception e) {

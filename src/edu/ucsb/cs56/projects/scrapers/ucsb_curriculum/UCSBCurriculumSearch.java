@@ -235,7 +235,7 @@ public class UCSBCurriculumSearch {
     	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
     	int numberOfLectures = 0; 
     	UCSBLecture currentLecture = new UCSBLecture();
-    	System.out.println(courseInfoRows.size());
+    	//System.out.println(courseInfoRows.size());
     	for (Element courseInfoRow: courseInfoRows) {
     		isLecture = courseInfoRow.getElementsByClass("Section").text();
     		if (isLecture.equals("True")) {
