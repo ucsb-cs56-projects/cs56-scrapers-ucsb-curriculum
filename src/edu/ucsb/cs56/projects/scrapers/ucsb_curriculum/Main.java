@@ -16,7 +16,6 @@ import java.io.*;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-
 public class Main{	
 /** main method to demonstrate that the page is being accessed
         @param args String arguments in the order of: Department (CMPSC), quarter (Spring), year (2014), and level (Undergraduate)
@@ -29,10 +28,10 @@ public class Main{
 		final String dept = "CMPSC"; // the department
 		final String qtr = "20181"; // 2012 = S11 [yyyyQ, where Q is 1,2,3,4
 									// (1=W, 2=S, 3=M, 4=F)]
-		final String level = "Undergraduate"; 
-		//uccs.parseLecture("test");
-		uccs.loadCoursesJsoup(dept, qtr, level);
-		//uccs.isLectureWithoutSection("efg");
+		final String level = "Undergraduate";
+		String html = uccs.getPage(dept, qtr, level);
+		uccs.loadCoursesJsoup(html);
+		uccs.printLecturesAndSections();
     	//System.out.print(uccs.loadCoursesJsoup(dept, "20181", level));
     	//System.out.println("\n \n \n \n \n" + uccs.getPage(dept, "20181", level));
         /*try {
@@ -52,7 +51,7 @@ public class Main{
                 String[] inputList = s.split(", ");
                 // Checks if user inputs 4 items. If not, goes to next iteration
                 if(inputList.length != 4){
-                    System.out.println("Error in input format! Try again!\n" +
+                    S	ystem.out.println("Error in input format! Try again!\n" +
                                        "Ex. CMPSC, Spring, 2014, Undergraduate");
                     bufferedReader.close();
                     continue;

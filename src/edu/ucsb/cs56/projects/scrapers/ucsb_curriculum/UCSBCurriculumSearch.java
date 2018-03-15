@@ -4,8 +4,14 @@ import java.net.*;
 import java.io.*;
 import javafx.util.Pair;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
+
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -165,7 +171,7 @@ public class UCSBCurriculumSearch {
 	@return the number of courses loaded
 	@throws java.lang.Exception thrown when an error occurs
     */
-    public int loadCourses(String dept, String qtr, String level) throws Exception {
+   /* public int loadCourses(String dept, String qtr, String level) throws Exception {
     	
         String page = getPage(dept,qtr,level);
         String origpage = page;
@@ -221,325 +227,174 @@ public class UCSBCurriculumSearch {
 		}
 		
 		return num_lectures;
-	}
-    public int loadCoursesJsoup(String dept, String qtr, String level) throws Exception {
-    	
-    	
-    	String html = getPage(dept, qtr, level);
+	} */
+    
+    public int loadCoursesJsoup(String html) {
+		String isLecture = "";
     	Document doc = Jsoup.parse(html);
     	Elements courseInfoRows = doc.getElementsByClass("CourseInfoRow");
     	int numberOfLectures = 0; 
-    	UCSBLecture currentLecture = null;
-    	
-    	System.out.println("Doc: " + doc.toString());
-    	System.out.println("Number of rows: " + courseInfoRows.size());
-    	
+    	UCSBLecture currentLecture = new UCSBLecture();
+    	//System.out.println(courseInfoRows.size());
     	for (Element courseInfoRow: courseInfoRows) {
-    		String line = courseInfoRow.text();    		
-    		if(isLectureWithoutSection(line) && isLecture(line)) {
-    			System.out.println("Parsing lecture without section");
-    			lectures.add(parseLecture(line));
-    			numberOfLectures++;
-    			
-    		} else 
-    		if(isLecture(line) && !isLectureWithoutSection(line)) {
-    			System.out.println("Creating lecture");
-    			currentLecture = parseLecture(line);
+    		isLecture = courseInfoRow.getElementsByClass("Section").text();
+    		if (isLecture.equals("True")) {
+    			//System.out.println("Creating lecture");
+    			currentLecture = parseLecture(courseInfoRow);
     			lectures.add(currentLecture);
+    			//System.out.println(currentLecture);
     			numberOfLectures++;
-    			
-    		} else {
-    			System.out.println("Creating section");
-    			UCSBSection newSection = parseSection(line);
+    		} else if (isLecture.equals("False")) {
+    			//System.out.println("Creating section");
+    			UCSBSection newSection = parseSection(courseInfoRow);
     			newSection.setParent(currentLecture);
+    			//System.out.println(currentLecture);
     			currentLecture.addSection(newSection);
+    			
+    			
     		}
     	}
+ 
     	
     	return numberOfLectures;
     }
- 
-    public UCSBSection parseSection(String line) {    	
-    	UCSBSection section = new UCSBSection();
-    	
-    	String enrollCode = line.substring(line.indexOf("Restrictions") - 6, line.indexOf("Restrictions") - 1);
-    	section.setEnrollCode(enrollCode);
-    	
-    	int instructorBeginIndex = line.indexOf("Messages: ");
-    	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
-    	int enrolled = enrolledAndCapacity.getKey();
-    	int capacity = enrolledAndCapacity.getValue();
-    	section.setEnrolled(enrolled);
-    	section.setCapacity(capacity);
-    	
-    	String closed = "closed";
-    	if(enrolled >= capacity) {
-    		section.setStatus("Full");
-    	} else if (line.toLowerCase().contains(closed.toLowerCase())) {
-    		section.setStatus("Closed");
-    	} else {
-    		section.setStatus("Open");
-    	}
-    	
-    	int timeBeginIndex = line.indexOf("Messages: ");
-    	String sectionTime = getLectTime(line.substring(timeBeginIndex));
-    	section.setSectionTime(sectionTime);
-    	
-    	String enrolledCapacityStr = enrolledAndCapacity.getKey().toString() + " / " + enrolledAndCapacity.getValue().toString();
-    	int sectionRoomStartIndex = line.indexOf(sectionTime) + sectionTime.length() + 1;
-    	int sectionRoomEndIndex = (sectionTime == "TBA") ? line.indexOf("Click box") - 1 : line.indexOf(enrolledCapacityStr);
-    	String sectionRoom = line.substring(sectionRoomStartIndex, sectionRoomEndIndex);
-    	section.setSectionRoom(sectionRoom);
-    	
-    	if(sectionTime == "TBA") {
-    		section.setSectionDay("TBA");
-    	} else {
-    		Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(sectionTime)));
-        	String lectDays = instructorAndDays.getValue();
-        	section.setSectionDay(lectDays);
-    	}
-    	
-    	return section;
+    public UCSBLecture parseLecture(Element courseInfoRow) {
+		String courseTitle, instructor, days, room, enrollment, fullTitle, description, college, units, grading, majorLimit, enrollCode, status, preRequisite, restrictions, levelLimit,
+		   majorLimitPass, messages, primaryCourseAbbr, time;
+		courseTitle = instructor = days = room = enrollment = enrollCode = status = preRequisite = college = restrictions = levelLimit = majorLimitPass = messages
+			= primaryCourseAbbr = time = grading = units  = " ";
+		Elements instructorDaysRoomElements = courseInfoRow.getElementsByAttributeValue("style", "text-align: left; vertical-align: middle;");
+		List <String> instructorDaysRoomText = instructorDaysRoomElements.eachText();
+		String[] instructorDaysRoom = parseInstructorDaysRoom(instructorDaysRoomText);
+		instructor = instructorDaysRoom[0];
+		days = instructorDaysRoom[1];
+		room = instructorDaysRoom[2];
+		time = courseInfoRow.getElementsByAttributeValueStarting("style", "text-align: left; vertical-align: top; white-space: nowrap; padding-left: 5px;").text();
+		
+		enrollment = courseInfoRow.getElementsByAttributeValue("style", "text-align: right; vertical-align: middle;").text().trim();
+		int enrolled = Integer.parseInt(enrollment.substring(0, enrollment.indexOf('/')).trim());
+		int capacity = Integer.parseInt(enrollment.substring(enrollment.indexOf('/') + 1).trim());
+		courseTitle = courseInfoRow.getElementById("CourseTitle").ownText();
+		enrollCode = courseInfoRow.getElementsByClass("EnrollCodeLink").text();
+		
+		Elements tableRows = courseInfoRow.select("tr");
+		List<String> tableRowsText = tableRows.eachText();
+		String [] courseData = parseTableRows(tableRowsText);
+		primaryCourseAbbr = courseInfoRow.getElementsByAttributeValue("style", "text-decoration:underline;").text();
+		status = courseInfoRow.getElementsByClass("Status").text();
+		fullTitle = courseData[0];
+		description = courseData[1];
+		preRequisite = courseData[2];
+		college = courseData[3];
+		units = courseData[4];
+		grading = courseData[5];
+		restrictions = courseData[6];
+		levelLimit = courseData[7];
+		majorLimitPass = courseData[8];
+		majorLimit = courseData[9];
+		messages = courseData[10];
+		UCSBLecture newLecture = new UCSBLecture(
+				courseTitle,
+				primaryCourseAbbr,
+				status,
+				instructor,
+				days,
+				time,
+				room,
+				grading,
+				units,
+				college,
+				preRequisite,
+				description,
+				fullTitle,
+				enrolled,
+				capacity,
+				enrollCode,
+				levelLimit,
+				majorLimitPass,
+				messages,
+				majorLimit);
+		return newLecture;
     }
     
-    public void parseLectureWithoutSections(String line) {
-    	//stub
+    public UCSBSection parseSection(Element courseInfoRow) {
+    	String days, room, enrollment, enrollCode, status, time;
+    	days = room = enrollment = enrollCode = status = time = "";
+		Elements instructorDaysRoomElements = courseInfoRow.getElementsByAttributeValue("style", "text-align: left; vertical-align: middle;");
+		List <String> instructorDaysRoomText = instructorDaysRoomElements.eachText();
+		String[] instructorDaysRoom = parseInstructorDaysRoom(instructorDaysRoomText);
+		days = instructorDaysRoom[1];
+		room = instructorDaysRoom[2];
+		time = courseInfoRow.getElementsByAttributeValueStarting("style", "text-align: left; vertical-align: top; white-space: nowrap; padding-left: 5px;").text();
+		enrollment = courseInfoRow.getElementsByAttributeValue("style", "text-align: right; vertical-align: middle;").text().trim();
+		int enrolled = Integer.parseInt(enrollment.substring(0, enrollment.indexOf('/')).trim());
+		int capacity = Integer.parseInt(enrollment.substring(enrollment.indexOf('/') + 1).trim());
+		enrollCode = courseInfoRow.getElementsByClass("EnrollCodeLink").text();
+		status = courseInfoRow.getElementsByClass("Status").text();
+		UCSBSection newSection = new UCSBSection(
+				null,
+				status,
+				enrollCode,
+				days,
+				time,
+				room,
+				enrolled,
+				capacity);
+		return newSection;
     }
-    //Write now this is just printing the values it parses and not creating a UCSBLecture Object from it
-    public UCSBLecture parseLecture(String line) {
-    	//Below is a sample of the input
-    	//	"CMPSC 4 Click box to close. Full Title: Computer Science Boot Camp Description: An introduction to computational thinking," 
-    	//+ 	" computing, data management, and problem solving using computers, for non-majors. Topics include coding basics, representing"
-    	//+	"code and data using a computer, and applications of computing that are important to society. PreRequisite: College: ENGR Units: 4.0 "
-    	//+ "Grading: Letter Textbook Information: http://www.ucsbstuff.com/SelectTermDept.aspx CS BOOT CAMP Restrictions Click box to close. Level-Limit:"
-    	//+ " Major-Limit-Pass: Major-Limit: Not these majors: CMPSC CMPEN Grading: Letter Messages: KOC C K M W 3:30pm - 4:45pm TD-W 1701 102 / 120 True";
-    	
-    	// Create a new lecture
-    	UCSBLecture lecture = new UCSBLecture();
-           	
-    	int courseTitleEndIndex = line.indexOf(" Click box to close.");
-    	String courseTitle = line.substring(0, courseTitleEndIndex);
-    	lecture.setCourseTitle(courseTitle);
-    	
-    	int fullTitleEndIndex = line.indexOf(" Description: ");
-    	String fullTitle = line.substring(line.indexOf(" Full Title: ") + 13, fullTitleEndIndex);
-    	lecture.setFullTitle(fullTitle);
-    	
-    	int descriptionEndIndex = line.indexOf(" PreRequisite: ");
-    	String description = line.substring(line.indexOf(" Description: ") + 14, descriptionEndIndex);
-    	lecture.setDescription(description);
-    	
-    	int prerequisiteEndIndex = line.indexOf(" College:");
-    	String prerequisite = line.substring(line.indexOf(" PreRequisite:") + 14, prerequisiteEndIndex);
-    	lecture.setPrerequisite(prerequisite);
-    	
-    	int collegeEndIndex = line.indexOf(" Units:");
-    	String college = line.substring(line.indexOf(" College: ") + 10, collegeEndIndex);
-    	lecture.setCollege(college);
-    	
-    	int unitsEndIndex = line.indexOf(" Grading:");
-    	String units = line.substring(line.indexOf(" Units: ") + 8, unitsEndIndex);
-    	lecture.setUnits(units);
-    	
-    	int gradingEndIndex = line.indexOf(" Textbook Information: ");
-    	String grading = line.substring(line.indexOf(" Grading: ") + 10, gradingEndIndex);
-    	lecture.setGrading(grading);
-    	
-    	//primaryCourseAbbr is going to need some extra work because sometimes something comes before "Restrictions Click Box..." but for now just gonna leave as is
-    	int primaryCourseAbbrEndIndex = line.indexOf(" Restrictions Click box to close. ");
-    	String primaryCourseAbbr = line.substring(line.indexOf("http://www.ucsbstuff.com/SelectTermDept.aspx ") + 45, primaryCourseAbbrEndIndex);
-    	lecture.setPrimaryCourseAbbr(primaryCourseAbbr);
-    	
-    	int majorLimitEndIndex = line.indexOf(" Grading: ", line.indexOf("Grading: ") + 1); // The " Grading: " substring appears twice and we need the 2nd one
-    	String majorLimit = "";
-    	if (!line.substring(line.indexOf(" Major-Limit: ") + 14, line.indexOf(" Major-Limit: ") + 21).equals("Grading")) {
-    		//This means major list is not empty
-    		majorLimit += line.substring(line.indexOf(" Major-Limit: ") + 14, majorLimitEndIndex);
+    
+    public String[] parseTableRows(List<String> tableRows) {
+	    /*
+	    CMPSC 4 Click box to close. Full Title: Computer Science Boot Camp Description: An introduction to computational thinking, computing, data management, and problem solving using computers, for non-majors. Topics include coding basics, representing code and data using a computer, and applications of computing that are important to society. PreRequisite: College: ENGR Units: 4.0 Grading: Letter Textbook Information: http://www.ucsbstuff.com/SelectTermDept.aspx CS BOOT CAMP Restrictions Click box to close. Level-Limit: Major-Limit-Pass: Major-Limit: Not these majors: CMPSC CMPEN Grading: Letter Messages: KOC C K M W 3:30pm - 4:45pm TD-W 1701 102 / 120 True
+		Click box to close.
+		Full Title: Computer Science Boot Camp
+		Description: An introduction to computational thinking, computing, data management, and problem solving using computers, for non-majors. Topics include coding basics, representing code and data using a computer, and applications of computing that are important to society.
+		PreRequisite:
+		College: ENGR
+		Units: 4.0
+		Grading: Letter
+		Textbook Information: http://www.ucsbstuff.com/SelectTermDept.aspx
+		Restrictions Click box to close.
+		Level-Limit:
+		Major-Limit-Pass:
+		Major-Limit: Not these majors: CMPSC CMPEN
+		Grading: Letter
+		Messages:	
+	     */
+	    //Above is an example of table rows for a given lecture/section.
+	    String fullTitle, description, preRequisite, college, units, grading, restrictions, levelLimit, majorLimitPass, majorLimit, messages;
+	    fullTitle = description = preRequisite = college = units = grading = restrictions = levelLimit = majorLimitPass = majorLimit = messages = "";
+	    fullTitle = tableRows.get(2).substring(tableRows.get(2).indexOf("Full Title:") + 11).trim();
+	    description = tableRows.get(3).substring(tableRows.get(3).indexOf("Description:") + 12).trim();
+	    preRequisite = tableRows.get(4).substring(tableRows.get(4).indexOf("PreRequisite:") + 13).trim();
+	    college = tableRows.get(5).substring(tableRows.get(5).indexOf("College:") + 8).trim();
+	    units = tableRows.get(6).substring(tableRows.get(6).indexOf("Units:") + 6).trim();
+	    grading = tableRows.get(7).substring(tableRows.get(7).indexOf("Grading:") + 8).trim();
+	    restrictions = tableRows.get(9).substring(tableRows.get(9).indexOf("Restrictions:") + 13, tableRows.get(9).indexOf("Click box to close.")).trim();
+	    levelLimit = tableRows.get(10).substring(tableRows.get(10).indexOf("Level-Limit:") + 12).trim();
+	    majorLimitPass = tableRows.get(11).substring(tableRows.get(11).indexOf("Major-Limit-Pass:") + 17).trim();
+	    majorLimit = tableRows.get(12).substring(tableRows.get(12).indexOf("Major-Limit:") + 12).trim();
+	    messages = tableRows.get(14).substring(tableRows.get(14).indexOf("Messages:") + 9).trim();
+	    String[] tableRowData = {fullTitle, description, preRequisite, college, units, grading, restrictions, levelLimit, majorLimitPass, majorLimit, messages};
+    return tableRowData;
+    }
+    
+    /** Returns a list with the instructor, days, and room in that order associated with a lecture/section.*/
+    public String[] parseInstructorDaysRoom(List<String> instructorDaysRoomText) {
+    	String instructor, days, room;
+    	instructor = days = room = "";
+    	if (instructorDaysRoomText.size() == 2) {
+    		instructor = instructorDaysRoomText.get(0);
+    		room = instructorDaysRoomText.get(1);
+    	} else if (instructorDaysRoomText.size() == 3) {
+    		instructor = instructorDaysRoomText.get(0);
+    		days = instructorDaysRoomText.get(1);
+    		room = instructorDaysRoomText.get(2);
     	}
-    	lecture.setMajorLimit(majorLimit);
-    	
-    	int instructorBeginIndex = line.indexOf("Messages: ");
-    	String lectTime = getLectTime(line.substring(instructorBeginIndex));
-    	lecture.setLectTime(lectTime);
-    	
-    	if(lectTime == "TBA") {
-    		lecture.setLectDays("TBA");
-    	} else {
-    		Pair <String, String> instructorAndDays = getInstructorAndDays(line.substring(line.indexOf("Messages: ") + 10, line.indexOf(lectTime)));
-        	String instructor = instructorAndDays.getKey();
-        	lecture.setInstructor(instructor);
-        	String lectDays = instructorAndDays.getValue();
-        	lecture.setLectDays(lectDays);
-    	}
-    	
-    	
-    	
-    	Pair <Integer, Integer> enrolledAndCapacity = getEnrolledAndCapacity(line.substring(instructorBeginIndex));
-    	int enrolled = enrolledAndCapacity.getKey();
-    	int capacity = enrolledAndCapacity.getValue();
-    	lecture.setEnrolled(enrolled);
-    	lecture.setCapacity(capacity);
-    	
-    	String enrolledCapacityStr = enrolledAndCapacity.getKey().toString() + " / " + enrolledAndCapacity.getValue().toString();
-    	int lectRoomStartIndex = line.indexOf(lectTime) + lectTime.length() + 1;
-    	int lectRoomEndIndex = line.indexOf(enrolledCapacityStr);
-    	String lectRoom = line.substring(lectRoomStartIndex, lectRoomEndIndex);
-    	lecture.setLectRoom(lectRoom);
-    	
-    	String levelLimit = line.substring(line.indexOf("Level-Limit:") + 13, line.indexOf("Major-Limit-Pass"));
-    	lecture.setLevelLimit(levelLimit);
-    	
-    	String majorLimitPass = line.substring(line.indexOf("Major-Limit-Pass:") + 17, line.indexOf("Major-Limit:"));
-    	lecture.setMajorLimitPass(majorLimitPass);
-    	
-    	String closed = "closed";
-    	if(enrolled >= capacity) {
-    		lecture.setStatus("Full");
-    	} else if (line.toLowerCase().contains(closed.toLowerCase())) {
-    		lecture.setStatus("Closed");
-    	} else {
-    		lecture.setStatus("Open");
-    	}
-    	
-    	return lecture;
+    	String[] instructorDaysRoom = {instructor, days, room};
+    	return instructorDaysRoom;
+    }
 
-    }
-    public boolean isLectureWithoutSection(String line) {
-    	//String dummy  = 
-    	//		"CMPSC 99 Click box to close. Full Title: Independent Studies in Computer Science Description: Independent studies in "
-    	//		+ "computer science for advanced students. PreRequisite: College: ENGR Units: 1.0 - 4.0 Grading: Pass/No Pass Textbook Information: "
-    	//		+ "http://www.ucsbstuff.com/SelectTermDept.aspx INDEPENDENT STUDIES 08466 Restrictions Click box to close. Level-Limit: L Major-Limit-Pass: "
-    	//		+ "Major-Limit: Grading: Pass/No Pass Messages: DEPT. APPROVAL REQUIRED PRIOR TO REGISTRATION. T B A T B A 0 / 5 True";
-    	int restrictionsIndex = line.indexOf("Restrictions");
-    	String enrollCode = "";
-    	for (int i = restrictionsIndex - 6; i < restrictionsIndex; i++) {
-    		if (Character.isDigit(line.charAt(i))) {
-    			enrollCode += line.charAt(i);
-    		}
-    	}
-    	//System.out.println(enrollCode);
-    	if (enrollCode.length() == 5) {
-    		return true;
-    	} else {
-    		return false;
-    	}
-    }
-    
-    public Pair<Integer, Integer> getEnrolledAndCapacity(String line) {
-    	int slashIndex = line.indexOf('/');
-    	Integer enrolled, capacity; 
-    	String strReverseEnrolled = "";
-    	String strCapacity = "";
-    	//Reading backwards from slash to get Enrolled number, it'll be in reverse since we're reading it backwards
-    	for (int i = slashIndex; i >= 0; i--) {
-    		if (strReverseEnrolled.length() == 0 && Character.isWhitespace(line.charAt(i))) {
-    			continue;
-    		} else if (Character.isDigit(line.charAt(i))) {
-    			strReverseEnrolled += line.charAt(i);
-    		} else if (Character.isWhitespace(line.charAt(i)) && strReverseEnrolled.length() > 0) {
-    			break;
-    		}
-    	}
-    	String strEnrolled = new StringBuilder(strReverseEnrolled).reverse().toString();
-    	for (int i = slashIndex; i < line.length(); i++) {
-    		if (strCapacity.length() == 0 && Character.isWhitespace(line.charAt(i))) {
-    			continue;
-    		} else if (Character.isDigit(line.charAt(i))) {
-    			strCapacity += line.charAt(i);
-    		} else if (Character.isWhitespace(line.charAt(i)) && strCapacity.length() > 0) {
-    			break;
-    		}
-    	}
-    	enrolled = Integer.parseInt(strEnrolled);
-    	capacity = Integer.parseInt(strCapacity);
-    	return new Pair<Integer, Integer>(enrolled, capacity);
-    }
-    
-    public String getLectTime(String line) {
-    	//start represents the index of where the time starts;
-    	int start = 0;
-    	//mCount counts the amount of "m"s (from am and pm) and once two "m"s have been read, we know we've finished reading the time
-    	int mCount = 0;
-    	//end represents the index of where the time ends
-    	int end = 0;
-    	for (int i = 0; i < line.length(); i++) {
-    		if (Character.isDigit(line.charAt(i))) {
-    			start = i;
-    			break;
-    		}
-    	}
-    	for (int i = start; i < line.length(); i++) {
-    		if (line.charAt(i) == 'm') {
-    			mCount += 1;
-    		}
-    		if (mCount == 2) {
-    			end = i + 1;
-    			break;
-    		}
-    	}
-    	
-    	String returnValue;
-    	
-    	try {
-    		returnValue = line.substring(start, end);
-    	} catch(StringIndexOutOfBoundsException siobe){
-    	    returnValue = "TBA";
-    	}
-    	
-    	return returnValue;
-    	
-    }
-    
-    public Pair <String, String> getInstructorAndDays (String line) {
-    	//Case where instructor is TBA
-    	if (line.substring(0, 5).equals("T B A")) {
-    		String instructor = "T B A";
-    		String days = line.substring(5);
-    		return new Pair<String, String>(instructor, days);
-    	}
-    	String instructor = "";
-    	String unorderedDays = "";
-    	String possibleDays = "MTWRF";
-    	String orderedDays = "";
-    	int instructorEndIndex = 0;
-    	for (int i = line.length() - 1; i >= 0; i--) {
-    		if (Character.isLetter(line.charAt(i))){
-    			//This means the character is a part of the instructor's initial and not a day
-        		if (possibleDays.indexOf(line.charAt(i)) == -1) {
-        			instructorEndIndex = i + 1;
-        			break;
-        		}
-        		//If a certain day character appears twice, that means that the 2nd character is apart of the name and not a day
-    			if (unorderedDays.indexOf(line.charAt(i)) != -1) {
-    				instructorEndIndex = i;
-    				break;
-    			} else if (possibleDays.indexOf(line.charAt(i)) != -1) {
-    				unorderedDays += line.charAt(i);
-    				unorderedDays += " ";
-    			}
-    		}
-    	}
-		instructor = line.substring(0, instructorEndIndex);
-		if (unorderedDays.indexOf('M') != -1)
-			orderedDays += "M ";
-		if (unorderedDays.indexOf('T') != -1)
-			orderedDays += "T ";
-		if (unorderedDays.indexOf('W') != -1)
-			orderedDays += "W ";
-		if (unorderedDays.indexOf('R') != -1)
-			orderedDays += "R ";
-		if (unorderedDays.indexOf('F') != -1)
-			orderedDays += "F";
-		return new Pair <String, String>(instructor, orderedDays);
-    }
-    
-    public boolean isLecture(String line) {
-    	if (line.indexOf("True") != -1) {
-    		return true;
-    	} else {
-		return false;
-    	}
-    }
     /** Find the list of offered Subject Areas given the HTML of the main page
 	@param html HTML of the main url
 	@return ArrayLIst of Strings of offered subject areas
@@ -595,289 +450,6 @@ public class UCSBCurriculumSearch {
 		return availableQuarters;
 	}
     
-    
-    /** Find the Course Title given a subsection of HTML only including one section or lecture.
-	@param html HTML of only one lecture or section
-	@return String Course Title e.g. "CMPSC     8"
-    */
-    private String findCourseTitle(String html){
-		String after_title_string = "";
-		try{
-			after_title_string = "<div class=\"MasterCourseTableDiv\">";
-		}catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-		
-		return html.substring(html.substring(0, html.indexOf(after_title_string)).lastIndexOf('>') + 1, html.indexOf(after_title_string)).trim();
-	}
-	
-    /** Find the Full Course Title (Abbreviation) given a subsection of HTML only inclduing one section or lecture.
-        If no Course Title abbreviation is found in the given section of HTML, return an empty string ("").
-	(This is how we know this portion of html holds the information of a section, not a lecture.)
-	 @param html HTML of only one lecture or section
-	 @return String Full Course Title e.g. "APP TO UNIV WRIT"
-    */
-	private String findPrimaryCourseAbbr(String html){
-
-			// If exists, it's the first text after this string:
-			String search = "decoration:underline;\">";
-			String title = "";
-
-		try{
-			title = html.substring(html.indexOf(search)+search.length(),
-								   html.indexOf("<a id=\"ctl00_pageContent_repeaterSearchResults"));
-			
-			title = title.substring(0, title.indexOf("</span>"));
-			
-		}catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-		
-		return title;
-		
-    }
-
-    /** Find the course description given a subsection of HTML only including on section or lecture
-	@param html HTML of one lecture or section
-	@return String course description
-    */
-	private String findDescription(String html){
-		String description = "";
-		try{
-			String search = "labelDescription\">";
-			description += html.substring(html.indexOf(search) + search.length());
-			description = description.substring(0, description.indexOf('<'));
-		}catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-		return description.trim();
-	}
-
-    /** Find the course status given a subsection of HTML only including on section or lecture
-	@param html HTML of one lecture or section
-	@return String course status
-     */
-    private String findStatus(String html){
-		String status = "";
-		try{
-			String search = "class=\"Status\">";
-			
-			status += html.substring(html.indexOf(search) + search.length());
-			status = status.substring(0, status.indexOf('<'));
-		}catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-		return status.trim();
-	}
-	
-    /** Find the course enrollment code given a subsection of HTML only including on section or lecture
-	@param html HTML of one lecture or section
-	@return String course enrollment code
-     */
-	private String findEnrollCode(String html){
-		String status = "";
-		try{
-			String search = "target=\"_self\">";
-			status += html.substring(html.indexOf(search) + search.length());
-			status = status.substring(0, status.indexOf("<"));
-			status = status.trim();
-		} catch (Exception e){
-			System.err.println("The HTML of UCSB Curriculum Serach has changed.");
-			System.err.println("This scraper must be updated.");
-		}
-		return status;
-	
-    }
-
-    /** This method is different because the end of the tables, with info about
-	instructor, enrolled, etc. has no unique defining characteristics.
-	We need to simply back up through each and know what they mean.
-	@param html HTML to parse. Only looks at the end
-	@param lect Lecture to set with the parsed elements
-     */
-    private UCSBLecture parseEnd(String html, UCSBLecture lect){
-    	UCSBLecture temp = lect;
-   
-        html = removeLastElement(html);
-        String enrollment_html = getEndElement(html);
-        
-        System.out.println(html.toString());
-
-        int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
-        int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
-        
-        //int enrollment = 23;
-        //int capacity = 36;
-
-        // Take out the enrollment/capacity because it has been parsed
-        html = removeLastElement(html);
-
-        String lect_room_html = getEndElement(html);
-        String lectRoom = lect_room_html.trim();
-        html = removeLastElement(html);
-
-        String lect_time_html = getEndElement(html);
-        String lectTime = lect_time_html.trim();
-        html = removeLastElement(html);
-
-        String lect_days_html = getEndElement(html);
-        String lectDays = lect_days_html.trim();
-        html = removeLastElement(html);
-
-        String instructor_html = getEndElement(html);
-        int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
-            instructor_html = instructor_html.substring(0, br);
-        String instructor = instructor_html.trim();
-        html = removeLastElement(html);
-
-
-	temp.setEnrolled(enrollment);
-        temp.setCapacity(capacity);
-        temp.setLectRoom(lectRoom);
-        temp.setLectTime(lectTime);
-        temp.setLectDays(lectDays);
-        temp.setInstructor(instructor);
-	
-	return temp;
-
-    }
-
-    /** This method is different because the end of the tables, with info about
-	instructor, enrolled, etc. has no unique defining characteristics.
-	We need to simply back up through each and know what they mean.
-	@param html HTML to parse. Only looks at the end
-	@param lect Lecture to set with the parsed elements
-     */
-    private UCSBSection parseEndSection(String html, UCSBSection sect){
-	UCSBSection temp = sect;
-	
-        html = removeLastElement(html);
-        String enrollment_html = getEndElement(html);
-
-        int enrollment = Integer.parseInt(enrollment_html.substring(0, enrollment_html.indexOf("/")).trim());
-        int capacity = Integer.parseInt(enrollment_html.substring(enrollment_html.indexOf("/") + 1).trim());
-
-        // Take out the enrollment/capacity because it has been parsed
-        html = removeLastElement(html);
-
-        String sect_room_html = getEndElement(html);
-        String sectRoom = sect_room_html.trim();
-        html = removeLastElement(html);
-
-        String sect_time_html = getEndElement(html);
-        String sectTime = sect_time_html.trim();
-        html = removeLastElement(html);
-
-        String sect_days_html = getEndElement(html);
-        String sectDays = sect_days_html.trim();
-        html = removeLastElement(html);
-
-        String instructor_html = getEndElement(html);
-        int br = instructor_html.indexOf("<br />");
-        if(br != -1) // Instructors have a break in them for some reason. TBA's don't though.
-	    instructor_html = instructor_html.substring(0, br);
-        String instructor = instructor_html.trim();
-        html = removeLastElement(html);
-
-	temp.setEnrolled(enrollment);
-        temp.setCapacity(capacity);
-        temp.setSectionRoom(sectRoom);
-        temp.setSectionTime(sectTime);
-        temp.setSectionDay(sectDays);
-  
-	return temp;
-
-    }
-
-    /** This is specific for parseEnd(). Input the html and this will return the element
-	at the end. E.g. if the html has <td ...> 63 / 88</td> at the end, it will return "63 / 88"
-	@param html HTML to get the end element of
-	@return String content of the last element
-     */
-    private String getEndElement(String html){
-        // Each section starts this way
-        String start_tag = "<td";
-        String end_tag = "</td>";
-
-        String element_html = html.substring(html.lastIndexOf(start_tag));
-        return element_html.substring(element_html.indexOf(">") + 1, element_html.indexOf(end_tag)).trim();
-    }
-
-    /** Removes last element because it doesn't do anything
-	@param html HTML to remove last element of
-	@return String with last element removed
-    */
-    
-    private String removeLastElement(String html){
-        int index = html.lastIndexOf("<td");
-        return html.substring(0, index);
-    }
-
-    
-
-    /**  Parses the HTML of a Lecture and returns a new UCSBLecture object
-	 @param html HTML of a lecture.
-	 @return UCSBLecture object with added members
-     */
-    public UCSBLecture parseLectureHtml(String html){
-	
-        UCSBLecture lect = new UCSBLecture();
-
-        String courseTitle = findCourseTitle(html);
-        String primaryCourseAbbr = findPrimaryCourseAbbr(html);
-		
-       // String description = findDescription(html); // @TODO: This is unused as of now. Not in ticket but written by accident.
-        String status = findStatus(html);
-	    String enrollcode = findEnrollCode(html);
-		
-        lect.setCourseTitle(courseTitle);
-        lect.setPrimaryCourseAbbr(primaryCourseAbbr);
-        lect.setStatus(status);
-		
-	
-		lect.setEnrollCode(enrollcode);
-		
-		
-        lect = parseEnd(html, lect);
-
-        return lect;
-
-    }
-
-    /** Parses the HTML of a Section and returns a new UCSBSection object
-	 @param html HTML of section
-	 @param parent UCSBLecture object that correlates to the section
-	 @return UCSBSection object with added members
-     */
-    public UCSBSection parseSectionHtml(String html, UCSBLecture parent){
-		UCSBSection sect = new UCSBSection();
-		
-		String status = findStatus(html);
-		String enrollCode = findEnrollCode(html);
-		
-		sect.setStatus(status);
-
-		sect.setEnrollCode(enrollCode);
-		sect.setParent(parent);
-		sect = parseEndSection(html, sect);
-
-        return sect;
-    }
-
-    public String getPageJsoup (String dept, String qtr, String level) throws Exception {
-    	String url = "https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx";
-    	Document doc = Jsoup.connect(url).get();
-    	System.out.println("Printing the doc!! \n \n \n");
-    	System.out.print(doc);
-    	System.out.println("FINISHED");
-    	//System.out
-    	return "wat";
-    }
     /** getPage() returns the contents of a page of HTML containing the courses
 	for a given department, quarter, and level. It is NOT a static method--it can
 	only be invoked from an object, because it needs the instance variables
@@ -1004,6 +576,15 @@ public class UCSBCurriculumSearch {
 	}
 
 	return retval;
+    }
+    
+    public void printLecturesAndSections() {
+    	for (UCSBLecture lecture: lectures) {
+    		System.out.println(lecture);
+    		for (UCSBSection section: lecture.getSections()) {
+    			System.out.println(section);
+    		}
+    	}
     }
     
     /** return the number of UCSBLecture objects already loaded that match
