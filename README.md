@@ -84,3 +84,7 @@ In addition, make sure to work closely with the group that has  cs56-webapps-cur
 F17 Final Remarks:
 
 To the next group of students, we would reccomend reading as much of the code as you can before doing aything. Read UCSBCurriculumSearch first that will give you the best idea of how the whole project works. This file will look very ambigous until you inspect the actual HTML code found at the main page URL (https://my.sa.ucsb.edu/public/curriculum/coursesearch.aspx). Once you read this you will understand how the scraping process works. By the time you read this the main page URL may have changed and many  of the scraping functions will no longer function. We'd suggest checking out the test files then running ant test first to see what has broken. 
+
+W18 Final Remarks:
+
+To the next group of students, this quarter we primarily spent our time converting the parsing structure from substrings to using a parsing library called JSOUP. We recommend looking at `loadCoursesJsoup` located in `UCSBCurriculumSearch.java`. This function (and its helpers) utilizes the JSOUP library and is where the parsing of the HTML happens. We also recommend looking at the newly refactored tests in `UCSBCurriculumSearchTest.java` to see the functionality of the parsing. The GUI interface is still broken and we recommend not investing too much time with it, as the future of the project leans more towards the API interface ( the project *cs56-webapps-curriculum* may eventually end up combining with this one). 
