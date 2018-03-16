@@ -1,7 +1,8 @@
 package edu.ucsb.cs56.projects.scrapers.ucsb_curriculum;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /** test class for UCSBLecture
 
@@ -13,38 +14,62 @@ import static org.junit.Assert.assertEquals;
 */
 
 public class UCSBLectureTest {
-    
-// Init some variables to be used
+  
+//// Init some variables to be used
 	String courseTitle = "CMPSC     8";
 	String primaryCourseAbbr = "INTRO TO COMP SCI";
 	String status = "Closed";
 	String instructor = "BUONI M J";
-	String lectDays = "T R";
-	String lectTime = "3:30pm - 4:45pm";
-	String lectRoom = "CHEM 1171";
+	String days = "T R";
+	String time = "3:30pm - 4:45pm";
+	String room = "CHEM 1171";
 	int enrolled = 63;
 	int capacity = 88;
 	String enrollCode = "00000";
-
-    /* Test the constructor written for issue 396
-     TODO: Extend test when extended cstruct is written */
+    String grading = "Letter";
+    String units= "4.0";
+    String college = "ENGR";
+    String preRequisite = "None";
+    String description = "See dept";
+    String fullTitle = "Introduction to CS";
+    String levelLimit = "None";
+    String majorLimitPass = "CSMPC";
+    String messages = "None";
+    String majorLimit = "None";
+	
      @Test
 	public void test_Constructor() {
-
-	
-
 		UCSBLecture lecture = 
-		    new UCSBLecture(courseTitle, primaryCourseAbbr, status, instructor,
-				    lectDays, lectTime, lectRoom, enrolled, capacity, enrollCode);
+		    new UCSBLecture(
+		    		courseTitle,
+		    		primaryCourseAbbr,
+		    		status,
+		    		instructor,
+		    		days,   		
+				    time,
+				    room,
+				    grading,
+				    units,
+				    college,
+				    preRequisite,
+				    description,
+				    fullTitle,
+				    enrolled,
+				    capacity,
+				    enrollCode,
+				    levelLimit,
+				    majorLimitPass,
+				    messages,
+				    majorLimit);
 	
 		// Test Constructor
-		assertEquals(courseTitle, lecture.getCourseTitle());
+     	assertEquals(courseTitle, lecture.getCourseTitle());
 		assertEquals(primaryCourseAbbr, lecture.getPrimaryCourseAbbr());
 		assertEquals(status, lecture.getStatus());
 		assertEquals(instructor, lecture.getInstructor());
-		assertEquals(lectDays, lecture.getLectDays());
-		assertEquals(lectTime, lecture.getLectTime());
-		assertEquals(lectRoom, lecture.getLectRoom());
+		assertEquals(days, lecture.getDays());
+		assertEquals(time, lecture.getTime());
+		assertEquals(room, lecture.getRoom());
 		assertEquals(enrolled, lecture.getEnrolled());
 		assertEquals(capacity, lecture.getCapacity());
 		assertEquals(enrollCode, lecture.getEnrollCode());
@@ -54,9 +79,9 @@ public class UCSBLectureTest {
 		lecture.setPrimaryCourseAbbr("Computer Science 56");
 		lecture.setStatus("Full");
 		lecture.setInstructor("CONRAD P");
-		lecture.setLectDays("M W");
-		lecture.setLectTime("9:00am - 9:50am");
-		lecture.setLectRoom("HFH 1132");
+		lecture.setDays("M W");
+		lecture.setTime("9:00am - 9:50am");
+		lecture.setRoom("HFH 1132");
 		lecture.setEnrolled(50);
 		lecture.setCapacity(50);
 		lecture.setEnrollCode("00000");
@@ -65,9 +90,9 @@ public class UCSBLectureTest {
 		assertEquals("Computer Science 56", lecture.getPrimaryCourseAbbr());
 		assertEquals("Full", lecture.getStatus());
 		assertEquals("CONRAD P", lecture.getInstructor());
-		assertEquals("M W", lecture.getLectDays());
-		assertEquals("9:00am - 9:50am", lecture.getLectTime());
-		assertEquals("HFH 1132", lecture.getLectRoom());
+		assertEquals("M W", lecture.getDays());
+		assertEquals("9:00am - 9:50am", lecture.getTime());
+		assertEquals("HFH 1132", lecture.getRoom());
 		assertEquals(50, lecture.getEnrolled());
 		assertEquals(50, lecture.getCapacity());
 		assertEquals("00000", lecture.getEnrollCode());
@@ -76,35 +101,54 @@ public class UCSBLectureTest {
 
     @Test
     public void test_toString(){
-        UCSBLecture lecture =
-	    new UCSBLecture(courseTitle, primaryCourseAbbr, status, instructor,
-			    lectDays, lectTime, lectRoom, enrolled, capacity, enrollCode);
+    	UCSBLecture lecture = 
+    		    new UCSBLecture(
+    		    		courseTitle,
+    		    		primaryCourseAbbr,
+    		    		status,
+    		    		instructor,
+    		    		days,   		
+    				    time,
+    				    room,
+    				    grading,
+    				    units,
+    				    college,
+    				    preRequisite,
+    				    description,
+    				    fullTitle,
+    				    enrolled,
+    				    capacity,
+    				    enrollCode,
+    				    levelLimit,
+    				    majorLimitPass,
+    				    messages,
+    				    majorLimit);
         
         String expected = "Course Title: " + courseTitle + "\n"
-        + "Course Abbreviation: " + primaryCourseAbbr + "\n"
+       + "Course Abbreviation: " + primaryCourseAbbr + "\n"
         
         + "\n ---- Course Details for " + courseTitle + "----\n"
-        + "Course Full Title: " + "null" + "\n"
-        + "Course Description: " + "null" + "\n"
-        + "Course Prerequisites: " + "null" + "\n"
-        + "College: " + "null" + "\n"
-        + "Messages: " + "null" + "\n"
+        + "Course Full Title: " + "Introduction to CS" + "\n"
+        + "Course Description: " + "See dept" + "\n"
+        + "Course Prerequisites: " + "None" + "\n"
+        + "College: " + "ENGR" + "\n"
+        + "Messages: " + "None" + "\n"
         
         + "\n ---- Enrollment Details for " + courseTitle + "----\n"
         + "Lecture Status: " + status + "\n"
         + "Enrolled / Capacity: " + enrolled + " / " + capacity + "\n"
-        + "Units: " + "null" + "\n"
-        + "Grading: " + "null" + "\n"
-        + "Level Limit: " + "null" + "\n"
-        + "Major Limit: " + "null" + "\n"
-        + "Major Limit Pass: " + "null" + "\n"
+        + "Units: " + "4.0" + "\n"
+        + "Grading: " + "Letter" + "\n"
+        + "Level Limit: " + "None" + "\n"
+        + "Major Limit: " + "None" + "\n"
+        + "Major Limit Pass: " + "CSMPC" + "\n"
         + "Enroll Code: " + enrollCode + "\n"
         
         + "\n ---- Lecture Details for " + courseTitle + "----\n"
         + "Lecture Instructor: " + instructor + "\n"
-        + "Lecture Days: " + lectDays + "\n"
-        + "Lecture Time: " + lectTime + "\n"
-        + "Lecture Room: " + lectRoom + "\n";
+        + "Lecture Days: " + days + "\n"
+        + "Lecture Time: " + time + "\n"
+        + "Lecture Room: " + room + "\n";
 
         assertEquals(expected, lecture.toString());
     }
